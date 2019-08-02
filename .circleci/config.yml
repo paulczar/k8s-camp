@@ -20,6 +20,8 @@ jobs:
               git add .
               git commit --message="publish k8s.camp" --signoff
               git push "$CIRCLE_REPOSITORY_URL" gh-pages
+            else
+              echo ">>> no changes to published site. <<<"
             fi
 
 workflows:
