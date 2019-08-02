@@ -2,7 +2,13 @@
 title: Learn Kubernetes during your Coffee Break
 ---
 
-[Kubernetes](https://kubernetes.io/) is big and hard. Don't let that get in your way. This internet website is designed to teach [Kubernetes](https://kubernetes.io/) basics in short easy to follow lessons that you can complete in less time than a coffee break.
+# Learn Kubernetes during your Coffee Break
+
+[Kubernetes](https://kubernetes.io/) is big and hard.
+
+Don't let that get in your way.
+
+This internet website is designed to teach [Kubernetes](https://kubernetes.io/) basics in short easy to follow lessons that you can complete in less time than a coffee break.
 
 ## Why?
 
