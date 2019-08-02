@@ -11,10 +11,13 @@ jobs:
             chmod +x hugo
             ./hugo hugo --destination=.deploy/
             git checkout gh-pages
-            echo "export GIT_REPOSITORY_URL=$CIRCLE_REPOSITORY_URL" >> $BASH_ENV
-            echo "export GIT_USERNAME=$CIRCLE_PROJECT_USERNAME" >> $BASH_ENV
-            echo "export GIT_REPOSITORY_NAME=$CIRCLE_PROJECT_REPONAME" >> $BASH_ENV
-            .circleci/release.sh
+            rm -rf ./*
+            mv .deploy/* .
+            echo "k8s.camp" > CNAME
+            git add .
+            git commit --message="publish k8s.camp" --signoff
+            git push "$CIRCLE_REPOSITORY_URL" gh-pages
+
 workflows:
   version: 2
   release:
