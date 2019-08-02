@@ -1,0 +1,38 @@
+baseURL = "http://k8s.camp/"
+languageCode = "en-us"
+title = "Learn Kubernetes on your Coffee Break"
+theme = "hugo-theme-techdoc"
+
+[Params]
+
+    # Souce Code repository section
+    description = "Learn Kubernetes on your Coffee Break"
+    #github_repository = "https://github.com/paulczar/k8s-camp"
+    #version = "0.2.2"
+
+    # Documentation repository section
+    # documentation repository (set edit link to documentation repository)
+    #github_doc_repository = "https://github.com/paulczar/k8s-camp"
+
+    # Analytic section
+    google_analytics_id = "UA-35638296-2" # Your Google Analytics tracking id
+    tag_manager_container_id = "" # Your Google Tag Manager container id
+    google_site_verification = "" # Your Google Site Verification for Search Console
+
+    # Theme settings section
+    dateformat = "" # default "2 Jan 2006"
+    # See the format reference https://gohugo.io/functions/format/#hugo-date-and-time-templating-reference
+
+    # path name excluded from documentation menu
+    menu_exclusion = ["archives", "blog", "entry", "post", "posts"]
+
+# Global menu section
+#[[menu.main]]
+#    name = "Home"
+#    url = "/"
+#    weight = 1
+
+#[[menu.main]]
+#    name = "Twitter"
+#    url = "https://twitter.com/pczarkowski"
+#    weight = 2
