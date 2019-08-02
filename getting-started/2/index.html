@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>2. Scale and upgrade your application - Kubernetes Camp</title>
+<meta name="description" content="Learn Kubernetes on your Coffee Break">
+<meta name="generator" content="Hugo 0.56.3" />
+<link href="http://k8s.camp/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="http://k8s.camp/getting-started/2/">
+<link rel="stylesheet" href="http://k8s.camp/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="http://k8s.camp/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="http://k8s.camp/js/functions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="http://k8s.camp/js/jquery.backtothetop/jquery.backtothetop.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-35638296-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-35638296-2');
+</script>
+</head>
+<body>
+<div class="container"><header>
+<h1>Kubernetes Camp</h1>
+<a href="https://github.com/paulczar/k8s-camp" class="github"><i class="fab fa-github"></i></a>
+<p class="description">Learn Kubernetes on your Coffee Break</p>
+
+</header>
+
+<div class="content-container">
+<main><h1>2. Scale and upgrade your application</h1>
+
+<p>Part of <a href="/getting-started/1">Running an application</a> is being able to scale it to meet traffic demands, and to upgrade it when new versions of the software is available.</p>
+
+<p>Thankfully Kubernetes makes both of these things really easy. In the previous steps we ran an application by creating a Deployment. A Deployment is a Controller with special properties to help you both scale and upgrade your workload.</p>
+
+<h2 id="validate-your-running-workload">Validate your running workload</h2>
+
+<p>We currently have a matching set of a Deployment, a ReplicaSet and a Pod in our cluster. Run <code>kubectl get all</code>:</p>
+
+<pre><code class="language-console">$ kubectl get all
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/first   1/1     1            1           15h
+
+NAME                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/first-7f77d57ccc   1         1         1       15h
+
+NAME                         READY   STATUS    RESTARTS   AGE
+pod/first-7f77d57ccc-8gwkp   1/1     Running   0          15h
+</code></pre>
+
+<p>You can see that the ReplicaSet shows a <code>DESIRED</code> and a <code>CURRENT</code> count of pods under its control. The ReplicaSet is managed by the Deployment, and is itself managed by the Deployment. The ReplicaSet will create or destroy Pods in order to make the current state match the desired state.</p>
+
+<h2 id="scale-your-application-out">Scale your application out</h2>
+
+<p>You can run <code>kubectl scale</code> to change the desired state like so:</p>
+
+<blockquote>
+<p>Note: since the ReplicaSet is managed by the Deployment we actually want to point the scale command at the Deployment resource.</p>
+</blockquote>
+
+<pre><code class="language-console">$ kubectl scale --replicas=3 deployment/first
+deployment.extensions/first scaled
+</code></pre>
+
+<p>Since our image is quite small, it should take just a few seconds for the scale event to occur which we can check with another <code>kubectl get all</code>:</p>
+
+<pre><code class="language-console">$ kubectl get all
+NAME                         READY   STATUS    RESTARTS   AGE
+pod/first-7f77d57ccc-7h9ch   1/1     Running   0          4s
+pod/first-7f77d57ccc-8gwkp   1/1     Running   0          20h
+pod/first-7f77d57ccc-c2j4x   1/1     Running   0          4s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    &lt;none&gt;        443/TCP   20h
+
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/first   3/3     3            3           20h
+
+NAME                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/first-7f77d57ccc   3         3         3       20h
+</code></pre>
+
+<p>You can see that the Deployment was updated to expect 3, which updated the ReplicaSet which created two more pods.</p>
+
+<blockquote>
+<p>Note: If we had scaled the ReplicaSet directly, it would immediately be changed back to the original size as the reconciliation loop of the Deployment controller would see the actual state of the ReplicaSet no longer matches the Desired state. Try it and see what happens if you run <code>kubectl scale --replicas=5 rs/first-7f77d57ccc</code> (change the name to match your output).</p>
+</blockquote>
+
+<h2 id="upgrade-your-application">Upgrade your application</h2>
+
+<p>If you remember that very first command we used to create this Deployment (<code>kubectl create deployment first image=nginx</code>) you&rsquo;ll note that we didn&rsquo;t specify a version of nginx to run.</p>
+
+<p>It&rsquo;s always a good idea to be as specific as possible, so lets upgrade our application to be a very specific version of nginx. We can do this with the <code>kubectl set</code> command:</p>
+
+<pre><code class="language-console">$ kubectl set image deployment/first nginx=nginx:1.17.2
+deployment.extensions/first image updated
+</code></pre>
+
+<p>Immediately re-run <code>kubectl get all</code> and if you&rsquo;re fast enough you&rsquo;ll catch the Deployment mid-upgrade:</p>
+
+<blockquote>
+<p>Note: if you&rsquo;re fast enough you&rsquo;ll see new Pods starting to run, and you&rsquo;ll see the old Dods being Terminated as the Deployment controller juggles a pair of ReplicaSets.</p>
+</blockquote>
+
+<pre><code class="language-console">$ kubectl get all
+NAME                         READY   STATUS              RESTARTS   AGE
+pod/first-765d49ddcb-f6hb4   1/1     Running             0          3s
+pod/first-765d49ddcb-gcgkn   0/1     ContainerCreating   0          1s
+pod/first-844f75c9b8-4cvgv   1/1     Running             0          4m10s
+pod/first-844f75c9b8-kzzhs   1/1     Running             0          4m17s
+pod/first-844f75c9b8-wwmkg   0/1     Terminating         0          4m7s
+
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    &lt;none&gt;        443/TCP   21h
+
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/first   3/3     2            3           20h
+
+NAME                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/first-765d49ddcb   2         2         1       3s
+replicaset.apps/first-844f75c9b8   2         2         2       4m17s
+</code></pre>
+
+<p>Changing the image version in the Deployment signalled to the Deployment controller that you had a new desired state. In order to bring the actual state into line with the desired state the Deployment controller creates a second ReplicaSet and it scales that new ReplicaSet up as it scales the old ReplicaSet down in a way to ensure that the actual number of Pods running always matches the desired number (in this case 3).</p>
+
+<p>This rolling upgrade of your application is completely transparent to you, the Deployment controller manages it for you, and it does it in a way to ensure as little disruption to end users as possible.</p>
+
+<p>Speaking of end users, wouldn&rsquo;t it be nice if we could set up access to the application? We can&rsquo;t expect everyone to run <code>kubectl port-forward</code> to access our app.</p>
+
+<p><a href="/getting-started/3">Next</a> Creating services to provide access into your application.</p>
+<div class="edit-meta">
+
+<br></div><nav class="pagination"><a class="nav nav-prev" href="/getting-started/1/" title="1. Run your first application"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - 1. Run your first application</a>
+<a class="nav nav-next" href="/getting-started/3/" title="3. Accessing apps via Services">Next - 3. Accessing apps via Services <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+</nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
+</footer>
+</main><div class="sidebar">
+<nav>
+<ul>
+<li class=""><a href="http://k8s.camp/">Home</a></li>
+
+<li class="parent"><a href="/getting-started/">Getting Started</a>
+<ul class="sub-menu">
+<li class=""><a href="/getting-started/1/">1. Run your first application</a></li>
+<li class="active"><a href="/getting-started/2/">2. Scale and upgrade your application</a></li>
+<li class=""><a href="/getting-started/3/">3. Accessing apps via Services</a></li>
+</ul>
+  
+</li>
+
+<li class=""><a href="/glossary/">Glossary</a>
+</li>
+</ul>
+</nav>
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>

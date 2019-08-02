@@ -3,7 +3,7 @@
 <head><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Run your first application - Kubernetes Camp</title>
+<title>1. Run your first application - Kubernetes Camp</title>
 <meta name="description" content="Learn Kubernetes on your Coffee Break">
 <meta name="generator" content="Hugo 0.56.3" />
 <link href="http://k8s.camp/index.xml" rel="alternate" type="application/rss+xml">
@@ -32,15 +32,29 @@
 </header>
 
 <div class="content-container">
-<main><h1>Run your first application</h1>
+<main><h1>1. Run your first application</h1>
+
+<p>Above all else <a href="https://kubernetes.io">Kubernetes</a> is a platform for running applications. It takes applications that are packaged into <a href="/glossary/#container">Linux Containers</a> and runs them in a special executable environment called a <a href="/glossary/#pod">Pod</a>.</p>
+
+<p>A simple application such as NGINX can be deployed to Kubernetes with a simple <code>kubectl</code> command. While this is not how you would deploy software into production, its a nice easy way to start getting familiar with Kubernetes.</p>
 
 <h2 id="ask-kubernetes-to-run-nginx">Ask Kubernetes to run NGINX</h2>
+
+<p>You can use the <code>kubectl create</code> command to create a <a href="/glossary/#deployment">Deployment</a> which is a <a href="/glossary/#controller">Controller</a> that wraps around a <a href="/glossary/#pod">Pod</a> to provide additional functionality.</p>
+
+<blockquote>
+<p>Note: Kubernetes downloads images from an Image Registry, if a specific registry is not provided it will default to the public Docker Registry. Thus the image referenced below is being pulled from <a href="https://hub.docker.com/_/nginx">https://hub.docker.com/_/nginx</a>.</p>
+</blockquote>
 
 <pre><code class="language-console">$ kubectl create deployment first --image=nginx
 deployment.apps/first created
 </code></pre>
 
 <h2 id="look-at-what-resources-are-running">Look at what resources are running</h2>
+
+<blockquote>
+<p>Note there are actually three resources that were deployed as a result of this command. <code>kubectl create deployment</code> created the <a href="/glossary/#deployment">Deployment</a>, which created the <a href="/glossary/#replicaset">ReplicaSet</a>, which created the <a href="/glossary/#pod">Pod</a> in which the application itself is running.</p>
+</blockquote>
 
 <pre><code class="language-console">$ kubectl get all
 NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
@@ -54,6 +68,10 @@ pod/first-7f77d57ccc-8gwkp   1/1     Running   0          15h
 </code></pre>
 
 <h2 id="ask-kubernetes-to-forward-a-port-to-your-new-deployment">Ask Kubernetes to forward a port to your new deployment</h2>
+
+<p>The astute observer would notice that there&rsquo;s no indication of how to access your application in the above output. That&rsquo;s because in order to access a running application in Kubernetes you would usually create a <a href="/glossary/#service">Service</a>.</p>
+
+<p>However you can also access an application by using the <code>kubectl port-forward</code> command which will forward a port from your localhost into the specified Resource.</p>
 
 <blockquote>
 <p>Note: this process will run until you hit <code>ctrl-c</code> to break it.</p>
@@ -98,13 +116,11 @@ Commercial support is available at
 
 <p>What we just did was create a Kubernetes resource using the <strong><a href="/glossary/#imperative">imperative</a></strong> command <code>kubectl create deployment</code>. This creates a <strong><a href="/glossary/#deployment">Deployment</a></strong> resource which in turn creates a <strong><a href="/glossary/#replicaset">ReplicaSet</a></strong> resource which in turn creates a <strong><a href="/glossary/#pod">Pod</a></strong> resource.</p>
 
-<blockquote>
-<p>Note: see <strong>Pod Resources</strong> for an explanation of Pods and extended Pod resources.</p>
-</blockquote>
+<p><a href="/getting-started/2">Next</a> learn how to scale and upgrade your Application.</p>
 <div class="edit-meta">
 
 <br></div><nav class="pagination"><a class="nav nav-prev" href="/getting-started/" title="Getting Started"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - Getting Started</a>
-<a class="nav nav-next" href="/glossary/" title="Glossary">Next - Glossary <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+<a class="nav nav-next" href="/getting-started/2/" title="2. Scale and upgrade your application">Next - 2. Scale and upgrade your application <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
 </nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
 </footer>
 </main><div class="sidebar">
@@ -114,7 +130,9 @@ Commercial support is available at
 
 <li class="parent"><a href="/getting-started/">Getting Started</a>
 <ul class="sub-menu">
-<li class="active"><a href="/getting-started/1/">Run your first application</a></li>
+<li class="active"><a href="/getting-started/1/">1. Run your first application</a></li>
+<li class=""><a href="/getting-started/2/">2. Scale and upgrade your application</a></li>
+<li class=""><a href="/getting-started/3/">3. Accessing apps via Services</a></li>
 </ul>
   
 </li>

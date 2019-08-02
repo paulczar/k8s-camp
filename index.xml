@@ -11,12 +11,34 @@
     
     
     <item>
-      <title>Run your first application</title>
+      <title>1. Run your first application</title>
       <link>http://k8s.camp/getting-started/1/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>http://k8s.camp/getting-started/1/</guid>
-      <description>Ask Kubernetes to run NGINX $ kubectl create deployment first --image=nginx deployment.apps/first created  Look at what resources are running $ kubectl get all NAME READY UP-TO-DATE AVAILABLE AGE deployment.apps/first 1/1 1 1 15h NAME DESIRED CURRENT READY AGE replicaset.apps/first-7f77d57ccc 1 1 1 15h NAME READY STATUS RESTARTS AGE pod/first-7f77d57ccc-8gwkp 1/1 Running 0 15h  Ask Kubernetes to forward a port to your new deployment  Note: this process will run until you hit ctrl-c to break it.</description>
+      <description>Above all else Kubernetes is a platform for running applications. It takes applications that are packaged into Linux Containers and runs them in a special executable environment called a Pod.
+A simple application such as NGINX can be deployed to Kubernetes with a simple kubectl command. While this is not how you would deploy software into production, its a nice easy way to start getting familiar with Kubernetes.
+Ask Kubernetes to run NGINX You can use the kubectl create command to create a Deployment which is a Controller that wraps around a Pod to provide additional functionality.</description>
+    </item>
+    
+    <item>
+      <title>2. Scale and upgrade your application</title>
+      <link>http://k8s.camp/getting-started/2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://k8s.camp/getting-started/2/</guid>
+      <description>Part of Running an application is being able to scale it to meet traffic demands, and to upgrade it when new versions of the software is available.
+Thankfully Kubernetes makes both of these things really easy. In the previous steps we ran an application by creating a Deployment. A Deployment is a Controller with special properties to help you both scale and upgrade your workload.
+Validate your running workload We currently have a matching set of a Deployment, a ReplicaSet and a Pod in our cluster.</description>
+    </item>
+    
+    <item>
+      <title>3. Accessing apps via Services</title>
+      <link>http://k8s.camp/getting-started/3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://k8s.camp/getting-started/3/</guid>
+      <description>&amp;hellip;</description>
     </item>
     
   </channel>
