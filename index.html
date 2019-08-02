@@ -56,64 +56,7 @@
 <li>A computer</li>
 </ul>
 
-<h2 id="getting-started">Getting Started</h2>
-
-<p>While <a href="https://kubernetes.io/">Kubernetes</a> is a complex distributed system designed to run clusters up to thousands of nodes, its also not entirely crazy to run just a small one or two node Kubernetes cluster.</p>
-
-<p>In fact You can run a simple single node Kubernetes cluster in a VM using <a href="https://github.com/kubernetes/minikube.git">Minikube</a> or <a href="https://github.com/kubernetes-sigs/kind">Kubernetes in Docker (KIND)</a>. If you&rsquo;re feeling saucy you can even use <a href="https://blog.docker.com/2018/01/docker-windows-desktop-now-kubernetes/">Docker for Windows with Kubernetes</a>.</p>
-
-<h3 id="getting-started-on-mac-osx">Getting started on Mac OSX</h3>
-
-<p>I dunno &hellip; brew install kubernetes or something amirite ?</p>
-
-<h3 id="getting-started-on-linux">Getting started on Linux</h3>
-
-<blockquote>
-<p>Note: you need <a href="https://get.docker.io">docker</a> installed to use kind.</p>
-</blockquote>
-
-<p>You can install and run KIND with a few simple commands:</p>
-
-<pre><code class="language-console">wget -O /tmp/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.4.0/kind-linux-amd64
-chmod +x /tmp/kind
-sudo mv /tmp/kind /usr/local/bin/kind
-</code></pre>
-
-<p>Creating a cluster once KIND is installed is even easier:</p>
-
-<blockquote>
-<p>Note: this may take a few minutes the first time you run it as it needs to download a bunch of docker images.</p>
-</blockquote>
-
-<pre><code class="language-console">$ kind create cluster
-Creating cluster &quot;kind&quot; ...
- ✓ Ensuring node image (kindest/node:v1.15.0) 🖼
- ✓ Preparing nodes 📦
- ✓ Creating kubeadm config 📜
- ✓ Starting control-plane 🕹️
- ✓ Installing CNI 🔌
- ✓ Installing StorageClass 💾
-Cluster creation complete. You can now use the cluster with:
-
-export KUBECONFIG=&quot;$(kind get kubeconfig-path --name=&quot;kind&quot;)&quot;
-kubectl cluster-info
-</code></pre>
-
-<p>Follow the instructions it provides to gain access to your cluster:</p>
-
-<pre><code class="language-console">$ export KUBECONFIG=&quot;$(kind get kubeconfig-path --name=&quot;kind&quot;)&quot;
-$ kubectl cluster-info
-Kubernetes master is running at https://127.0.0.1:44075
-KubeDNS is running at https://127.0.0.1:44075/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
-
-To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
-
-$ docker ps
-CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS              PORTS                                  NAMES
-a25107ff8863        kindest/node:v1.15.0   &quot;/usr/local/bin/entr…&quot;   33 seconds ago      Up 28 seconds       44075/tcp, 127.0.0.1:44075-&gt;6443/tcp   kind-control-plane
-</code></pre>
-
-<p>Congratulations, you&rsquo;re now running a simple single node Kubernetes cluster on your laptop. Check out the other guides to see what to do next.</p>
+<p>Are you ready to start by <a href="/getting-started">installing Kubernetes</a>?</p>
 <nav class="pagination"><a class="nav nav-next" href="/getting-started/" title="Getting Started">Next - Getting Started <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
 </nav><div class="edit-meta">
 
