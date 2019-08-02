@@ -1,0 +1,27 @@
+version: 2
+jobs:
+
+  hugo-publish:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          command: |
+            curl -sSL https://github.com/gohugoio/hugo/releases/download/v0.56.3/hugo_0.56.3_Linux-64bit.tar.gz | tar xzf -
+            chmod +x hugo
+            ./hugo hugo --destination=.deploy/
+            git checkout gh-pages
+            echo "export GIT_REPOSITORY_URL=$CIRCLE_REPOSITORY_URL" >> $BASH_ENV
+            echo "export GIT_USERNAME=$CIRCLE_PROJECT_USERNAME" >> $BASH_ENV
+            echo "export GIT_REPOSITORY_NAME=$CIRCLE_PROJECT_REPONAME" >> $BASH_ENV
+            .circleci/release.sh
+workflows:
+  version: 2
+  release:
+    jobs:
+      - hugo-publish:
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              only: master
