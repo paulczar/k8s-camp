@@ -1,4 +1,4 @@
-baseURL = "http://k8s.camp/"
+baseURL = "https://k8s.camp/"
 languageCode = "en-us"
 title = "Kubernetes Camp"
 theme = "hugo-theme-techdoc"
