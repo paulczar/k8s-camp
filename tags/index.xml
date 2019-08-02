@@ -2,12 +2,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Kubernetes Camp</title>
-    <link>http://k8s.camp/tags/</link>
+    <link>https://k8s.camp/tags/</link>
     <description>Recent content in Tags on Kubernetes Camp</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
-	<atom:link href="http://k8s.camp/tags/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://k8s.camp/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>

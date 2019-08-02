@@ -3,36 +3,36 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://k8s.camp/getting-started/1/</loc>
+    <loc>https://k8s.camp/getting-started/1/</loc>
   </url>
   
   <url>
-    <loc>http://k8s.camp/getting-started/2/</loc>
+    <loc>https://k8s.camp/getting-started/2/</loc>
   </url>
   
   <url>
-    <loc>http://k8s.camp/getting-started/3/</loc>
+    <loc>https://k8s.camp/getting-started/3/</loc>
   </url>
   
   <url>
-    <loc>http://k8s.camp/categories/</loc>
+    <loc>https://k8s.camp/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://k8s.camp/getting-started/</loc>
+    <loc>https://k8s.camp/getting-started/</loc>
   </url>
   
   <url>
-    <loc>http://k8s.camp/glossary/</loc>
+    <loc>https://k8s.camp/glossary/</loc>
   </url>
   
   <url>
-    <loc>http://k8s.camp/</loc>
+    <loc>https://k8s.camp/</loc>
   </url>
   
   <url>
-    <loc>http://k8s.camp/tags/</loc>
+    <loc>https://k8s.camp/tags/</loc>
     <priority>0</priority>
   </url>
   
