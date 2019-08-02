@@ -16,9 +16,11 @@ jobs:
             rm -rf ./*
             mv .deploy/* .
             echo "k8s.camp" > CNAME
-            git add .
-            git commit --message="publish k8s.camp" --signoff
-            git push "$CIRCLE_REPOSITORY_URL" gh-pages
+            if ! git diff --quiet; then
+              git add .
+              git commit --message="publish k8s.camp" --signoff
+              git push "$CIRCLE_REPOSITORY_URL" gh-pages
+            fi
 
 workflows:
   version: 2
