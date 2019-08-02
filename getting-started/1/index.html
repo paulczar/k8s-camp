@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Run your first application - Learn Kubernetes on your Coffee Break</title>
+<meta name="description" content="Learn Kubernetes on your Coffee Break">
+<meta name="generator" content="Hugo 0.56.3" />
+<link href="http://k8s.camp/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="http://k8s.camp/getting-started/1/">
+<link rel="stylesheet" href="http://k8s.camp/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="http://k8s.camp/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="http://k8s.camp/js/functions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="http://k8s.camp/js/jquery.backtothetop/jquery.backtothetop.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-35638296-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-35638296-2');
+</script>
+</head>
+<body>
+<div class="container"><header>
+<h1>Learn Kubernetes on your Coffee Break</h1>
+
+<p class="description">Learn Kubernetes on your Coffee Break</p>
+
+</header>
+
+<div class="content-container">
+<main><h1>Run your first application</h1>
+
+<h2 id="ask-kubernetes-to-run-nginx">Ask Kubernetes to run NGINX</h2>
+
+<pre><code class="language-console">$ kubectl create deployment first --image=nginx
+deployment.apps/first created
+</code></pre>
+
+<h2 id="look-at-what-resources-are-running">Look at what resources are running</h2>
+
+<pre><code class="language-console">$ kubectl get all
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/first   1/1     1            1           15h
+
+NAME                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/first-7f77d57ccc   1         1         1       15h
+
+NAME                         READY   STATUS    RESTARTS   AGE
+pod/first-7f77d57ccc-8gwkp   1/1     Running   0          15h
+</code></pre>
+
+<h2 id="ask-kubernetes-to-forward-a-port-to-your-new-deployment">Ask Kubernetes to forward a port to your new deployment</h2>
+
+<blockquote>
+<p>Note: this process will run until you hit <code>ctrl-c</code> to break it.</p>
+</blockquote>
+
+<pre><code class="language-console">$ kubectl port-forward deployment/first 8080:80
+Forwarding from 127.0.0.1:8080 -&gt; 80
+Handling connection for 8080
+</code></pre>
+
+<p>Access <a href="http://127.0.0.1:8080">http://127.0.0.1:8080</a> from a web browser, or another terminal:</p>
+
+<pre><code class="language-console">$ curl 127.0.0.1:8080
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+&lt;style&gt;
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;
+&lt;p&gt;If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.&lt;/p&gt;
+
+&lt;p&gt;For online documentation and support please refer to
+&lt;a href=&quot;http://nginx.org/&quot;&gt;nginx.org&lt;/a&gt;.&lt;br/&gt;
+Commercial support is available at
+&lt;a href=&quot;http://nginx.com/&quot;&gt;nginx.com&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Thank you for using nginx.&lt;/em&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h2 id="summary">Summary</h2>
+
+<p>What we just did was create a Kubernetes resource using the <strong><a href="/glossary/#imperative">imperative</a></strong> command <code>kubectl create deployment</code>. This creates a <strong><a href="/glossary/#deployment">Deployment</a></strong> resource which in turn creates a <strong><a href="/glossary/#replicaset">ReplicaSet</a></strong> resource which in turn creates a <strong><a href="/glossary/#pod">Pod</a></strong> resource.</p>
+
+<blockquote>
+<p>Note: see <strong>Pod Resources</strong> for an explanation of Pods and extended Pod resources.</p>
+</blockquote>
+<div class="edit-meta">
+
+<br></div><nav class="pagination"><a class="nav nav-prev" href="/getting-started/" title="Getting Started"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - Getting Started</a>
+<a class="nav nav-next" href="/glossary/" title="Glossary">Next - Glossary <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+</nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
+</footer>
+</main><div class="sidebar">
+<nav>
+<ul>
+<li class=""><a href="http://k8s.camp/">Home</a></li>
+
+<li class="parent"><a href="/getting-started/">Getting Started</a>
+<ul class="sub-menu">
+<li class="active"><a href="/getting-started/1/">Run your first application</a></li>
+</ul>
+  
+</li>
+
+<li class=""><a href="/glossary/">Glossary</a>
+</li>
+</ul>
+</nav>
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>

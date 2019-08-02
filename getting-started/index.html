@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Getting Started - Learn Kubernetes on your Coffee Break</title>
+<meta name="description" content="Learn Kubernetes on your Coffee Break">
+<meta name="generator" content="Hugo 0.56.3" />
+<link href="http://k8s.camp/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="http://k8s.camp/getting-started/">
+<link rel="stylesheet" href="http://k8s.camp/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="http://k8s.camp/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="http://k8s.camp/js/functions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="http://k8s.camp/js/jquery.backtothetop/jquery.backtothetop.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-35638296-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-35638296-2');
+</script>
+</head>
+<body>
+<div class="container"><header>
+<h1>Learn Kubernetes on your Coffee Break</h1>
+
+<p class="description">Learn Kubernetes on your Coffee Break</p>
+
+</header>
+
+<div class="content-container">
+<main><h1>Getting Started</h1>
+
+<h2 id="getting-started-on-mac-osx">Getting started on Mac OSX</h2>
+
+<p>I dunno &hellip; brew install kubernetes or something amirite ?</p>
+
+<h2 id="getting-started-on-linux">Getting started on Linux</h2>
+
+<blockquote>
+<p>Note: you need <a href="https://get.docker.io">docker</a> installed to use kind.</p>
+</blockquote>
+
+<h3 id="you-can-install-and-run-kind-with-a-few-simple-commands">You can install and run KIND with a few simple commands</h3>
+
+<pre><code class="language-console">wget -O /tmp/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.4.0/kind-linux-amd64
+chmod +x /tmp/kind
+sudo mv /tmp/kind /usr/local/bin/kind
+</code></pre>
+
+<h3 id="creating-a-cluster-once-kind-is-installed-is-even-easier">Creating a cluster once KIND is installed is even easier</h3>
+
+<blockquote>
+<p>Note: this may take a few minutes the first time you run it as it needs to download a bunch of docker images.</p>
+</blockquote>
+
+<pre><code class="language-console">$ kind create cluster
+Creating cluster &quot;kind&quot; ...
+ ✓ Ensuring node image (kindest/node:v1.15.0) 🖼
+ ✓ Preparing nodes 📦
+ ✓ Creating kubeadm config 📜
+ ✓ Starting control-plane 🕹️
+ ✓ Installing CNI 🔌
+ ✓ Installing StorageClass 💾
+Cluster creation complete. You can now use the cluster with:
+
+export KUBECONFIG=&quot;$(kind get kubeconfig-path --name=&quot;kind&quot;)&quot;
+kubectl cluster-info
+</code></pre>
+
+<h3 id="follow-the-instructions-it-provides-to-gain-access-to-your-cluster">Follow the instructions it provides to gain access to your cluster</h3>
+
+<blockquote>
+<p>Note: you need <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">kubectl</a> installed to continue.</p>
+</blockquote>
+
+<pre><code class="language-console">$ export KUBECONFIG=&quot;$(kind get kubeconfig-path --name=&quot;kind&quot;)&quot;
+$ kubectl cluster-info
+Kubernetes master is running at https://127.0.0.1:44075
+KubeDNS is running at https://127.0.0.1:44075/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+
+$ docker ps
+CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS              PORTS                                  NAMES
+a25107ff8863        kindest/node:v1.15.0   &quot;/usr/local/bin/entr…&quot;   33 seconds ago      Up 28 seconds       44075/tcp, 127.0.0.1:44075-&gt;6443/tcp   kind-control-plane
+</code></pre>
+
+<p>Congratulations, you&rsquo;re now running a simple single node Kubernetes cluster on your laptop. Check out the other guides to see what to do next.</p>
+
+<p>Next learn how to <a href="/getting-started/1">run your first application</a>.</p>
+<div class="edit-meta">
+
+<br></div><nav class="pagination"><a class="nav nav-prev" href="/" title="Learning Kubernetes - Be Back Quick"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - Learning Kubernetes - Be Back Quick</a>
+<a class="nav nav-next" href="/getting-started/1/" title="Run your first application">Next - Run your first application <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+</nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
+</footer>
+</main><div class="sidebar">
+<nav>
+<ul>
+<li class=""><a href="http://k8s.camp/">Home</a></li>
+
+<li class="parent active"><a href="/getting-started/">Getting Started</a>
+<ul class="sub-menu">
+<li class=""><a href="/getting-started/1/">Run your first application</a></li>
+</ul>
+  
+</li>
+
+<li class=""><a href="/glossary/">Glossary</a>
+</li>
+</ul>
+</nav>
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>

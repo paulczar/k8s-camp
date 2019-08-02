@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Learning Kubernetes - Be Back Quick on Learn Kubernetes on your Coffee Break</title>
+    <link>http://k8s.camp/</link>
+    <description>Recent content in Learning Kubernetes - Be Back Quick on Learn Kubernetes on your Coffee Break</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    
+	<atom:link href="http://k8s.camp/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Run your first application</title>
+      <link>http://k8s.camp/getting-started/1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://k8s.camp/getting-started/1/</guid>
+      <description>Ask Kubernetes to run NGINX $ kubectl create deployment first --image=nginx deployment.apps/first created  Look at what resources are running $ kubectl get all NAME READY UP-TO-DATE AVAILABLE AGE deployment.apps/first 1/1 1 1 15h NAME DESIRED CURRENT READY AGE replicaset.apps/first-7f77d57ccc 1 1 1 15h NAME READY STATUS RESTARTS AGE pod/first-7f77d57ccc-8gwkp 1/1 Running 0 15h  Ask Kubernetes to forward a port to your new deployment  Note: this process will run until you hit ctrl-c to break it.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://k8s.camp/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://k8s.camp/getting-started/</loc>
+  </url>
+  
+  <url>
+    <loc>http://k8s.camp/glossary/</loc>
+  </url>
+  
+  <url>
+    <loc>http://k8s.camp/</loc>
+  </url>
+  
+  <url>
+    <loc>http://k8s.camp/getting-started/1/</loc>
+  </url>
+  
+  <url>
+    <loc>http://k8s.camp/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+</urlset>
