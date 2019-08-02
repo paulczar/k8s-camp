@@ -34,24 +34,36 @@
 <div class="content-container">
 <main><h1>Getting Started</h1>
 
+<p>The best way to run Kubernetes is to get somebody else to do it for you. If you have a few dollars to spend we recommend using the hosted Kubernetes offering from your favorite cloud.</p>
+
+<p>However for many of us that&rsquo;s not feasible, thankfully there are tools like <a href="https://kind.sigs.k8s.io/">Kubernetes in Docker</a> (KIND) that will let you run a small Kubernetes cluster in containers on your laptop.</p>
+
+<p>The basic tutorials (unless specified otherwise) are written with <a href="https://kind.sigs.k8s.io/">Kubernetes in Docker</a> as the default runtime to ensure maximum accessibility. Thus the following instructions are provided to help you get Kubernetes in Docker running.</p>
+
+<p>You could also use <a href="https://kubernetes.io/docs/setup/learning-environment/minikube/">minikube</a> if you prefer, but all the cool kids are using KIND these days.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<ol>
+<li><a href="https://docs.docker.com/install/">docker</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">kubectl</a></li>
+</ol>
+
 <h2 id="getting-started-on-mac-osx">Getting started on Mac OSX</h2>
 
-<p>I dunno &hellip; brew install kubernetes or something amirite ?</p>
+<pre><code class="language-console">curl -Lo ./kind-darwin-amd64 https://github.com/kubernetes-sigs/kind/releases/download/v0.4.0/kind-darwin-amd64
+chmod +x ./kind-darwin-amd64
+mv ./kind-darwin-amd64 /some-dir-in-your-PATH/kind
+</code></pre>
 
 <h2 id="getting-started-on-linux">Getting started on Linux</h2>
-
-<blockquote>
-<p>Note: you need <a href="https://get.docker.io">docker</a> installed to use kind.</p>
-</blockquote>
-
-<h3 id="you-can-install-and-run-kind-with-a-few-simple-commands">You can install and run KIND with a few simple commands</h3>
 
 <pre><code class="language-console">wget -O /tmp/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.4.0/kind-linux-amd64
 chmod +x /tmp/kind
 sudo mv /tmp/kind /usr/local/bin/kind
 </code></pre>
 
-<h3 id="creating-a-cluster-once-kind-is-installed-is-even-easier">Creating a cluster once KIND is installed is even easier</h3>
+<h2 id="creating-a-cluster-once-kind-is-installed-is-even-easier">Creating a cluster once KIND is installed is even easier</h2>
 
 <blockquote>
 <p>Note: this may take a few minutes the first time you run it as it needs to download a bunch of docker images.</p>
