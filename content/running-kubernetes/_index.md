@@ -16,12 +16,13 @@ Your favorite private cloud software has a managed Kubernetes offering, use that
 
 Failing all that if you do want to run your own Kubernetes, here's some resources that will help:
 
+Have a good read through the various failure stories at [Kubernetes Failure Stories](https://k8s.af/), free lessons in what not to do!.
+
 ## At home
 
 * [k3s](https://k3s.io/)
 
 ## At work
 
-* [Kubernetes Failure Stories](https://k8s.af/)
 * [KOPS](https://github.com/kubernetes/kops)
 * [Kube Spray](https://github.com/kubernetes-sigs/kubespray)
