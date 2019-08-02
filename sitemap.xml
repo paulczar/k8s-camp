@@ -32,6 +32,10 @@
   </url>
   
   <url>
+    <loc>https://k8s.camp/running-kubernetes/</loc>
+  </url>
+  
+  <url>
     <loc>https://k8s.camp/tags/</loc>
     <priority>0</priority>
   </url>
