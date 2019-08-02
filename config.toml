@@ -1,6 +1,6 @@
 baseURL = "http://k8s.camp/"
 languageCode = "en-us"
-title = "Learn Kubernetes on your Coffee Break"
+title = "Kubernetes Camp"
 theme = "hugo-theme-techdoc"
 
 [Params]
