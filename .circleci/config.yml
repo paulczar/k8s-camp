@@ -10,6 +10,8 @@ jobs:
             curl -sSL https://github.com/gohugoio/hugo/releases/download/v0.56.3/hugo_0.56.3_Linux-64bit.tar.gz | tar xzf - hugo
             chmod +x hugo
             ./hugo --destination=.deploy/
+            git config --global user.email "username.taken@gmail.com"
+            git config --global user.name "Hugo Publisher"
             git checkout gh-pages
             rm -rf ./*
             mv .deploy/* .
