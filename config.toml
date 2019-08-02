@@ -7,7 +7,7 @@ theme = "hugo-theme-techdoc"
 
     # Souce Code repository section
     description = "Learn Kubernetes on your Coffee Break"
-    #github_repository = "https://github.com/paulczar/k8s-camp"
+    github_repository = "https://github.com/paulczar/k8s-camp"
     #version = "0.2.2"
 
     # Documentation repository section
