@@ -2,15 +2,28 @@
 title: Getting Started
 ---
 
+The best way to run Kubernetes is to get somebody else to do it for you. If you have a few dollars to spend we recommend using the hosted Kubernetes offering from your favorite cloud.
+
+However for many of us that's not feasible, thankfully there are tools like [Kubernetes in Docker](https://kind.sigs.k8s.io/) (KIND) that will let you run a small Kubernetes cluster in containers on your laptop.
+
+The basic tutorials (unless specified otherwise) are written with [Kubernetes in Docker](https://kind.sigs.k8s.io/) as the default runtime to ensure maximum accessibility. Thus the following instructions are provided to help you get Kubernetes in Docker running.
+
+You could also use [minikube](https://kubernetes.io/docs/setup/learning-environment/minikube/) if you prefer, but all the cool kids are using KIND these days.
+
+## Prerequisites
+
+1. [docker](https://docs.docker.com/install/)
+2. [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
 ## Getting started on Mac OSX
 
-I dunno ... brew install kubernetes or something amirite ?
+```console
+curl -Lo ./kind-darwin-amd64 https://github.com/kubernetes-sigs/kind/releases/download/v0.4.0/kind-darwin-amd64
+chmod +x ./kind-darwin-amd64
+mv ./kind-darwin-amd64 /some-dir-in-your-PATH/kind
+```
 
 ## Getting started on Linux
-
-> Note: you need [docker](https://get.docker.io) installed to use kind.
-
-### You can install and run KIND with a few simple commands
 
 ```console
 wget -O /tmp/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.4.0/kind-linux-amd64
@@ -18,7 +31,7 @@ chmod +x /tmp/kind
 sudo mv /tmp/kind /usr/local/bin/kind
 ```
 
-### Creating a cluster once KIND is installed is even easier
+## Creating a cluster once KIND is installed is even easier
 
 > Note: this may take a few minutes the first time you run it as it needs to download a bunch of docker images.
 
