@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Tags on Learn Kubernetes on your Coffee Break</title>
+    <title>Tags on Kubernetes Camp</title>
     <link>http://k8s.camp/tags/</link>
-    <description>Recent content in Tags on Learn Kubernetes on your Coffee Break</description>
+    <description>Recent content in Tags on Kubernetes Camp</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
