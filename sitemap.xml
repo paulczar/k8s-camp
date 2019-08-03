@@ -36,6 +36,10 @@
   </url>
   
   <url>
+    <loc>https://k8s.camp/running-kubernetes/minikube/</loc>
+  </url>
+  
+  <url>
     <loc>https://k8s.camp/tags/</loc>
     <priority>0</priority>
   </url>

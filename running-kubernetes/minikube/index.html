@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Running Kubernetes - Minikube - Kubernetes Camp</title>
+<meta name="description" content="Learn Kubernetes on your Coffee Break">
+<meta name="generator" content="Hugo 0.56.3" />
+<link href="https://k8s.camp/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="https://k8s.camp/running-kubernetes/minikube/">
+<link rel="stylesheet" href="https://k8s.camp/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="https://k8s.camp/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://k8s.camp/js/functions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="https://k8s.camp/js/jquery.backtothetop/jquery.backtothetop.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-35638296-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-35638296-2');
+</script>
+</head>
+<body>
+<div class="container"><header>
+<h1>Kubernetes Camp</h1>
+<a href="https://github.com/paulczar/k8s-camp" class="github"><i class="fab fa-github"></i></a>
+<p class="description">Learn Kubernetes on your Coffee Break</p>
+
+</header>
+
+<div class="content-container">
+<main><h1>Running Kubernetes - Minikube</h1>
+
+<p>Minikube is the original &ldquo;run Kubernetes on your desktop without screwing everything up&rdquo; tool. Minikube runs Kubernetes in a VM on your machine for users looking to just test Kubernetes out, or Develop against it.</p>
+
+<p>We <a href="/getting-started/">recommend using KIND (Kubernetes IN Docker)</a>, however if you can&rsquo;t run Docker on your local machine minikube is the next best option.</p>
+
+<h2 id="macos">macOS</h2>
+
+<h3 id="install-kubectl">Install kubectl</h3>
+
+<p>Obviously you&rsquo;ll need kubectl installed to interact with Kubernetes. You can find instructions for macOS <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-macos">here</a></p>
+
+<h3 id="install-a-hypervisor">Install a Hypervisor</h3>
+
+<p>Ensure you have one of <a href="https://github.com/moby/hyperkit">HyperKit</a>, <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a>, or <a href="https://www.vmware.com/products/fusion">VMWare Fusion</a> installed.</p>
+
+<h3 id="install-minikube">Install minikube</h3>
+
+<p>The easiest way to install Minikube on macOS is using Homebrew:</p>
+
+<pre><code class="language-console">brew cask install minikube
+</code></pre>
+
+<blockquote>
+<p>Note: You can also yolo that install <code>curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64 \
+  &amp;&amp; chmod +x minikube</code></p>
+</blockquote>
+
+<h2 id="linux">Linux</h2>
+
+<p>First of all you want to ensure that Virtualization is supported on your machine, it probably is, but its nice to be sure. Run the following command, as long as the output is not <code>0</code> you should be good to go:</p>
+
+<pre><code class="language-console">egrep 'vmx|svm' /proc/cpuinfo | wc -l
+</code></pre>
+
+<h3 id="install-kubectl-1">Install kubectl</h3>
+
+<p>Obviously you&rsquo;ll need kubectl installed to interact with Kubernetes. You can find instructions for Linux <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux">here</a></p>
+
+<h3 id="install-a-hypervisor-1">Install a Hypervisor</h3>
+
+<p>You probably have either <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> or <a href="https://www.linux-kvm.org/">KVM</a> installed.</p>
+
+<blockquote>
+<p>Note: minikube also supports installing with Docker by using the <code>--vm-driver=none</code> flag, but if you&rsquo;re going to do that, you should just use KIND.</p>
+</blockquote>
+
+<h3 id="install-minikube-1">Install minikube</h3>
+
+<p>Install the latest version of minikube from its <a href="https://github.com/kubernetes/minikube/releases">GitHub releases page</a>. You&rsquo;ll find <code>.deb</code> and <code>.rpm</code> packages as well as a raw <code>.tgz</code> file for each version.</p>
+
+<blockquote>
+<p>Note: alternatively you can just yolo that install with <code>curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
+  &amp;&amp; chmod +x minikube</code></p>
+</blockquote>
+
+<h2 id="windows">Windows</h2>
+
+<h3 id="install-kubectl-2">Install kubectl</h3>
+
+<p>Obviously you&rsquo;ll need kubectl installed to interact with Kubernetes. You can find instructions for Windows <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-windows">here</a></p>
+
+<h3 id="install-a-hypervisor-2">Install a Hypervisor</h3>
+
+<p>You probably have either <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> or <a href="https://msdn.microsoft.com/en-us/virtualization/hyperv_on_windows/quick_start/walkthrough_install">Hyper-V</a> installed.</p>
+
+<blockquote>
+<p>Note: minikube also supports installing with Docker by using the <code>--vm-driver=none</code> flag, but if you&rsquo;re going to do that, you should just use KIND.</p>
+</blockquote>
+
+<h3 id="install-minikube-2">Install minikube</h3>
+
+<p>Download the minikube <a href="https://github.com/kubernetes/minikube/releases/latest/download/minikube-installer.exe">Windows Installer</a> and run it.</p>
+
+<h2 id="run-minikube">Run minikube</h2>
+
+<p>Running minikube is the same across the various operating systems once installed.</p>
+
+<p>Start minikube:</p>
+
+<pre><code class="language-console">$ minikube start
+Starting local Kubernetes cluster...
+Running pre-create checks...
+Creating machine...
+Starting local Kubernetes cluster...
+</code></pre>
+
+<blockquote>
+<p>Note: if minikube errors with <code>machine does not exist</code> it means you&rsquo;ve probably run it before. Run <code>minikube delete</code> to cleanup and try again.</p>
+</blockquote>
+
+<p>Ensure its running by checking its version:</p>
+
+<pre><code class="language-console">$ kubectl version
+Client Version: version.Info{Major:&quot;1&quot;, Minor:&quot;14&quot;, GitVersion:&quot;v1.14.0&quot;, GitCommit:&quot;641856db18352033a0d96dbc99153fa3b27298e5&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2019-03-25T15:53:57Z&quot;, GoVersion:&quot;go1.12.1&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;}
+Server Version: version.Info{Major:&quot;1&quot;, Minor:&quot;13&quot;, GitVersion:&quot;v1.13.5&quot;, GitCommit:&quot;2166946f41b36dea2c4626f90a77706f426cdea2&quot;, GitTreeState:&quot;clean&quot;, BuildDate:&quot;2019-03-25T15:19:22Z&quot;, GoVersion:&quot;go1.11.5&quot;, Compiler:&quot;gc&quot;, Platform:&quot;linux/amd64&quot;}
+</code></pre>
+
+<p><a href="/getting-started/1">Next</a> follow the tutorial to get a running workload on minikube.</p>
+<div class="edit-meta">
+
+<br></div><nav class="pagination"><a class="nav nav-prev" href="/running-kubernetes/" title="Running Kubernetes"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - Running Kubernetes</a>
+<a class="nav nav-next" href="/getting-started/" title="Getting Started">Next - Getting Started <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+</nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
+</footer>
+</main><div class="sidebar">
+<nav>
+<ul>
+<li class=""><a href="https://k8s.camp/">Home</a></li>
+
+<li class=""><a href="/getting-started/">Getting Started</a>
+<ul class="">
+<li class=""><a href="/getting-started/1/">1. Run your first application</a></li>
+<li class=""><a href="/getting-started/2/">2. Scale and upgrade your application</a></li>
+<li class=""><a href="/getting-started/3/">3. Accessing apps via Services</a></li>
+</ul>
+  
+</li>
+
+<li class=""><a href="/glossary/">Glossary</a>
+</li>
+
+<li class="parent"><a href="/running-kubernetes/">Running Kubernetes</a>
+<ul class="sub-menu">
+<li class="active"><a href="/running-kubernetes/minikube/">Running Kubernetes - Minikube</a></li>
+</ul>
+  
+</li>
+</ul>
+</nav>
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>
