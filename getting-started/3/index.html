@@ -32,7 +32,43 @@
 </header>
 
 <div class="content-container">
-<main><h1>3. Accessing apps via Services</h1><p>&hellip;</p>
+<main><h1>3. Accessing apps via Services</h1><p>So far we&rsquo;ve <a href="/getting-started">installed KIND</a>, <a href="/getting-started/1">run our first app</a>, and learned how to <a href="/getting-started/2">scale that app</a>. However still haven&rsquo;t made the application accessible.</p>
+
+<p>We can make it accessible by creating a <a href="/glossary/#service">Service</a> which we can do with the <code>kubectl expose</code> command like so:</p>
+
+<pre><code class="language-console">$ kubectl expose deployment first --type=LoadBalancer --port 80
+service/first exposed
+</code></pre>
+
+<p>After a few moments we can check what resources are now running in Kubernetes with <code>kubectl get all</code>:</p>
+
+<pre><code class="language-console">$ kubectl get all
+NAME                         READY   STATUS    RESTARTS   AGE
+pod/first-765d49ddcb-92vv9   1/1     Running   0          20h
+pod/first-765d49ddcb-f6hb4   1/1     Running   0          20h
+pod/first-765d49ddcb-gcgkn   1/1     Running   0          20h
+
+NAME                 TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+service/first        LoadBalancer   10.108.204.60   &lt;pending&gt;     80:31063/TCP   2m4s
+
+NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/first   3/3     3            3           41h
+
+NAME                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/first-765d49ddcb   3         3         3       20h
+</code></pre>
+
+<p>You can see we now have a new <a href="/glossary/#service">Service</a> resource of type <code>LoadBalancer</code>. However it has <code>pending</code> for its external IP address. This is because the Service resource wants to actually configure a Load Balancer for the application, but KIND does not have a built in load balancer.</p>
+
+<blockquote>
+<p>Note: If you had run this on a cloud provider&rsquo;s Kubernetes system such as Google&rsquo;s GKE, it would have automatically wired up a Google Load Balancer.</p>
+</blockquote>
+
+<p>It is at this moment that it dawned on the author that KIND does not in fact support exposing ports to outside the Kubernetes cluster in a consistent way across various operating systems and that he would need to rewrite the tutorial to use minikube.</p>
+
+<p>Except its Saturday and that sounds too much like actual work.</p>
+
+<p>To be Continued&hellip;</p>
 <div class="edit-meta">
 
 <br></div><nav class="pagination"><a class="nav nav-prev" href="/getting-started/2/" title="2. Scale and upgrade your application"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - 2. Scale and upgrade your application</a>

@@ -38,7 +38,9 @@ Validate your running workload We currently have a matching set of a Deployment,
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://k8s.camp/getting-started/3/</guid>
-      <description>&amp;hellip;</description>
+      <description>So far we&amp;rsquo;ve installed KIND, run our first app, and learned how to scale that app. However still haven&amp;rsquo;t made the application accessible.
+We can make it accessible by creating a Service which we can do with the kubectl expose command like so:
+$ kubectl expose deployment first --type=LoadBalancer --port 80 service/first exposed  After a few moments we can check what resources are now running in Kubernetes with kubectl get all:</description>
     </item>
     
     <item>
