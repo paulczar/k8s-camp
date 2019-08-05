@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Running Kubernetes - KIND - Kubernetes Camp</title>
+<meta name="description" content="Learn Kubernetes on your Coffee Break">
+<meta name="generator" content="Hugo 0.56.3" />
+<link href="https://k8s.camp/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="https://k8s.camp/running-kubernetes/kind/">
+<link rel="stylesheet" href="https://k8s.camp/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="https://k8s.camp/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://k8s.camp/js/functions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="https://k8s.camp/js/jquery.backtothetop/jquery.backtothetop.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-35638296-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-35638296-2');
+</script>
+</head>
+<body>
+<div class="container"><header>
+<h1>Kubernetes Camp</h1>
+<a href="https://github.com/paulczar/k8s-camp" class="github"><i class="fab fa-github"></i></a>
+<p class="description">Learn Kubernetes on your Coffee Break</p>
+
+</header>
+
+<div class="content-container">
+<main><h1>Running Kubernetes - KIND</h1>
+
+<p><a href="https://kind.sigs.k8s.io/">Kubernetes IN Docker</a> (KIND) is part of the new wave of easy to use Kubernetes installers focussed at people looking to learn, or use as a local development environment.</p>
+
+<p>It&rsquo;s great for just running a few applications, but is lacking support for some of the networking etc to handle some of our use cases.</p>
+
+<p>For now we recommend using <a href="/getting-started">minikube</a> to install Kubernetes locally.</p>
+
+<p>However if you do want to use KIND you can follow these instructions.</p>
+
+<h2 id="prerequisites">Prerequisites</h2>
+
+<ol>
+<li><a href="https://docs.docker.com/install/">docker</a></li>
+<li><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">kubectl</a></li>
+</ol>
+
+<h2 id="getting-started-on-mac-osx">Getting started on Mac OSX</h2>
+
+<pre><code class="language-console">curl -Lo ./kind-darwin-amd64 https://github.com/kubernetes-sigs/kind/releases/download/v0.4.0/kind-darwin-amd64
+chmod +x ./kind-darwin-amd64
+mv ./kind-darwin-amd64 /some-dir-in-your-PATH/kind
+</code></pre>
+
+<h2 id="getting-started-on-linux">Getting started on Linux</h2>
+
+<pre><code class="language-console">wget -O /tmp/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.4.0/kind-linux-amd64
+chmod +x /tmp/kind
+sudo mv /tmp/kind /usr/local/bin/kind
+</code></pre>
+
+<h2 id="creating-a-cluster-once-kind-is-installed-is-even-easier">Creating a cluster once KIND is installed is even easier</h2>
+
+<blockquote>
+<p>Note: this may take a few minutes the first time you run it as it needs to download a bunch of docker images.</p>
+</blockquote>
+
+<pre><code class="language-console">$ kind create cluster
+Creating cluster &quot;kind&quot; ...
+ ✓ Ensuring node image (kindest/node:v1.15.0) 🖼
+ ✓ Preparing nodes 📦
+ ✓ Creating kubeadm config 📜
+ ✓ Starting control-plane 🕹️
+ ✓ Installing CNI 🔌
+ ✓ Installing StorageClass 💾
+Cluster creation complete. You can now use the cluster with:
+
+export KUBECONFIG=&quot;$(kind get kubeconfig-path --name=&quot;kind&quot;)&quot;
+kubectl cluster-info
+</code></pre>
+
+<h3 id="follow-the-instructions-it-provides-to-gain-access-to-your-cluster">Follow the instructions it provides to gain access to your cluster</h3>
+
+<blockquote>
+<p>Note: you need <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">kubectl</a> installed to continue.</p>
+</blockquote>
+
+<pre><code class="language-console">$ export KUBECONFIG=&quot;$(kind get kubeconfig-path --name=&quot;kind&quot;)&quot;
+$ kubectl cluster-info
+Kubernetes master is running at https://127.0.0.1:44075
+KubeDNS is running at https://127.0.0.1:44075/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+
+$ docker ps
+CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS              PORTS                                  NAMES
+a25107ff8863        kindest/node:v1.15.0   &quot;/usr/local/bin/entr…&quot;   33 seconds ago      Up 28 seconds       44075/tcp, 127.0.0.1:44075-&gt;6443/tcp   kind-control-plane
+</code></pre>
+
+<p>Congratulations, you&rsquo;re now running a simple single node Kubernetes cluster on your laptop. Check out the other guides to see what to do next.</p>
+
+<p>Next learn how to <a href="/getting-started/1">run your first application</a>.</p>
+<div class="edit-meta">
+
+<br></div><nav class="pagination"><a class="nav nav-prev" href="/running-kubernetes/" title="Running Kubernetes"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - Running Kubernetes</a>
+<a class="nav nav-next" href="/running-kubernetes/minikube/" title="Running Kubernetes - Minikube">Next - Running Kubernetes - Minikube <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+</nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
+</footer>
+</main><div class="sidebar">
+<nav>
+<ul>
+<li class=""><a href="https://k8s.camp/">Home</a></li>
+
+<li class=""><a href="/getting-started/">Getting Started</a>
+<ul class="">
+<li class=""><a href="/getting-started/1/">1. Run your first application</a></li>
+<li class=""><a href="/getting-started/2/">2. Scale and upgrade your application</a></li>
+<li class=""><a href="/getting-started/3/">3. Accessing apps via Services</a></li>
+</ul>
+  
+</li>
+
+<li class=""><a href="/glossary/">Glossary</a>
+</li>
+
+<li class="parent"><a href="/running-kubernetes/">Running Kubernetes</a>
+<ul class="sub-menu">
+<li class="active"><a href="/running-kubernetes/kind/">Running Kubernetes - KIND</a></li>
+<li class=""><a href="/running-kubernetes/minikube/">Running Kubernetes - Minikube</a></li>
+</ul>
+  
+</li>
+</ul>
+</nav>
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>

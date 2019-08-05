@@ -32,78 +32,19 @@
 </header>
 
 <div class="content-container">
-<main><h1>Getting Started</h1>
+<main><h1>Getting Started</h1><p>The best way to run Kubernetes is to get somebody else to do it for you. If you have a few dollars to spend we recommend using the hosted Kubernetes offering from your favorite cloud.</p>
 
-<p>The best way to run Kubernetes is to get somebody else to do it for you. If you have a few dollars to spend we recommend using the hosted Kubernetes offering from your favorite cloud.</p>
+<p>However for many of us that&rsquo;s not feasible, thankfully there are tools like <a href="https://github.com/kubernetes/minikube">minikube</a> and <a href="https://kind.sigs.k8s.io/">Kubernetes in Docker</a> (KIND) that will let you run a small Kubernetes cluster in VMs or containers on your laptop.</p>
 
-<p>However for many of us that&rsquo;s not feasible, thankfully there are tools like <a href="https://kind.sigs.k8s.io/">Kubernetes in Docker</a> (KIND) that will let you run a small Kubernetes cluster in containers on your laptop.</p>
+<p>The basic tutorials (unless specified otherwise) are written with <a href="https://github.com/kubernetes/minikube">minikube</a> as the default runtime to ensure maximum accessibility. Thus the following instructions are provided to help you get Kubernetes in Docker running.</p>
 
-<p>The basic tutorials (unless specified otherwise) are written with <a href="https://kind.sigs.k8s.io/">Kubernetes in Docker</a> as the default runtime to ensure maximum accessibility. Thus the following instructions are provided to help you get Kubernetes in Docker running.</p>
-
-<p>You could also use <a href="https://kubernetes.io/docs/setup/learning-environment/minikube/">minikube</a> if you prefer, but all the cool kids are using KIND these days.</p>
-
-<h2 id="prerequisites">Prerequisites</h2>
-
-<ol>
-<li><a href="https://docs.docker.com/install/">docker</a></li>
-<li><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">kubectl</a></li>
-</ol>
-
-<h2 id="getting-started-on-mac-osx">Getting started on Mac OSX</h2>
-
-<pre><code class="language-console">curl -Lo ./kind-darwin-amd64 https://github.com/kubernetes-sigs/kind/releases/download/v0.4.0/kind-darwin-amd64
-chmod +x ./kind-darwin-amd64
-mv ./kind-darwin-amd64 /some-dir-in-your-PATH/kind
-</code></pre>
-
-<h2 id="getting-started-on-linux">Getting started on Linux</h2>
-
-<pre><code class="language-console">wget -O /tmp/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.4.0/kind-linux-amd64
-chmod +x /tmp/kind
-sudo mv /tmp/kind /usr/local/bin/kind
-</code></pre>
-
-<h2 id="creating-a-cluster-once-kind-is-installed-is-even-easier">Creating a cluster once KIND is installed is even easier</h2>
+<p>You could also use <a href="https://kind.sigs.k8s.io/">KID</a> if you prefer, but all the cool kids are using KIND these days.</p>
 
 <blockquote>
-<p>Note: this may take a few minutes the first time you run it as it needs to download a bunch of docker images.</p>
+<p>Follow <a href="/running-kubernetes/minikube">these</a> instructions to install minikube. Alternatively <a href="/running-kubernetes/kind">here</a> can be installed, but is not recommended for using with these tutorials.</p>
 </blockquote>
 
-<pre><code class="language-console">$ kind create cluster
-Creating cluster &quot;kind&quot; ...
- ✓ Ensuring node image (kindest/node:v1.15.0) 🖼
- ✓ Preparing nodes 📦
- ✓ Creating kubeadm config 📜
- ✓ Starting control-plane 🕹️
- ✓ Installing CNI 🔌
- ✓ Installing StorageClass 💾
-Cluster creation complete. You can now use the cluster with:
-
-export KUBECONFIG=&quot;$(kind get kubeconfig-path --name=&quot;kind&quot;)&quot;
-kubectl cluster-info
-</code></pre>
-
-<h3 id="follow-the-instructions-it-provides-to-gain-access-to-your-cluster">Follow the instructions it provides to gain access to your cluster</h3>
-
-<blockquote>
-<p>Note: you need <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/">kubectl</a> installed to continue.</p>
-</blockquote>
-
-<pre><code class="language-console">$ export KUBECONFIG=&quot;$(kind get kubeconfig-path --name=&quot;kind&quot;)&quot;
-$ kubectl cluster-info
-Kubernetes master is running at https://127.0.0.1:44075
-KubeDNS is running at https://127.0.0.1:44075/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
-
-To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
-
-$ docker ps
-CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS              PORTS                                  NAMES
-a25107ff8863        kindest/node:v1.15.0   &quot;/usr/local/bin/entr…&quot;   33 seconds ago      Up 28 seconds       44075/tcp, 127.0.0.1:44075-&gt;6443/tcp   kind-control-plane
-</code></pre>
-
-<p>Congratulations, you&rsquo;re now running a simple single node Kubernetes cluster on your laptop. Check out the other guides to see what to do next.</p>
-
-<p>Next learn how to <a href="/getting-started/1">run your first application</a>.</p>
+<p>Once you&rsquo;ve got a working Kubernetes cluster, you can learn how to <a href="/getting-started/1">run your first application</a>.</p>
 <div class="edit-meta">
 
 <br></div><nav class="pagination"><a class="nav nav-prev" href="/" title="Learn Kubernetes during your Coffee Break"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - Learn Kubernetes during your Coffee Break</a>
@@ -129,6 +70,7 @@ a25107ff8863        kindest/node:v1.15.0   &quot;/usr/local/bin/entr…&quot;   
 
 <li class=""><a href="/running-kubernetes/">Running Kubernetes</a>
 <ul class="">
+<li class=""><a href="/running-kubernetes/kind/">Running Kubernetes - KIND</a></li>
 <li class=""><a href="/running-kubernetes/minikube/">Running Kubernetes - Minikube</a></li>
 </ul>
   
