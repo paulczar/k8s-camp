@@ -4,7 +4,7 @@ title: Learn Kubernetes during your Coffee Break
 
 # Learn Kubernetes during your Coffee Break
 
-[Kubernetes](https://kubernetes.io/) is big and hard.
+[Kubernetes](https://kubernetes.io/) is complicated.
 
 Don't let that get in your way.
 

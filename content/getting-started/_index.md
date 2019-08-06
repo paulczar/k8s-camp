@@ -10,6 +10,6 @@ The basic tutorials (unless specified otherwise) are written with [minikube](htt
 
 You could also use [KID](https://kind.sigs.k8s.io/) if you prefer, but all the cool kids are using KIND these days.
 
-> Follow [these](/running-kubernetes/minikube) instructions to install minikube. Alternatively [here](/running-kubernetes/kind) can be installed, but is not recommended for using with these tutorials.
+Follow [these](/running-kubernetes/minikube) instructions to install minikube. Alternatively [here](/running-kubernetes/kind) can be installed, but is not recommended for using with these tutorials.
 
-Once you've got a working Kubernetes cluster, you can learn how to [run your first application](/getting-started/1).
+If you already have a working Kubernetes cluster, you can move straight onto [running your first application](/getting-started/1).
