@@ -8,7 +8,7 @@ However for many of us that's not feasible, thankfully there are tools like [min
 
 The basic tutorials (unless specified otherwise) are written with [minikube](https://github.com/kubernetes/minikube) as the default runtime to ensure maximum accessibility. Thus the following instructions are provided to help you get Kubernetes in Docker running.
 
-You could also use [KID](https://kind.sigs.k8s.io/) if you prefer, but all the cool kids are using KIND these days.
+You could also use [KIND](https://kind.sigs.k8s.io/) if you prefer, but all the cool kids are using KIND these days.
 
 Follow [these](/running-kubernetes/minikube) instructions to install minikube. Alternatively [here](/running-kubernetes/kind) can be installed, but is not recommended for using with these tutorials.
 
