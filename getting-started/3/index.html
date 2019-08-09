@@ -58,17 +58,24 @@ NAME                               DESIRED   CURRENT   READY   AGE
 replicaset.apps/first-765d49ddcb   3         3         3       20h
 </code></pre>
 
-<p>You can see we now have a new <a href="/glossary/#service">Service</a> resource of type <code>LoadBalancer</code>. However it has <code>pending</code> for its external IP address. This is because the Service resource wants to actually configure a Load Balancer for the application, but KIND does not have a built in load balancer.</p>
+<p>You can see we now have a new <a href="/glossary/#service">Service</a> resource of type <code>LoadBalancer</code>. On cloud providers that support Load Balancers this would have wired up a Load Balancer to provide access to your application. Minikube does not have a Load Balancer and instead provides makes your application available via <code>minikube service</code>.</p>
+
+<pre><code class="language-console">$ minikube service first --url
+http://192.168.99.107:32183
+</code></pre>
 
 <blockquote>
-<p>Note: If you had run this on a cloud provider&rsquo;s Kubernetes system such as Google&rsquo;s GKE, it would have automatically wired up a Google Load Balancer.</p>
+<p>Note: if you omit the <code>--url</code> part of the command it will automatically open your preferred browser to the URL.</p>
 </blockquote>
 
-<p>It is at this moment that it dawned on the author that KIND does not in fact support exposing ports to outside the Kubernetes cluster in a consistent way across various operating systems and that he would need to rewrite the tutorial to use minikube.</p>
+<p>You can then use curl or a web browser to access that URL:</p>
 
-<p>Except its Saturday and that sounds too much like actual work.</p>
-
-<p>To be Continued&hellip;</p>
+<pre><code class="language-console">$ curl -s `minikube service first --url` | head -n 4
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+</code></pre>
 <div class="edit-meta">
 
 <br></div><nav class="pagination"><a class="nav nav-prev" href="/getting-started/2/" title="2. Scale and upgrade your application"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - 2. Scale and upgrade your application</a>
