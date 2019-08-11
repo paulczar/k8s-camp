@@ -18,7 +18,7 @@
       <guid>https://k8s.camp/getting-started/1/</guid>
       <description>Above all else Kubernetes is a platform for running applications. It takes applications that are packaged into Linux Containers and runs them in a special executable environment called a Pod.
 A simple application such as NGINX can be deployed to Kubernetes with a simple kubectl command. While this is not how you would deploy software into production, its a nice easy way to start getting familiar with Kubernetes.
-Ask Kubernetes to run NGINX You can use the kubectl create command to create a Deployment which is a Controller that wraps around a Pod to provide additional functionality.</description>
+Do Ask Kubernetes to run NGINX You can use the kubectl create command to create a Deployment which is a Controller that wraps around a Pod to provide additional functionality.</description>
     </item>
     
     <item>

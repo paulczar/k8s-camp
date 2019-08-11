@@ -38,7 +38,9 @@
 
 <p>A simple application such as NGINX can be deployed to Kubernetes with a simple <code>kubectl</code> command. While this is not how you would deploy software into production, its a nice easy way to start getting familiar with Kubernetes.</p>
 
-<h2 id="ask-kubernetes-to-run-nginx">Ask Kubernetes to run NGINX</h2>
+<h2 id="do">Do</h2>
+
+<h3 id="ask-kubernetes-to-run-nginx">Ask Kubernetes to run NGINX</h3>
 
 <p>You can use the <code>kubectl create</code> command to create a <a href="/glossary/#deployment">Deployment</a> which is a <a href="/glossary/#controller">Controller</a> that wraps around a <a href="/glossary/#pod">Pod</a> to provide additional functionality.</p>
 
@@ -50,7 +52,7 @@
 deployment.apps/first created
 </code></pre>
 
-<h2 id="look-at-what-resources-are-running">Look at what resources are running</h2>
+<h3 id="look-at-what-resources-are-running">Look at what resources are running</h3>
 
 <blockquote>
 <p>Note there are actually three resources that were deployed as a result of this command. <code>kubectl create deployment</code> created the <a href="/glossary/#deployment">Deployment</a>, which created the <a href="/glossary/#replicaset">ReplicaSet</a>, which created the <a href="/glossary/#pod">Pod</a> in which the application itself is running.</p>
@@ -67,7 +69,7 @@ NAME                         READY   STATUS    RESTARTS   AGE
 pod/first-7f77d57ccc-8gwkp   1/1     Running   0          15h
 </code></pre>
 
-<h2 id="ask-kubernetes-to-forward-a-port-to-your-new-deployment">Ask Kubernetes to forward a port to your new deployment</h2>
+<h3 id="ask-kubernetes-to-forward-a-port-to-your-new-deployment">Ask Kubernetes to forward a port to your new deployment</h3>
 
 <p>The astute observer would notice that there&rsquo;s no indication of how to access your application in the above output. That&rsquo;s because in order to access a running application in Kubernetes you would usually create a <a href="/glossary/#service">Service</a>.</p>
 
@@ -112,9 +114,49 @@ Commercial support is available at
 &lt;/html&gt;
 </code></pre>
 
-<h2 id="summary">Summary</h2>
+<h2 id="learn">Learn</h2>
+
+<h3 id="summary">Summary</h3>
 
 <p>What we just did was create a Kubernetes resource using the <strong><a href="/glossary/#imperative">imperative</a></strong> command <code>kubectl create deployment</code>. This creates a <strong><a href="/glossary/#deployment">Deployment</a></strong> resource which in turn creates a <strong><a href="/glossary/#replicaset">ReplicaSet</a></strong> resource which in turn creates a <strong><a href="/glossary/#pod">Pod</a></strong> resource.</p>
+
+<blockquote>
+<p>Imperative commands are actions that act against the live resources and are used to quickly create, update, and delete resources. While this makes for simple use, they are not great for real workloads.</p>
+</blockquote>
+
+<h3 id="controllers">Controllers</h3>
+
+<p>Controllers are the beating heart of Kubernetes, they&rsquo;re what take it from being a fairly simple container scheduler to a powerful platform. Controllers are programs that watch resources (by connecting to the API) and reconciles the live object against the desired state.</p>
+
+<p>Most resources in Kubernetes are managed by controllers. Following the <a href="https://en.wikipedia.org/wiki/Unix_philosophy">UNIX Philosophy</a> of doing one thing and doing it well, controllers will often stack together to create complex workflows.</p>
+
+<p>We saw this controller stacking in action above when we created a Deployment, which managed ReplicaSets which in turn managed sets of Pods.</p>
+
+<h3 id="resources">Resources</h3>
+
+<p>Kubernetes objects are known as Resources and they can be described by a fairly simple datastructure, usually formatted as <em>YAML</em> or <em>JSON</em>. All resources have a <em>kind</em>, <em>apiVersion</em>, <em>metadata</em>, and <em>spec</em>.</p>
+
+<h4 id="pod">Pod</h4>
+
+<p>A Pod is the basic building block of compute operations in Kubernetes. A Pod is <em>not</em> a container, a Pod is the execution environment in which one or more containers run. Each pod shares a Network IP (and localhost) and Volumes between the Containers hosted in the pod.</p>
+
+<p>Think of the Pod as the minimum scalable unit of your application. If you were running Wordpress you might run an NGINX container and a PHP-FPM container in the same pod sharing a UNIX socket over a shared volume. You would not however put the MySQL database in the same pod as while it is part of your application it is a separate scalable unit of your application.</p>
+
+<p>A Pod however is [purposefully] quite fragile. A Pod is scheduled to a specific worker node (managed via the kubelet process). If the worker node disappears, so does the pod.</p>
+
+<h4 id="replicaset">ReplicaSet</h4>
+
+<p>The ReplicaSet improves the resiliancy of compute workloads on Kubernetes. A ReplicaSet Controller manages mulitple copies of the same Pod. When the ReplicaSet controller detects that the number of pods is different to the requested number of Pods it will attempt to create or destroy pods to reconcile the difference.</p>
+
+<p>It is completely normal to see a ReplicaSet with a size of one, as that ensures that if a Pod disappears a new copy of the pod will be started.</p>
+
+<h4 id="deployment">Deployment</h4>
+
+<p>A Deployment goes one step further and manages the upgrade lifecycle of a compute workload on Kubernetes. A Deployment Controller manages sets of ReplicaSet resources. When you first request a Deployment the controller will request a single ReplicaSet of the specified size.</p>
+
+<p>When you change the image version, change an environment variable, or other such settings the Deployment Controller goes to work. It will request a new ReplicaSet using the new settings and will slowly increase the new ReplicaSet size while reducing the old ReplicaSet (maintaining the correct max count) until the old ReplicaSet has a size of zero.</p>
+
+<p>You can tweak the specific behaviors of the upgrade process in the Deployment resource manifest.</p>
 
 <p><a href="/getting-started/2">Next</a> learn how to scale and upgrade your Application.</p>
 <div class="edit-meta">
