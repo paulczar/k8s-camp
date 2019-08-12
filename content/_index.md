@@ -22,7 +22,7 @@ This internet website is designed to teach [Kubernetes](https://kubernetes.io/) 
 
 ## Why Not ?
 
-[Kubernetes](https://kubernetes.io/) is not for everyone. There are many reasons another tool or platform is more suitable for you. That's Ok. Here's some alternative platforms that do similar things:
+[Kubernetes](https://kubernetes.io/) is not for everyone. There are many reasons another tool or platform is more suitable for you. That's fine! Here's some alternative platforms that do similar things:
 
 * Mesos - DC/OS
 * Docker Swarm

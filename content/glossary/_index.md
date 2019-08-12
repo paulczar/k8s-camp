@@ -4,7 +4,7 @@ title: Glossary
 
 ## Container
 
-A Linux Container is an execution environment that has been sandboxed using Linux Kernel features such as CGROUPS and Namespaces. While not the original inventors of Linux Containers, Docker popularized them and thus the terms "docker container" and "linux container" are often interchangable.
+A Linux Container is an execution environment that has been sandboxed using Linux Kernel features such as CGROUPS and Namespaces. While not the original inventors of Linux Containers, Docker popularized them and thus the terms "docker container" and "linux container" are often interchangeable.
 
 ## Controller
 

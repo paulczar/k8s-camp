@@ -1,12 +1,35 @@
 version: 2
 jobs:
 
-  hugo-publish:
-    machine: true
+  spell-check:
+    docker:
+      - image: node:lts-alpine
     steps:
       - checkout
       - run:
           command: |
+            npm install markdown-spellcheck
+            ./node_modules/markdown-spellcheck/bin/mdspell -r -n -a --en-us 'content/**/*.md'
+
+  write-good:
+    docker:
+      - image: node:lts-alpine
+    steps:
+      - checkout
+      - run:
+          command: |
+            npm install write-good
+            ./node_modules/write-good/bin/write-good.js content/**/*.md
+
+  hugo-publish:
+    machine: true
+    # docker:
+    #   - image: ubuntu:bionic
+    steps:
+      - checkout
+      - run:
+          command: |
+            # apt-get update && apt-get install -yqq curl git
             curl -sSL https://github.com/gohugoio/hugo/releases/download/v0.56.3/hugo_0.56.3_Linux-64bit.tar.gz | tar xzf - hugo
             chmod +x hugo
             ./hugo --destination=.deploy/
@@ -28,6 +51,12 @@ workflows:
   version: 2
   release:
     jobs:
+      - spell-check:
+          filters:
+            tags:
+              ignore: /.*/
+            branches:
+              only: master
       - hugo-publish:
           filters:
             tags:

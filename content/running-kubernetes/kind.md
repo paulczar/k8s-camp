@@ -2,7 +2,7 @@
 title: Running Kubernetes - KIND
 ---
 
-[Kubernetes IN Docker](https://kind.sigs.k8s.io/) (KIND) is part of the new wave of easy to use Kubernetes installers focussed at people looking to learn, or use as a local development environment.
+[Kubernetes IN Docker](https://kind.sigs.k8s.io/) (KIND) is part of the new wave of easy to use Kubernetes installers focused at people looking to learn, or use as a local development environment.
 
 It's great for just running a few applications, but is lacking support for some of the networking etc to handle some of our use cases.
 
