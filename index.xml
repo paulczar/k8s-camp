@@ -16,9 +16,9 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://k8s.camp/getting-started/1/</guid>
-      <description>Above all else Kubernetes is a platform for running applications. It takes applications that are packaged into Linux Containers and runs them in a special executable environment called a Pod.
-A simple application such as NGINX can be deployed to Kubernetes with a simple kubectl command. While this is not how you would deploy software into production, its a nice easy way to start getting familiar with Kubernetes.
-Do Ask Kubernetes to run NGINX You can use the kubectl create command to create a Deployment which is a Controller that wraps around a Pod to provide additional functionality.</description>
+      <description>Above all else Kubernetes is a platform for running applications. It takes applications in the form of Linux Containers and runs them in a special executable environment called a Pod.
+A simple application such as NGINX can deploy to Kubernetes with a simple kubectl command. While this is not how you would deploy software into production, its a nice easy way to start getting familiar with Kubernetes.
+Do Ask Kubernetes to run NGINX You can use the kubectl create command to create a Deployment which is a Controller that wraps around a Pod to provide functionality.</description>
     </item>
     
     <item>
@@ -29,7 +29,7 @@ Do Ask Kubernetes to run NGINX You can use the kubectl create command to create 
       <guid>https://k8s.camp/getting-started/2/</guid>
       <description>Part of Running an application is being able to scale it to meet traffic demands, and to upgrade it when new versions of the software is available.
 Thankfully Kubernetes makes both of these things really easy. In the previous steps we ran an application by creating a Deployment. A Deployment is a Controller with special properties to help you both scale and upgrade your workload.
-Validate your running workload We currently have a matching set of a Deployment, a ReplicaSet and a Pod in our cluster.</description>
+Do Validate your running workload We currently have a matching set of a Deployment, a ReplicaSet and a Pod in our cluster.</description>
     </item>
     
     <item>
@@ -39,7 +39,7 @@ Validate your running workload We currently have a matching set of a Deployment,
       
       <guid>https://k8s.camp/getting-started/3/</guid>
       <description>So far we&amp;rsquo;ve installed KIND, run our first app, and learned how to scale that app. However still haven&amp;rsquo;t made the application accessible.
-We can make it accessible by creating a Service which we can do with the kubectl expose command like so:
+Do We can make it accessible by creating a Service which we can do with the kubectl expose command like so:
 $ kubectl expose deployment first --type=LoadBalancer --port 80 service/first exposed  After a few moments we can check what resources are now running in Kubernetes with kubectl get all:</description>
     </item>
     
@@ -49,7 +49,7 @@ $ kubectl expose deployment first --type=LoadBalancer --port 80 service/first ex
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://k8s.camp/running-kubernetes/kind/</guid>
-      <description>Kubernetes IN Docker (KIND) is part of the new wave of easy to use Kubernetes installers focussed at people looking to learn, or use as a local development environment.
+      <description>Kubernetes IN Docker (KIND) is part of the new wave of easy to use Kubernetes installers focused at people looking to learn, or use as a local development environment.
 It&amp;rsquo;s great for just running a few applications, but is lacking support for some of the networking etc to handle some of our use cases.
 For now we recommend using minikube to install Kubernetes locally.
 However if you do want to use KIND you can follow these instructions.</description>

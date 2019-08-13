@@ -34,18 +34,18 @@
 <div class="content-container">
 <main><h1>1. Run your first application</h1>
 
-<p>Above all else <a href="https://kubernetes.io">Kubernetes</a> is a platform for running applications. It takes applications that are packaged into <a href="/glossary/#container">Linux Containers</a> and runs them in a special executable environment called a <a href="/glossary/#pod">Pod</a>.</p>
+<p>Above all else <a href="https://kubernetes.io">Kubernetes</a> is a platform for running applications. It takes applications in the form of <a href="/glossary/#container">Linux Containers</a> and runs them in a special executable environment called a <a href="/glossary/#pod">Pod</a>.</p>
 
-<p>A simple application such as NGINX can be deployed to Kubernetes with a simple <code>kubectl</code> command. While this is not how you would deploy software into production, its a nice easy way to start getting familiar with Kubernetes.</p>
+<p>A simple application such as NGINX can deploy to Kubernetes with a simple <code>kubectl</code> command. While this is not how you would deploy software into production, its a nice easy way to start getting familiar with Kubernetes.</p>
 
 <h2 id="do">Do</h2>
 
 <h3 id="ask-kubernetes-to-run-nginx">Ask Kubernetes to run NGINX</h3>
 
-<p>You can use the <code>kubectl create</code> command to create a <a href="/glossary/#deployment">Deployment</a> which is a <a href="/glossary/#controller">Controller</a> that wraps around a <a href="/glossary/#pod">Pod</a> to provide additional functionality.</p>
+<p>You can use the <code>kubectl create</code> command to create a <a href="/glossary/#deployment">Deployment</a> which is a <a href="/glossary/#controller">Controller</a> that wraps around a <a href="/glossary/#pod">Pod</a> to provide functionality.</p>
 
 <blockquote>
-<p>Note: Kubernetes downloads images from an Image Registry, if a specific registry is not provided it will default to the public Docker Registry. Thus the image referenced below is being pulled from <a href="https://hub.docker.com/_/nginx">https://hub.docker.com/_/nginx</a>.</p>
+<p>Note: Kubernetes downloads images from an Image Registry, if a specific registry is not provided it will default to the public Docker Registry. Thus the image referenced below is pulled from <a href="https://hub.docker.com/_/nginx">https://hub.docker.com/_/nginx</a>.</p>
 </blockquote>
 
 <pre><code class="language-console">$ kubectl create deployment first --image=nginx
@@ -55,7 +55,7 @@ deployment.apps/first created
 <h3 id="look-at-what-resources-are-running">Look at what resources are running</h3>
 
 <blockquote>
-<p>Note there are actually three resources that were deployed as a result of this command. <code>kubectl create deployment</code> created the <a href="/glossary/#deployment">Deployment</a>, which created the <a href="/glossary/#replicaset">ReplicaSet</a>, which created the <a href="/glossary/#pod">Pod</a> in which the application itself is running.</p>
+<p>Note there are actually three resources deployed as a result of this command. <code>kubectl create deployment</code> created the <a href="/glossary/#deployment">Deployment</a>, which created the <a href="/glossary/#replicaset">ReplicaSet</a>, which created the <a href="/glossary/#pod">Pod</a> in which the application itself is running.</p>
 </blockquote>
 
 <pre><code class="language-console">$ kubectl get all
@@ -71,9 +71,9 @@ pod/first-7f77d57ccc-8gwkp   1/1     Running   0          15h
 
 <h3 id="ask-kubernetes-to-forward-a-port-to-your-new-deployment">Ask Kubernetes to forward a port to your new deployment</h3>
 
-<p>The astute observer would notice that there&rsquo;s no indication of how to access your application in the above output. That&rsquo;s because in order to access a running application in Kubernetes you would usually create a <a href="/glossary/#service">Service</a>.</p>
+<p>The astute observer would notice that there&rsquo;s no obvious way to access your application in the above output. This is because a <a href="/glossary/#service">Service</a> is needed to wire up external access.</p>
 
-<p>However you can also access an application by using the <code>kubectl port-forward</code> command which will forward a port from your localhost into the specified Resource.</p>
+<p>You can access an application by using the <code>kubectl port-forward</code> command which will forward a port from your localhost into the specified Resource.</p>
 
 <blockquote>
 <p>Note: this process will run until you hit <code>ctrl-c</code> to break it.</p>
@@ -118,7 +118,7 @@ Commercial support is available at
 
 <h3 id="summary">Summary</h3>
 
-<p>What we just did was create a Kubernetes resource using the <strong><a href="/glossary/#imperative">imperative</a></strong> command <code>kubectl create deployment</code>. This creates a <strong><a href="/glossary/#deployment">Deployment</a></strong> resource which in turn creates a <strong><a href="/glossary/#replicaset">ReplicaSet</a></strong> resource which in turn creates a <strong><a href="/glossary/#pod">Pod</a></strong> resource.</p>
+<p>What you just did was create a Kubernetes resource using the <strong><a href="/glossary/#imperative">imperative</a></strong> command <code>kubectl create deployment</code>. This creates a <strong><a href="/glossary/#deployment">Deployment</a></strong> resource which in turn creates a <strong><a href="/glossary/#replicaset">ReplicaSet</a></strong> resource which in turn creates a <strong><a href="/glossary/#pod">Pod</a></strong> resource.</p>
 
 <blockquote>
 <p>Imperative commands are actions that act against the live resources and are used to quickly create, update, and delete resources. While this makes for simple use, they are not great for real workloads.</p>
@@ -134,7 +134,7 @@ Commercial support is available at
 
 <h3 id="resources">Resources</h3>
 
-<p>Kubernetes objects are known as Resources and they can be described by a fairly simple datastructure, usually formatted as <em>YAML</em> or <em>JSON</em>. All resources have a <em>kind</em>, <em>apiVersion</em>, <em>metadata</em>, and <em>spec</em>.</p>
+<p>Kubernetes objects are known as Resources and they can be described by a fairly simple data structure, usually formatted as <em>YAML</em> or <em>JSON</em>. All resources have a <em>kind</em>, <em>apiVersion</em>, <em>metadata</em>, and <em>spec</em>.</p>
 
 <h4 id="pod">Pod</h4>
 
@@ -146,7 +146,7 @@ Commercial support is available at
 
 <h4 id="replicaset">ReplicaSet</h4>
 
-<p>The ReplicaSet improves the resiliancy of compute workloads on Kubernetes. A ReplicaSet Controller manages mulitple copies of the same Pod. When the ReplicaSet controller detects that the number of pods is different to the requested number of Pods it will attempt to create or destroy pods to reconcile the difference.</p>
+<p>The ReplicaSet improves the resiliency of compute workloads on Kubernetes. A ReplicaSet Controller manages multiple copies of the same Pod. When the ReplicaSet controller detects that the number of pods is different to the requested number of Pods it will attempt to create or destroy pods to reconcile the difference.</p>
 
 <p>It is completely normal to see a ReplicaSet with a size of one, as that ensures that if a Pod disappears a new copy of the pod will be started.</p>
 

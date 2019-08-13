@@ -16,7 +16,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://k8s.camp/running-kubernetes/kind/</guid>
-      <description>Kubernetes IN Docker (KIND) is part of the new wave of easy to use Kubernetes installers focussed at people looking to learn, or use as a local development environment.
+      <description>Kubernetes IN Docker (KIND) is part of the new wave of easy to use Kubernetes installers focused at people looking to learn, or use as a local development environment.
 It&amp;rsquo;s great for just running a few applications, but is lacking support for some of the networking etc to handle some of our use cases.
 For now we recommend using minikube to install Kubernetes locally.
 However if you do want to use KIND you can follow these instructions.</description>
