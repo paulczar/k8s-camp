@@ -34,7 +34,7 @@
 <div class="content-container">
 <main><h1>3. Accessing apps via Services</h1>
 
-<p>So far we&rsquo;ve <a href="/getting-started">installed KIND</a>, <a href="/getting-started/1">run our first app</a>, and learned how to <a href="/getting-started/2">scale that app</a>. However still haven&rsquo;t made the application accessible.</p>
+<p>So far we&rsquo;ve <a href="/getting-started">installed Kubernetes</a>, <a href="/getting-started/1">run our first app</a>, and learned how to <a href="/getting-started/2">scale that app</a>. However still haven&rsquo;t made the application accessible.</p>
 
 <h2 id="do">Do</h2>
 
@@ -82,6 +82,75 @@ http://192.168.99.107:32183
 </code></pre>
 
 <h2 id="learn">Learn</h2>
+
+<h3 id="service">Service</h3>
+
+<blockquote>
+<p>For a more in-depth look at services see the official <a href="https://kubernetes.io/docs/concepts/services-networking/service/">Kubernetes Documentation</a>.</p>
+</blockquote>
+
+<p><strong>Services</strong> are an abstract way to expose applications running on sets of <strong>Pods</strong> as a network service.</p>
+
+<p><strong>Services</strong> achieve this by watching <strong>Pods</strong> for specific metadata and coordinating with <a href="/glossary/#kube-proxy">kube-proxy</a> to make them accessible, and <a href="/glossary/#kube-dns">kube-dns</a> for service discovery.</p>
+
+<p><strong>Services</strong> can be exposed in various ways depending on the access required.</p>
+
+<h4 id="cluster-ip">Cluster IP</h4>
+
+<p>The default service type is <code>clusterIP</code> which simply provides an IP address that is accessible on every worker node that forwards each request to one of the <strong>Pods</strong> being managed by the service.</p>
+
+<p>This IP is only accessible inside the cluster and is perfect for <strong>Pod</strong> to <strong>Pod</strong> communication. The obvious use case here is for a web Pod to connect to a database backend pod.</p>
+
+<h4 id="node-port">Node Port</h4>
+
+<p>When you want to provide external access to a service you set the type to <code>nodePort</code> which will forward an specific port from every worker node into the service. Armed with the IP address of a worker node, and the specified port you can access your service from outside of the cluster.</p>
+
+<h4 id="load-balancer">Load Balancer</h4>
+
+<p>Having to know the IP and Port of a <code>nodePort</code> service can be painful. Since Kubernetes is already tracking this information when you set the service type to <code>loadBalancer</code> it (the (Cloud Controller Manager)[/glossary/#cloud-controller-manager]) will actually go out and configure a Load Balancer in your infrastructure with this information and will keep it up to date.</p>
+
+<p>This means that as long as you know the IP address of your Load Balancer (will be provided by Kubernetes) you can access your application via a set IP or Vanity URL.</p>
+
+<h3 id="kubernetes-network-proxy-kube-proxy">Kubernetes Network Proxy (kube-proxy)</h3>
+
+<p><strong>kube-proxy</strong> runs on each worker node and provides the network skaffolding for services. It can do simple TCP, UDP, and SCTP stream forwarding or round robin TCP, UDP, and SCTP forwarding across a set of backends.</p>
+
+<h3 id="kubernetes-service-discovery-kube-dns">Kubernetes Service Discovery (kube-dns)</h3>
+
+<p>Kubernetes provides service discovery for services running in the cluster. It does this via three primary mechanisms; API Queries, DNS, Environment variables.</p>
+
+<h4 id="api-queries">API Queries</h4>
+
+<p>This is the least used method as it requires you to known the Kubernetes API and query it appropriately for sets of <strong>Pods</strong> or <strong>Services</strong>.</p>
+
+<h4 id="environment-variables">Environment Variables</h4>
+
+<p>When running a Pod the Kubelet adds a set of <em>environment variables</em> for each active service. These environment variables can be used by your application to configure itself. However they are statically created when the <strong>Pod</strong> is launched. An example of this would be:</p>
+
+<pre><code class="language-console">$ kubectl exec -ti first-765d49ddcb-wtp5k -- env | grep KUBERNETES
+KUBERNETES_SERVICE_PORT_HTTPS=443
+KUBERNETES_PORT=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP=tcp://10.96.0.1:443
+KUBERNETES_PORT_443_TCP_PROTO=tcp
+KUBERNETES_PORT_443_TCP_PORT=443
+KUBERNETES_PORT_443_TCP_ADDR=10.96.0.1
+KUBERNETES_SERVICE_HOST=10.96.0.1
+KUBERNETES_SERVICE_PORT=443
+</code></pre>
+
+<blockquote>
+<p>Note: above we used the <code>kubectl exec</code> command which is a way to execute arbitrary commands in an existing pod. By default Kubernetes provides a service called <code>kubernetes</code> for the Kubernetes API, so we can grep for the service name in environment variables to see what is exposed.</p>
+</blockquote>
+
+<h4 id="kube-dns">Kube DNS</h4>
+
+<p><strong>kube-dns</strong> A cluster aware DNS server watches the Kubernetes API and modifies DNS records as Services are created or modified.</p>
+
+<p>Our service named <code>first</code> had a DNS record registered for it. <strong>Pods</strong> running in the same <a href="/glossary/#namespace">namespace</a> can access it simply by the short name <code>first</code>. <strong>Pods</strong> in another namespace can access it via <code>first.default</code> (since we haven&rsquo;t yet specified namespaces, we&rsquo;re using the default).</p>
+
+<p>Kubernetes also supports DNS SRV (Service) records for named ports. We don&rsquo;t have a named port for the <code>first</code> service but if we did you could do a DNS SRV query for _http._tcp.my-service.my-ns to discover the port number for &ldquo;http&rdquo;, as well as the IP address.</p>
+
+<p>is even more useful than environment variables. and will resolve DNS inside the cluster. For example our <code>first</code> service will be accessible via <code>first.svc.default.kubernetes.local</code></p>
 <div class="edit-meta">
 
 <br></div><nav class="pagination"><a class="nav nav-prev" href="/getting-started/2/" title="2. Scale and upgrade your application"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - 2. Scale and upgrade your application</a>
