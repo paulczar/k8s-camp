@@ -38,4 +38,18 @@ sandbox
 sandboxed
 replicationcontroller
 namespaces
+namespace
+kube-dns
+backend
+skaffolding
+backends
+_http
+_tcp
+
+
+# weird stuff
+service.my
+_tcp.my
+ns
+
 _
