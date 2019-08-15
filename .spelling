@@ -45,6 +45,8 @@ skaffolding
 backends
 _http
 _tcp
+config
+base64
 
 
 # weird stuff
