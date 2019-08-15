@@ -107,7 +107,7 @@ http://192.168.99.107:32183
 
 <h4 id="load-balancer">Load Balancer</h4>
 
-<p>Having to know the IP and Port of a <code>nodePort</code> service can be painful. Since Kubernetes is already tracking this information when you set the service type to <code>loadBalancer</code> it (the (Cloud Controller Manager)[/glossary/#cloud-controller-manager]) will actually go out and configure a Load Balancer in your infrastructure with this information and will keep it up to date.</p>
+<p>Having to know the IP and Port of a <code>nodePort</code> service can be painful. Since Kubernetes is already tracking this information when you set the service type to <code>loadBalancer</code> it [the <a href="/glossary/#cloud-controller-manager">Cloud Controller Manager</a>] will actually go out and configure a Load Balancer in your infrastructure with this information and will keep it up to date.</p>
 
 <p>This means that as long as you know the IP address of your Load Balancer (will be provided by Kubernetes) you can access your application via a set IP or Vanity URL.</p>
 
@@ -150,11 +150,13 @@ KUBERNETES_SERVICE_PORT=443
 
 <p>Kubernetes also supports DNS SRV (Service) records for named ports. We don&rsquo;t have a named port for the <code>first</code> service but if we did you could do a DNS SRV query for _http._tcp.my-service.my-ns to discover the port number for &ldquo;http&rdquo;, as well as the IP address.</p>
 
-<p>is even more useful than environment variables. and will resolve DNS inside the cluster. For example our <code>first</code> service will be accessible via <code>first.svc.default.kubernetes.local</code></p>
+<p>is even more useful than environment variables. and will resolve DNS inside the cluster. For example our <code>first</code> service will be accessible via <code>first.svc.default.kubernetes.local</code>.</p>
+
+<p>Kube DNS is designed purely for use inside the cluster to allow cross Pod communication. External service discovery needs to be solved with additional tooling.</p>
 <div class="edit-meta">
 
 <br></div><nav class="pagination"><a class="nav nav-prev" href="/getting-started/2/" title="2. Scale and upgrade your application"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - 2. Scale and upgrade your application</a>
-<a class="nav nav-next" href="/glossary/" title="Glossary">Next - Glossary <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+<a class="nav nav-next" href="/getting-started/4/" title="4. Configuring your Application">Next - 4. Configuring your Application <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
 </nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
 </footer>
 </main><div class="sidebar">
@@ -167,6 +169,7 @@ KUBERNETES_SERVICE_PORT=443
 <li class=""><a href="/getting-started/1/">1. Run your first application</a></li>
 <li class=""><a href="/getting-started/2/">2. Scale and upgrade your application</a></li>
 <li class="active"><a href="/getting-started/3/">3. Accessing your application</a></li>
+<li class=""><a href="/getting-started/4/">4. Configuring your Application</a></li>
 </ul>
   
 </li>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>4. Configuring your Application - Kubernetes Camp</title>
+<meta name="description" content="Learn Kubernetes on your Coffee Break">
+<meta name="generator" content="Hugo 0.56.3" />
+<link href="https://k8s.camp/index.xml" rel="alternate" type="application/rss+xml">
+<link rel="canonical" href="https://k8s.camp/getting-started/4/">
+<link rel="stylesheet" href="https://k8s.camp/css/theme.min.css">
+<script src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<link rel="stylesheet" href="https://k8s.camp/css/chroma.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://k8s.camp/js/functions.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.easing@1.4.1/jquery.easing.min.js"></script>
+<script src="https://k8s.camp/js/jquery.backtothetop/jquery.backtothetop.min.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-35638296-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-35638296-2');
+</script>
+</head>
+<body>
+<div class="container"><header>
+<h1>Kubernetes Camp</h1>
+<a href="https://github.com/paulczar/k8s-camp" class="github"><i class="fab fa-github"></i></a>
+<p class="description">Learn Kubernetes on your Coffee Break</p>
+
+</header>
+
+<div class="content-container">
+<main><h1>4. Configuring your Application</h1>
+
+<p>So far we&rsquo;ve <a href="/getting-started">installed Kubernetes</a>, <a href="/getting-started/1">run our first app</a>, learned how to <a href="/getting-started/2">scale that app</a> and <a href="/getting-started/3">exposed that application</a> via a service.</p>
+
+<p>You may want to pass configuration settings into your application, you can use <strong>Config Maps</strong> and <strong>Secrets</strong> to do this.</p>
+
+<h2 id="do">Do</h2>
+
+<h3 id="create-a-basic-website">Create a basic website</h3>
+
+<p>Create a HTML file to display hello world:</p>
+
+<pre><code class="language-console">echo '&lt;html&gt;&lt;head&gt;&lt;title&gt;Hello World&lt;/title&gt;&lt;/head&gt;&lt;body&gt;Hello World&lt;/body&gt;&lt;/html&gt;' &gt; /tmp/index.html
+</code></pre>
+
+<h3 id="create-a-config-map">Create a Config Map</h3>
+
+<p>Create a Kubernetes Config Map from that file:</p>
+
+<pre><code class="language-console">$kubectl create configmap hello --from-file=/tmp/index.html
+configmap/hello created
+</code></pre>
+
+<h3 id="create-a-secret">Create a Secret</h3>
+
+<p>Create a Kubernetes Secret from that file:</p>
+
+<pre><code class="language-console">$ kubectl create secret generic hello --from-file=/tmp/index.html
+secret/hello created
+</code></pre>
+
+<p>View the resultant Config Map:</p>
+
+<pre><code class="language-yaml">$ kubectl get configmap hello -o yaml
+apiVersion: v1
+data:
+  index.html: |
+    &lt;html&gt;&lt;head&gt;&lt;title&gt;Hello World&lt;/title&gt;&lt;/head&gt;&lt;body&gt;Hello World&lt;/body&gt;&lt;/html&gt;
+kind: ConfigMap
+metadata:
+  creationTimestamp: &quot;2019-08-15T20:09:43Z&quot;
+  name: hello
+  namespace: default
+  resourceVersion: &quot;591027&quot;
+  selfLink: /api/v1/namespaces/default/configmaps/hello
+  uid: a47a6058-a482-40be-99d3-1aaf5390af85
+</code></pre>
+
+<p>View the resultant Secret:</p>
+
+<blockquote>
+<p>Note: the secret is unreadable. It is not encrypted, simple base64 encoded.</p>
+</blockquote>
+
+<pre><code class="language-yaml">apiVersion: v1
+data:
+  index.html: PGh0bWw+PGhlYWQ+PHRpdGxlPkhlbGxvIFdvcmxkPC90aXRsZT48L2hlYWQ+PGJvZHk+SGVsbG8gV29ybGQ8L2JvZHk+PC9odG1sPgo=
+kind: Secret
+metadata:
+  creationTimestamp: &quot;2019-08-15T20:09:49Z&quot;
+  name: hello
+  namespace: default
+  resourceVersion: &quot;591038&quot;
+  selfLink: /api/v1/namespaces/default/secrets/hello
+  uid: ead44f8c-041f-4db7-bb98-ee56dd1f2e3e
+type: Opaque
+</code></pre>
+
+<p>You can map either of these into your <strong>Pod</strong> as an environment variable, or as a file in a volume. Since the example application is nginx it makes sense to mount it as a file in a volume.</p>
+
+<p>To mount it as a volume you would need to edit the actual underlying Kubernetes manifest defining the Deployment. You could do this live with the <code>kubectl edit</code> command, however it will be easier if we create a new <strong>pod</strong> from a simpler manifest.</p>
+
+<h3 id="create-a-new-deployment">Create a new deployment</h3>
+
+<p>Create the following file as <code>/tmp/hello.yaml</code>:</p>
+
+<pre><code class="language-yaml">apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: hello-world
+spec:
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+      - name: hello
+        image: nginx:latest
+        volumeMounts:
+        - name: html
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: html
+        configMap:
+          name: hello
+</code></pre>
+
+<p>Apply that manifest using the declarative command <code>kubectl apply</code>:</p>
+
+<pre><code class="language-console">$ kubectl apply -f /tmp/hello.yaml
+deployment.extensions/hello-world created
+</code></pre>
+
+<h3 id="test-the-new-deployment">Test the new deployment</h3>
+
+<p>Use <code>kubectl port-forward</code> to enable access to the new deployment:</p>
+
+<pre><code class="language-console">$ kubectl port-forward deployment/hello-world 8080:80
+Forwarding from 127.0.0.1:8080 -&gt; 80
+Handling connection for 8080
+</code></pre>
+
+<p>Access the new port-forward from another terminal (or from a web browser):</p>
+
+<pre><code class="language-console">$ curl localhost:8080
+&lt;html&gt;&lt;head&gt;&lt;title&gt;Hello World&lt;/title&gt;&lt;/head&gt;&lt;body&gt;Hello World&lt;/body&gt;&lt;/html&gt;
+</code></pre>
+
+<h2 id="learn">Learn</h2>
+<div class="edit-meta">
+
+<br></div><nav class="pagination"><a class="nav nav-prev" href="/getting-started/3/" title="3. Accessing your application"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - 3. Accessing your application</a>
+<a class="nav nav-next" href="/glossary/" title="Glossary">Next - Glossary <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+</nav><footer><p class="powered">Powered by <a href="https://gohugo.io">Hugo</a>. Theme by <a href="https://themes.gohugo.io/hugo-theme-techdoc/">TechDoc</a>. Designed by <a href="https://github.com/thingsym/hugo-theme-techdoc">Thingsym</a>.</p>
+</footer>
+</main><div class="sidebar">
+<nav>
+<ul>
+<li class=""><a href="https://k8s.camp/">Home</a></li>
+
+<li class="parent"><a href="/getting-started/">Getting Started</a>
+<ul class="sub-menu">
+<li class=""><a href="/getting-started/1/">1. Run your first application</a></li>
+<li class=""><a href="/getting-started/2/">2. Scale and upgrade your application</a></li>
+<li class=""><a href="/getting-started/3/">3. Accessing your application</a></li>
+<li class="active"><a href="/getting-started/4/">4. Configuring your Application</a></li>
+</ul>
+  
+</li>
+
+<li class=""><a href="/glossary/">Glossary</a>
+</li>
+
+<li class=""><a href="/running-kubernetes/">Running Kubernetes</a>
+<ul class="">
+<li class=""><a href="/running-kubernetes/kind/">Running Kubernetes - KIND</a></li>
+<li class=""><a href="/running-kubernetes/minikube/">Running Kubernetes - Minikube</a></li>
+</ul>
+  
+</li>
+</ul>
+</nav>
+
+
+<div class="sidebar-footer"></div>
+</div>
+</div><a href="#" id="backtothetop-fixed" class="backtothetop"
+ data-backtothetop-duration="600"
+ data-backtothetop-easing="easeOutQuart"
+ data-backtothetop-fixed-fadeIn="1000"
+ data-backtothetop-fixed-fadeOut="1000"
+ data-backtothetop-fixed-bottom="10"
+ data-backtothetop-fixed-right="20">
+<span class="fa-layers fa-fw">
+<i class="fas fa-circle"></i>
+<i class="fas fa-arrow-circle-up"></i>
+</span></a>
+</div>
+</body>
+</html>

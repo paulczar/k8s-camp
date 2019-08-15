@@ -15,6 +15,10 @@
   </url>
   
   <url>
+    <loc>https://k8s.camp/getting-started/4/</loc>
+  </url>
+  
+  <url>
     <loc>https://k8s.camp/categories/</loc>
     <priority>0</priority>
   </url>

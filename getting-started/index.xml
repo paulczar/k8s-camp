@@ -43,5 +43,17 @@ Do We can make it accessible by creating a Service which we can do with the kube
 $ kubectl expose deployment first --type=LoadBalancer --port 80 service/first exposed  After a few moments we can check what resources are now running in Kubernetes with kubectl get all:</description>
     </item>
     
+    <item>
+      <title>4. Configuring your Application</title>
+      <link>https://k8s.camp/getting-started/4/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://k8s.camp/getting-started/4/</guid>
+      <description>So far we&amp;rsquo;ve installed Kubernetes, run our first app, learned how to scale that app and exposed that application via a service.
+You may want to pass configuration settings into your application, you can use Config Maps and Secrets to do this.
+Do Create a basic website Create a HTML file to display hello world:
+echo &#39;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;title&amp;gt;Hello World&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;Hello World&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&#39; &amp;gt; /tmp/index.html  Create a Config Map Create a Kubernetes Config Map from that file:</description>
+    </item>
+    
   </channel>
 </rss>
