@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
-set -e
-set -x
+#set -e
+#set -x
 set -o pipefail
 
 if [[ -z "$GITHUB_WORKSPACE" ]]; then

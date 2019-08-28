@@ -1,1 +1,5 @@
 .deploy/
+
+# node test artifacts
+node_modules/
+package-lock.json
