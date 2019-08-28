@@ -47,6 +47,8 @@ _http
 _tcp
 config
 base64
+configmap
+gitops
 
 
 # weird stuff
