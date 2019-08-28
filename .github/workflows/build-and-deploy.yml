@@ -12,5 +12,5 @@ jobs:
           fetch-depth: 1
       - uses: ./.github/actions/spell-check
       - uses: ./.github/actions/publish-gh-pages
-        secrets:
-          PUSH_TOKEN: ${{ secrets.PUSH_TOKEN }}
+        env:
+          PUSH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
