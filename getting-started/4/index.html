@@ -155,6 +155,170 @@ Handling connection for 8080
 </code></pre>
 
 <h2 id="learn">Learn</h2>
+
+<p>Not only did you create a <strong>ConfigMap</strong> and a <strong>Secret</strong>, but you also created a new <strong>Deployment</strong> using the declarative <code>kubectl apply</code> command using a <strong>YAML</strong> based Kubernetes manifest.</p>
+
+<h3 id="config-map">Config Map</h3>
+
+<p><strong>Config Maps</strong> are A Kubernetes resource to store key/value pairs that can be used by other Kubernetes resources. These key/value pairs can be loaded into <strong>Pods</strong> as environment variables or as files in a volume.</p>
+
+<p>This allows you to decouple configuration from image content with is an integral part of building Cloud Native Applications.</p>
+
+<p>You can create a <strong>Config Map</strong> from a manifest, or you can use the declarative <code>kubectl create configmap</code>. You can also combine the two and build a manifest using the <code>kubectl create configmap</code> command like so:</p>
+
+<pre><code class="language-yaml">$ kubectl create configmap example --from-file /tmp/index.html --dry-run -o yaml
+apiVersion: v1
+data:
+  index.html: |
+    &lt;html&gt;&lt;head&gt;&lt;title&gt;Hello World&lt;/title&gt;&lt;/head&gt;&lt;body&gt;Hello World&lt;/body&gt;&lt;/html&gt;
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: example
+</code></pre>
+
+<blockquote>
+<p>Note: the <code>--dry-run -o yaml</code> flags are incredibly useful, you can create a Kubernetes manifest for almost any type of Kubernetes resource via <code>kubectl create</code> to be used later with <code>kubectl apply -f</code>.</p>
+</blockquote>
+
+<h4 id="environment-variables">Environment Variables</h4>
+
+<p>As well as files, Values in a <strong>Config Map</strong> can be loaded into <em>environment variables</em> for your application to use inside of a <strong>Pod</strong> like so:</p>
+
+<pre><code class="language-yaml">apiVersion: v1
+data:
+  username: myApp
+kind: ConfigMap
+metadata:
+  name: mysql
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+spec:
+  containers:
+  - name: mysql
+    image: mysql
+    env:
+    - name: MYSQL_USERNAME
+      valueFrom:
+        configMapKeyRef:
+          # The ConfigMap containing the value you want to assign to MYSQL_USERNAME
+          name: mysql
+          # Specify the key associated with the value
+          key: username
+</code></pre>
+
+<p>You can also load an entire <strong>Config Map</strong> into environment variables like so:</p>
+
+<pre><code class="language-yaml">apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql
+data:
+  username: myApp
+  host: my.database.server
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+spec:
+  containers:
+  - name: mysql
+    image: mysql
+    envFrom:
+    - configMapRef:
+        name: mysql
+</code></pre>
+
+<h3 id="secret">Secret</h3>
+
+<p><strong>Secrets</strong> are like <strong>Config Maps</strong> but with a few differences. <strong>Secrets</strong> are base64 encoded which means unless you&rsquo;re a math genius you can&rsquo;t read them with the naked eye. This is not however for any security reason, its to ensure that the contents of the secret are safe to store in a text based format.</p>
+
+<p><strong>Secrets</strong> can be loaded into a <strong>Pod</strong> just like a <strong>Config Map</strong> as files in a volume or as environment variables. The syntax is roughly the same as you can see below.</p>
+
+<h4 id="files-in-a-volume">Files in a Volume</h4>
+
+<p>In the example above you created a Secret from a <code>index.html</code> file, you could load this into a Pod like so:</p>
+
+<pre><code class="language-yaml">apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+spec:
+  containers:
+  - name: hello
+    image: nginx:latest
+    volumeMounts:
+    - name: html
+      mountPath: /usr/share/nginx/html
+  volumes:
+  - name: html
+    secret:
+      secretName: hello
+</code></pre>
+
+<h4 id="environment-variables-1">Environment Variables</h4>
+
+<p>You can load <strong>Secrets</strong> into a <strong>Pod</strong> as environment variables much in the same way as you can <strong>Config Maps</strong>.</p>
+
+<p>Just a specific Key:</p>
+
+<pre><code class="language-yaml">apiVersion: v1
+data:
+  password: YmFjb24taXMtZGVsaWNpb3VzCg==
+kind: Secret
+metadata:
+  name: mysql
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+spec:
+  containers:
+  - name: mysql
+    image: mysql
+    env:
+    - name: MYSQL_USERNAME
+      valueFrom:
+        secretKeyRef:
+          # The Secret containing the value you want to assign to MYSQL_USERNAME
+          name: mysql
+          # Specify the key associated with the value
+          key: password
+</code></pre>
+
+<p>You can also load an entire <strong>Secret</strong> into environment variables like so:</p>
+
+<pre><code class="language-yaml">apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql
+data:
+  MYSQL_PASSWORD: YmFjb24taXMtZGVsaWNpb3VzCg==
+  MYSQL_ROOT_PASSWORD: YnV0LXNvLWlzLXRvZnUK
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mysql
+spec:
+  containers:
+  - name: mysql
+    image: mysql
+    envFrom:
+    - secretRef:
+        name: mysql
+</code></pre>
+
+<h3 id="declarative-kubernetes">Declarative Kubernetes</h3>
+
+<p>The best way to create resources with <code>kubectl</code> is to use <strong>Declarative</strong> commands like <code>kubectl apply</code>. When you use a declarative command you provide a desired state (usually in the form of a YAML based manifest like above) and let Kubernetes sweat the details on how to make the actual state match that desired state.</p>
+
+<p>These manifests are text based artifacts that can (and should) be stored in source control and provide a great foundation on which you can build out Infrastructure as Code and follow devops practices such as gitops.</p>
 <div class="edit-meta">
 
 <br></div><nav class="pagination"><a class="nav nav-prev" href="/getting-started/3/" title="3. Accessing your application"><i class="fas fa-arrow-left" aria-hidden="true"></i> Prev - 3. Accessing your application</a>
