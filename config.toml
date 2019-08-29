@@ -15,7 +15,7 @@ theme = "hugo-theme-techdoc"
     #github_doc_repository = "https://github.com/paulczar/k8s-camp"
 
     # Analytic section
-    google_analytics_id = "UA-35638296-2" # Your Google Analytics tracking id
+    google_analytics_id = "UA-146683530-1" # Your Google Analytics tracking id
     tag_manager_container_id = "" # Your Google Tag Manager container id
     google_site_verification = "" # Your Google Site Verification for Search Console
 
