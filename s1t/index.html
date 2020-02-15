@@ -1,0 +1,4208 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spring One Tour - Kubernetes Workshop </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="workshop.css">
+  </head>
+  <body>
+    <!--
+    <div style="position: absolute; left: 20%; right: 20%; top: 30%;">
+      <h1 style="font-size: 3em;">Loading ...</h1>
+      The slides should show up here. If they don't, it might be
+      because you are accessing this file directly from your filesystem.
+      It needs to be served from a web server. You can try this:
+      <pre>
+        docker-compose up -d
+        open http://localhost:8888/workshop.html # on MacOS
+        xdg-open http://localhost:8888/workshop.html # on Linux
+      </pre>
+      Once the slides are loaded, this notice disappears when you
+      go full screen (e.g. by hitting "f").
+    </div>
+    -->
+    <textarea id="source">class: title, self-paced
+
+Spring One Tour - Kubernetes Workshop<br/>
+
+.nav[*Self-paced version*]
+
+.debug[
+```
+ M slides/kube-fullday-namespaced.yml
+ M slides/markmaker.py
+ M slides/pks/connecting.md
+ M slides/pks/dashboard.md
+ M slides/pks/kubectlexpose.md
+ M slides/pks/kubectlget.md
+ M slides/pks/logistics.md
+ M slides/pks/octant.md
+ M slides/pks/prereqs.md
+?? slides/pks/helm-intro.md
+?? slides/pks/httpenv-update.md
+?? slides/pks/kubectlrun.md
+?? slides/pks/kubercoins.md
+?? slides/pks/logs-centralized.md
+?? slides/pks/sampleapp.md
+?? slides/pks/security-kubectl-apply.md
+?? slides/spring-one-tour.yml
+
+```
+
+These slides have been built from commit: e1c1db9
+
+
+[pks/title.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/title.md)]
+---
+
+class: title, in-person
+
+Spring One Tour - Kubernetes Workshop<br/><br/></br>
+
+.footnote[
+**Be kind to the WiFi!**<br/>
+<!-- *Use the 5G network.* -->
+*Don't use your hotspot.*<br/>
+*Don't stream videos or download big files during the workshop[.](https://www.youtube.com/watch?v=h16zyxiwDLY)*<br/>
+*Thank you!*
+
+**Slides: http://k8s.camp/s1t/**<br/>
+**Credentials: https://tinyurl.com/k8scamp**<br/>
+**Login: https://gangway.workshop.demo.paulczar.wtf**
+]
+
+.debug[[pks/title.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/title.md)]
+---
+## Intros
+
+- Hello! We are:
+
+   - .emoji[👨🏾‍🎓] Paul Czarkowski ([@pczarkowski](https://twitter.com/pczarkowski), VMware)
+   - .emoji[👨🏾‍🎓] Tyler Britten ([@tybritten](https://twitter.com/tybritten), VMWare)
+
+
+- Feel free to interrupt for questions at any time
+
+- *Especially when you see full screen container pictures!*
+
+.debug[[pks/logistics.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/logistics.md)]
+---
+## A brief introduction
+
+- This was initially written by [Jérôme Petazzoni](https://twitter.com/jpetazzo) to support in-person,
+  instructor-led workshops and tutorials
+  
+- Credit is also due to [multiple contributors](https://github.com/paulczar/container.training/graphs/contributors) — thank you!
+
+- You can also follow along on your own, at your own pace
+
+- We included as much information as possible in these slides
+
+- We recommend having a mentor to help you ...
+
+- ... Or be comfortable spending some time reading the Kubernetes [documentation](https://kubernetes.io/docs/) ...
+
+- ... And looking for answers on [StackOverflow](http://stackoverflow.com/questions/tagged/kubernetes) and other outlets
+
+.debug[[k8s/intro.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/intro.md)]
+---
+
+class: self-paced
+
+## Hands on, you shall practice
+
+- Nobody ever became a Jedi by spending their lives reading Wookiepedia
+
+- Likewise, it will take more than merely *reading* these slides
+  to make you an expert
+
+- These slides include *tons* of exercises and examples
+
+- They assume that you have access to a Kubernetes cluster
+
+- If you are attending a workshop or tutorial:
+  <br/>you will be given specific instructions to access your cluster
+
+- If you are doing this on your own:
+  <br/>the first chapter will give you various options to get your own cluster
+
+.debug[[k8s/intro.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/intro.md)]
+---
+## Accessing these slides now
+
+- We recommend that you open these slides in your browser:
+
+  http://k8s.camp/s1t/
+
+- Use arrows to move to next/previous slide
+
+  (up, down, left, right, page up, page down)
+
+- Type a slide number + ENTER to go to that slide
+
+- The slide number is also visible in the URL bar
+
+  (e.g. .../#123 for slide 123)
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/pks/slides/shared/about-slides.md)]
+---
+
+## Accessing these slides later
+
+- Slides will remain online so you can review them later if needed
+
+  (let's say we'll keep them online at least 1 year, how about that?)
+
+- You can download the slides using that URL:
+
+  http://k8s.camp/s1t/slides.zip
+
+  (then open the file `spring-one-tour.yml.html`)
+
+- You will to find new versions of these slides on:
+
+  https://container.training/
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/pks/slides/shared/about-slides.md)]
+---
+
+## These slides are open source
+
+- You are welcome to use, re-use, share these slides
+
+- These slides are written in markdown
+
+- The sources of these slides are available in a public GitHub repository:
+
+  https://github.com/paulczar/container.training
+
+- Typos? Mistakes? Questions? Feel free to hover over the bottom of the slide ...
+
+.footnote[.emoji[👇] Try it! The source file will be shown and you can view it on GitHub and fork and edit it.]
+
+<!--
+.exercise[
+```open https://github.com/paulczar/container.training/tree/master/slides/common/about-slides.md```
+]
+-->
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/pks/slides/shared/about-slides.md)]
+---
+
+class: extra-details
+
+## Extra details
+
+- This slide has a little magnifying glass in the top left corner
+
+- This magnifying glass indicates slides that provide extra details
+
+- Feel free to skip them if:
+
+  - you are in a hurry
+
+  - you are new to this and want to avoid cognitive overload
+
+  - you want only the most essential information
+
+- You can review these slides another time if you want, they'll be waiting for you ☺
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/pks/slides/shared/about-slides.md)]
+---
+
+class: in-person, chat-room
+
+## Chat room
+
+- We've set up a chat room that we will monitor during the workshop
+
+- Don't hesitate to use it to ask questions, or get help, or share feedback
+
+- The chat room will also be available after the workshop
+
+- Join the chat room: In person!
+
+- Say hi in the chat room!
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/pks/slides/shared/about-slides.md)]
+---
+
+name: toc-chapter-1
+
+## Chapter 1
+
+- [Pre-requirements](#toc-pre-requirements)
+
+- [Kubernetes concepts](#toc-kubernetes-concepts)
+
+- [Declarative vs imperative](#toc-declarative-vs-imperative)
+
+- [The Kubernetes dashboard](#toc-the-kubernetes-dashboard)
+
+- [Octant](#toc-octant)
+
+- [First contact with `kubectl`](#toc-first-contact-with-kubectl)
+
+.debug[(auto-generated TOC)]
+---
+name: toc-chapter-2
+
+## Chapter 2
+
+- [Running our first containers on Kubernetes](#toc-running-our-first-containers-on-kubernetes)
+
+- [Exposing containers](#toc-exposing-containers)
+
+- [Rolling updates](#toc-rolling-updates)
+
+- [Managing stacks with Helm](#toc-managing-stacks-with-helm)
+
+- [Creating a basic chart](#toc-creating-a-basic-chart)
+
+- [Next steps](#toc-next-steps)
+
+- [Links and resources](#toc-links-and-resources)
+
+.debug[(auto-generated TOC)]
+
+
+
+.debug[[shared/toc.md](https://github.com/paulczar/container.training/tree/pks/slides/shared/toc.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/Container-Ship-Freighter-Navigation-Elbe-Romance-1782991.jpg)]
+
+---
+
+name: toc-pre-requirements
+class: title
+
+ Pre-requirements
+
+.nav[
+[Previous section](#toc-)
+|
+[Back to table of contents](#toc-chapter-1)
+|
+[Next section](#toc-kubernetes-concepts)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Pre-requirements
+
+- Be comfortable with the UNIX command line
+
+  - navigating directories
+
+  - editing files
+
+  - a little bit of bash-fu (environment variables, loops)
+
+- Some Docker knowledge
+
+  - `docker run`, `docker ps`, `docker build`
+
+  - ideally, you know how to write a Dockerfile and build it
+    <br/>
+    (even if it's a `FROM` line and a couple of `RUN` commands)
+
+- It's totally OK if you are not a Docker expert!
+
+.debug[[pks/prereqs.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/prereqs.md)]
+---
+
+## software pre-requirements
+
+- You'll need the following software installed on your local laptop:
+
+* [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+* [helm 3](https://helm.sh/docs/using_helm/#installing-helm)
+
+- Bonus tools
+
+* [octant](https://github.com/vmware/octant#installation)
+* [stern](https://github.com/wercker/stern/releases/tag/1.11.0)
+* [jq](https://stedolan.github.io/jq/download/)
+
+.debug[[pks/prereqs.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/prereqs.md)]
+---
+
+class: title
+
+*Tell me and I forget.*
+<br/>
+*Teach me and I remember.*
+<br/>
+*Involve me and I learn.*
+
+Misattributed to Benjamin Franklin
+
+[(Probably inspired by Chinese Confucian philosopher Xunzi)](https://www.barrypopik.com/index.php/new_york_city/entry/tell_me_and_i_forget_teach_me_and_i_may_remember_involve_me_and_i_will_lear/)
+
+.debug[[pks/prereqs.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/prereqs.md)]
+---
+
+## Hands-on sections
+
+- The whole workshop is hands-on
+
+- You are invited to reproduce all the demos
+
+- You will be using conference wifi and a shared kubernetes cluster. Please be kind to both.
+
+- All hands-on sections are clearly identified, like the gray rectangle below
+
+.exercise[
+
+- This is the stuff you're supposed to do!
+
+- Go to http://k8s.camp/s1t/ to view these slides
+
+- Join the chat room: In person!
+
+<!-- ```open http://k8s.camp/s1t/``` -->
+
+]
+
+.debug[[pks/prereqs.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/prereqs.md)]
+---
+
+class: in-person
+
+## Where are we going to run our containers?
+
+.debug[[pks/prereqs.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/prereqs.md)]
+---
+
+class: in-person
+
+## shared cluster dedicated to this workshop
+
+- A large Pivotal Container Service (PKS) cluster deployed to Google Cloud.
+
+- It will remain up for the duration of the workshop (and maybe a few days beyond)
+
+- You should have a credentials to log into the cluster.
+
+
+.debug[[pks/prereqs.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/prereqs.md)]
+---
+
+class: in-person
+
+## Why don't we run containers locally?
+
+- Installing this stuff can be hard on some machines
+
+  (32 bits CPU or OS... Laptops without administrator access... etc.)
+
+- *"The whole team downloaded all these container images from the WiFi!
+  <br/>... and it went great!"* (Literally no-one ever)
+
+- All you need is a computer (or even a phone or tablet!), with:
+
+  - an internet connection
+
+  - a web browser
+
+  - kubectl
+
+  - helm
+
+.debug[[pks/prereqs.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/prereqs.md)]
+---
+class: in-person
+
+## Connecting to our lab environment
+
+.exercise[
+
+- Log into https://gangway.workshop.paulczar.wtf with your provided credentials.
+
+- Follow the instructions on the auth portal to set up a `kubeconfig` file.
+
+- Check that you can connect to the cluster with `kubectl cluster-info`:
+
+```bash
+$ kubectl cluster-info
+Kubernetes master is running at https://k8s.cluster1.demo.paulczar.wtf:8443
+CoreDNS is running at https://k8s.cluster1.demo.paulczar.wtf:8443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+```
+]
+
+If anything goes wrong — ask for help!
+
+.debug[[pks/connecting.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/connecting.md)]
+---
+
+## Role Based Authorization Control
+
+You are restricted to a subset of Kubernetes resources in your own namespace. Just like in a real world enterprise cluster.
+
+
+.exercise[
+
+1\. Can you create pods?
+
+```
+$ kubectl auth can-i create pods
+```
+
+2\. Can you delete namespaces?
+
+```
+$ kubectl auth can-i delete namespaces
+```
+]
+--
+
+1. You can create pods in your own namespace.
+2. You cannot delete namespaces.
+.debug[[pks/connecting.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/connecting.md)]
+---
+
+## Doing or re-doing the workshop on your own?
+
+- Use something like
+  [Play-With-Docker](http://play-with-docker.com/) or
+  [Play-With-Kubernetes](https://training.play-with-kubernetes.com/)
+
+  Zero setup effort; but environment are short-lived and
+  might have limited resources
+
+- Create your own cluster (local or cloud VMs)
+
+  Small setup effort; small cost; flexible environments
+
+- Create a bunch of clusters for you and your friends
+    ([instructions](https://github.com/paulczar/container.training/tree/master/prepare-vms))
+
+  Bigger setup effort; ideal for group training
+
+.debug[[pks/connecting.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/connecting.md)]
+---
+
+class: self-paced
+
+## Get your own Docker nodes
+
+- If you already have some Docker nodes: great!
+
+- If not: let's get some thanks to Play-With-Docker
+
+.exercise[
+
+- Go to http://www.play-with-docker.com/
+
+- Log in
+
+- Create your first node
+
+<!-- ```open http://www.play-with-docker.com/``` -->
+
+]
+
+You will need a Docker ID to use Play-With-Docker.
+
+(Creating a Docker ID is free.)
+
+.debug[[pks/connecting.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/connecting.md)]
+---
+
+## Terminals
+
+Once in a while, the instructions will say:
+<br/>"Open a new terminal."
+
+There are multiple ways to do this:
+
+- create a new window or tab on your machine, and SSH into the VM;
+
+- use screen or tmux on the VM and open a new window from there.
+
+You are welcome to use the method that you feel the most comfortable with.
+
+.debug[[pks/connecting.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/connecting.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/ShippingContainerSFBay.jpg)]
+
+---
+
+name: toc-kubernetes-concepts
+class: title
+
+ Kubernetes concepts
+
+.nav[
+[Previous section](#toc-pre-requirements)
+|
+[Back to table of contents](#toc-chapter-1)
+|
+[Next section](#toc-declarative-vs-imperative)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Kubernetes concepts
+
+- Kubernetes is a container management system
+
+- It runs and manages containerized applications on a cluster
+
+--
+
+- What does that really mean?
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+## Basic things we can ask Kubernetes to do
+
+--
+
+- Start 5 containers using image `atseashop/api:v1.3`
+
+--
+
+- Place an internal load balancer in front of these containers
+
+--
+
+- Start 10 containers using image `atseashop/webfront:v1.3`
+
+--
+
+- Place a public load balancer in front of these containers
+
+--
+
+- It's Black Friday (or Christmas), traffic spikes, grow our cluster and add containers
+
+--
+
+- New release! Replace my containers with the new image `atseashop/webfront:v1.4`
+
+--
+
+- Keep processing requests during the upgrade; update my containers one at a time
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+## Other things that Kubernetes can do for us
+
+- Basic autoscaling
+
+- Blue/green deployment, canary deployment
+
+- Long running services, but also batch (one-off) jobs
+
+- Overcommit our cluster and *evict* low-priority jobs
+
+- Run services with *stateful* data (databases etc.)
+
+- Fine-grained access control defining *what* can be done by *whom* on *which* resources
+
+- Integrating third party services (*service catalog*)
+
+- Automating complex tasks (*operators*)
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+## Kubernetes architecture
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+class: pic
+
+![haha only kidding](images/k8s-arch1.png)
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+## Kubernetes architecture
+
+- Ha ha ha ha
+
+- OK, I was trying to scare you, it's much simpler than that ❤️
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+class: pic
+
+![that one is more like the real thing](images/k8s-arch2.png)
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+## Credits
+
+- The first schema is a Kubernetes cluster with storage backed by multi-path iSCSI
+
+  (Courtesy of [Yongbok Kim](https://www.yongbok.net/blog/))
+
+- The second one is a simplified representation of a Kubernetes cluster
+
+  (Courtesy of [Imesh Gunaratne](https://medium.com/containermind/a-reference-architecture-for-deploying-wso2-middleware-on-kubernetes-d4dee7601e8e))
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+## Kubernetes architecture: the data plane
+
+- The data plane is a collection of nodes that execute our containers
+
+- These nodes run a collection of services:
+
+  - a container Engine (typically Docker)
+
+  - kubelet (the "node agent")
+
+  - kube-proxy (a necessary but not sufficient network component)
+
+- Nodes were formerly called "minions"
+
+  (You might see that word in older articles or documentation)
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+## Kubernetes architecture: the control plane
+
+- The Kubernetes logic (its "brains") is a collection of services:
+
+  - the API server (our point of entry to everything!)
+
+  - core services like the scheduler and controller manager
+
+  - `etcd` (a highly available key/value store; the "database" of Kubernetes)
+
+- Together, these services form the control plane of our cluster
+
+- The control plane is also called the "master"
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+class: pic
+
+![One of the best Kubernetes architecture diagrams available](images/k8s-arch4-thanks-luxas.png)
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+class: extra-details
+
+## Running the control plane on special nodes
+
+- PKS reserves dedicated node[s] for the control plane
+
+- This node is then called a "master"
+
+  (Yes, this is ambiguous: is the "master" a node, or the whole control plane?)
+
+- Normal applications are restricted from running on this node
+
+- When high availability is required, each service of the control plane must be resilient
+
+- The control plane is then replicated on multiple nodes
+
+  (This is sometimes called a "multi-master" setup)
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+class: extra-details
+
+## Do we need to run Docker at all?
+
+No!
+
+--
+
+- By default, Kubernetes uses the Docker Engine to run containers
+
+- We could also use `rkt` ("Rocket") from CoreOS
+
+- Or leverage other pluggable runtimes through the *Container Runtime Interface*
+
+  (like CRI-O, or containerd)
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+class: extra-details
+
+## Do we need to run Docker at all?
+
+Yes!
+
+--
+
+- Our Kubernetes cluster is using Docker as the container engine
+
+- We still use it to build images and ship them around
+
+- We can do these things without Docker
+  <br/>
+  (and get diagnosed with NIH¹ syndrome)
+
+- Docker is still the most stable container engine today
+  <br/>
+  (but other options are maturing very quickly)
+
+.footnote[¹[Not Invented Here](https://en.wikipedia.org/wiki/Not_invented_here)]
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+class: extra-details
+
+## Do we need to run Docker at all?
+
+- On our development environments, CI pipelines ... :
+
+  *Yes, almost certainly*
+
+- On our production servers:
+
+  *Yes (today)*
+
+  *Probably not (in the future)*
+
+.footnote[More information about CRI [on the Kubernetes blog](https://kubernetes.io/blog/2016/12/container-runtime-interface-cri-in-kubernetes)]
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+## Interacting with Kubernetes
+
+- We will interact with our Kubernetes cluster through the Kubernetes API
+
+- The Kubernetes API is (mostly) RESTful
+
+- It allows us to create, read, update, delete *resources*
+
+- A few common resource types are:
+
+  - node (a machine — physical or virtual — in our cluster)
+
+  - pod (group of containers running together on a node)
+
+  - service (stable network endpoint to connect to one or multiple containers)
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+class: pic
+
+![Node, pod, container](images/k8s-arch3-thanks-weave.png)
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+## Credits
+
+- The first diagram is courtesy of Lucas Käldström, in [this presentation](https://speakerdeck.com/luxas/kubeadm-cluster-creation-internals-from-self-hosting-to-upgradability-and-ha)
+
+  - it's one of the best Kubernetes architecture diagrams available!
+
+- The second diagram is courtesy of Weave Works
+
+  - a *pod* can have multiple containers working together
+
+  - IP addresses are associated with *pods*, not with individual containers
+
+Both diagrams used with permission.
+
+.debug[[pks/concepts-k8s.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/concepts-k8s.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/aerial-view-of-containers.jpg)]
+
+---
+
+name: toc-declarative-vs-imperative
+class: title
+
+ Declarative vs imperative
+
+.nav[
+[Previous section](#toc-kubernetes-concepts)
+|
+[Back to table of contents](#toc-chapter-1)
+|
+[Next section](#toc-the-kubernetes-dashboard)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Declarative vs imperative
+
+- Our container orchestrator puts a very strong emphasis on being *declarative*
+
+- Declarative:
+
+  *I would like a cup of tea.*
+
+- Imperative:
+
+  *Boil some water. Pour it in a teapot. Add tea leaves. Steep for a while. Serve in a cup.*
+
+--
+
+- Declarative seems simpler at first ... 
+
+--
+
+- ... As long as you know how to brew tea
+
+.debug[[shared/declarative.md](https://github.com/paulczar/container.training/tree/pks/slides/shared/declarative.md)]
+---
+
+## Declarative vs imperative
+
+- What declarative would really be:
+
+  *I want a cup of tea, obtained by pouring an infusion¹ of tea leaves in a cup.*
+
+--
+
+  *¹An infusion is obtained by letting the object steep a few minutes in hot² water.*
+
+--
+
+  *²Hot liquid is obtained by pouring it in an appropriate container³ and setting it on a stove.*
+
+--
+
+  *³Ah, finally, containers! Something we know about. Let's get to work, shall we?*
+
+--
+
+.footnote[Did you know there was an [ISO standard](https://en.wikipedia.org/wiki/ISO_3103)
+specifying how to brew tea?]
+
+.debug[[shared/declarative.md](https://github.com/paulczar/container.training/tree/pks/slides/shared/declarative.md)]
+---
+
+## Declarative vs imperative
+
+- Imperative systems:
+
+  - simpler
+
+  - if a task is interrupted, we have to restart from scratch
+
+- Declarative systems:
+
+  - if a task is interrupted (or if we show up to the party half-way through),
+    we can figure out what's missing and do only what's necessary
+
+  - we need to be able to *observe* the system
+
+  - ... and compute a "diff" between *what we have* and *what we want*
+
+.debug[[shared/declarative.md](https://github.com/paulczar/container.training/tree/pks/slides/shared/declarative.md)]
+---
+## Declarative vs imperative in Kubernetes
+
+- With Kubernetes, we cannot say: "run this container"
+
+- All we can do is write a *spec* and push it to the API server
+
+  (by creating a resource like e.g. a Pod or a Deployment)
+
+- The API server will validate that spec (and reject it if it's invalid)
+
+- Then it will store it in etcd
+
+- A *controller* will "notice" that spec and act upon it
+
+.debug[[k8s/declarative.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/declarative.md)]
+---
+
+## Reconciling state
+
+- Watch for the `spec` fields in the YAML files later!
+
+- The *spec* describes *how we want the thing to be*
+
+- Kubernetes will *reconcile* the current state with the spec
+  <br/>(technically, this is done by a number of *controllers*)
+
+- When we want to change some resource, we update the *spec*
+
+- Kubernetes will then *converge* that resource
+
+.debug[[k8s/declarative.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/declarative.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/blue-containers.jpg)]
+
+---
+
+name: toc-the-kubernetes-dashboard
+class: title
+
+ The Kubernetes dashboard
+
+.nav[
+[Previous section](#toc-declarative-vs-imperative)
+|
+[Back to table of contents](#toc-chapter-1)
+|
+[Next section](#toc-octant)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# The Kubernetes dashboard
+
+- Kubernetes resources can be viewed with a web dashboard
+
+- That dashboard is usually exposed over HTTPS
+
+  (this requires obtaining a proper TLS certificate)
+
+- Dashboard users need to authenticate
+
+- Most people just YOLO it into their cluster and then get hacked
+
+.debug[[pks/dashboard.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/dashboard.md)]
+---
+
+## Stop the madness
+
+You know what, this is all a very bad idea.  Let's not run the Kubernetes dashboard at all ... ever.
+
+The following slides are informational. **Do not run them**.
+
+.debug[[pks/dashboard.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/dashboard.md)]
+---
+
+## The insecure method
+
+- We could (and should) use [Let's Encrypt](https://letsencrypt.org/) ...
+
+- ... but we don't want to deal with TLS certificates
+
+- We could (and should) learn how authentication and authorization work ...
+
+- ... but we will use a guest account with admin access instead
+
+.footnote[.warning[Yes, this will open our cluster to all kinds of shenanigans. Don't do this at home.]]
+
+.debug[[pks/dashboard.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/dashboard.md)]
+---
+
+## Running a very insecure dashboard
+
+- We are going to deploy that dashboard with *one single command*
+
+- This command will create all the necessary resources
+
+  (the dashboard itself, the HTTP wrapper, the admin/guest account)
+
+- All these resources are defined in a YAML file
+
+- All we have to do is load that YAML file with with `kubectl apply -f`
+
+.exercise[
+
+- Create all the dashboard resources, with the following command:
+  ```bash
+  kubectl apply -f ~/container.training/k8s/insecure-dashboard.yaml
+  ```
+
+]
+
+.debug[[pks/dashboard.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/dashboard.md)]
+---
+
+## Connecting to the dashboard
+
+.exercise[
+
+- Check which port the dashboard is on:
+  ```bash
+  kubectl get svc dashboard
+  ```
+
+]
+
+You'll want the `3xxxx` port.
+
+
+.exercise[
+
+- Connect to http://oneofournodes:3xxxx/
+
+<!-- ```open http://node1:3xxxx/``` -->
+
+]
+
+The dashboard will then ask you which authentication you want to use.
+
+.debug[[pks/dashboard.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/dashboard.md)]
+---
+
+## Dashboard authentication
+
+- We have three authentication options at this point:
+
+  - token (associated with a role that has appropriate permissions)
+
+  - kubeconfig (e.g. using the `~/.kube/config` file from `node1`)
+
+  - "skip" (use the dashboard "service account")
+
+- Let's use "skip": we're logged in!
+
+--
+
+.warning[By the way, we just added a backdoor to our Kubernetes cluster!]
+
+.debug[[pks/dashboard.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/dashboard.md)]
+---
+
+## Running the Kubernetes dashboard securely
+
+- The steps that we just showed you are *for educational purposes only!*
+
+- If you do that on your production cluster, people [can and will abuse it](https://redlock.io/blog/cryptojacking-tesla)
+
+- For an in-depth discussion about securing the dashboard,
+  <br/>
+  check [this excellent post on Heptio's blog](https://blog.heptio.com/on-securing-the-kubernetes-dashboard-16b09b1b7aca)
+
+--
+
+- Or better yet, don't use the dashboard.  Use Octant.
+.debug[[pks/dashboard.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/dashboard.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/chinook-helicopter-container.jpg)]
+
+---
+
+name: toc-octant
+class: title
+
+ Octant
+
+.nav[
+[Previous section](#toc-the-kubernetes-dashboard)
+|
+[Back to table of contents](#toc-chapter-1)
+|
+[Next section](#toc-first-contact-with-kubectl)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Octant
+
+Octant is an open source tool from VMWare which is designed to be a Kubernetes workload visualization tool that runs locally and uses your Kubeconfig to connect to the Kubernetes cluster.
+
+Since Octant runs locally on your machine and only uses your kube credentials its [in theory at least] more secure than the kubernetes dashboard.
+
+.exercise[
+
+- Run octant and browse through your resources:
+  ```bash
+  octant
+  ```
+]
+
+--
+
+*We can use Octant through the workshop to see our resources running in Kubernetes. If you don't have it already installed, you can ignore it.*
+.debug[[pks/octant.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/octant.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/container-cranes.jpg)]
+
+---
+
+name: toc-first-contact-with-kubectl
+class: title
+
+ First contact with `kubectl`
+
+.nav[
+[Previous section](#toc-octant)
+|
+[Back to table of contents](#toc-chapter-1)
+|
+[Next section](#toc-running-our-first-containers-on-kubernetes)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# First contact with `kubectl`
+
+- `kubectl` is (almost) the only tool we'll need to talk to Kubernetes
+
+- It is a rich CLI tool around the Kubernetes API
+
+  (Everything you can do with `kubectl`, you can do directly with the API)
+
+- On our machines, there is a `~/.kube/config` file with:
+
+  - the Kubernetes API address
+
+  - the path to our TLS certificates used to authenticate
+
+- You can also use the `--kubeconfig` flag to pass a config file
+
+- Or directly `--server`, `--user`, etc.
+
+- `kubectl` can be pronounced "Cube C T L", "Cube cuttle", "Cube cuddle"...
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## `kubectl get`
+
+- Let's look at our `Node` resources with `kubectl get`!
+
+.exercise[
+
+- Look at the composition of our cluster:
+  ```bash
+  kubectl get node
+  ```
+
+- These commands are equivalent:
+  ```bash
+  kubectl get no
+  kubectl get node
+  kubectl get nodes
+  ```
+
+]
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## Obtaining machine-readable output
+
+- `kubectl get` can output JSON, YAML, or be directly formatted
+
+.exercise[
+
+- Give us more info about the nodes:
+  ```bash
+  kubectl get nodes -o wide
+  ```
+
+- Let's have some YAML:
+  ```bash
+  kubectl get no -o yaml
+  ```
+  See that `kind: List` at the end? It's the type of our result!
+
+]
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## (Ab)using `kubectl` and `jq`
+
+- It's super easy to build custom reports
+
+.exercise[
+
+- Show the capacity of all our nodes as a stream of JSON objects:
+  ```bash
+    kubectl get nodes -o json |
+            jq ".items[] | {name:.metadata.name} + .status.capacity"
+  ```
+
+]
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+class: extra-details
+
+## Exploring types and definitions
+
+- We can list all available resource types by running `kubectl api-resources`
+  <br/>
+  (In Kubernetes 1.10 and prior, this command used to be `kubectl get`)
+
+- We can view the definition for a resource type with:
+  ```bash
+  kubectl explain type
+  ```
+
+- We can view the definition of a field in a resource, for instance:
+  ```bash
+  kubectl explain node.spec
+  ```
+
+- Or get the full definition of all fields and sub-fields:
+  ```bash
+  kubectl explain node --recursive
+  ```
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+class: extra-details
+
+## Introspection vs. documentation
+
+- We can access the same information by reading the [API documentation](https://kubernetes.io/docs/reference/#api-reference)
+
+- The API documentation is usually easier to read, but:
+
+  - it won't show custom types (like Custom Resource Definitions)
+
+  - we need to make sure that we look at the correct version
+
+- `kubectl api-resources` and `kubectl explain` perform *introspection*
+
+  (they communicate with the API server and obtain the exact type definitions)
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## Type names
+
+- The most common resource names have three forms:
+
+  - singular (e.g. `node`, `service`, `deployment`)
+
+  - plural (e.g. `nodes`, `services`, `deployments`)
+
+  - short (e.g. `no`, `svc`, `deploy`)
+
+- Some resources do not have a short name
+
+- `Endpoints` only have a plural form
+
+  (because even a single `Endpoints` resource is actually a list of endpoints)
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## Viewing details
+
+- We can use `kubectl get -o yaml` to see all available details
+
+- However, YAML output is often simultaneously too much and not enough
+
+- For instance, `kubectl get node node1 -o yaml` is:
+
+  - too much information (e.g.: list of images available on this node)
+
+  - not enough information (e.g.: doesn't show pods running on this node)
+
+  - difficult to read for a human operator
+
+- For a comprehensive overview, we can use `kubectl describe` instead
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## `kubectl describe`
+
+- `kubectl describe` needs a resource type and (optionally) a resource name
+
+- It is possible to provide a resource name *prefix*
+
+  (all matching objects will be displayed)
+
+- `kubectl describe` will retrieve some extra information about the resource
+
+.exercise[
+
+- Look at the information available for `node1` with one of the following commands:
+  ```bash
+  kubectl describe \`k get node -o name | head -1`
+  ```
+
+]
+
+(We should notice a bunch of control plane pods.)
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## Services
+
+- A *service* is a stable endpoint to connect to "something"
+
+  (In the initial proposal, they were called "portals")
+
+.exercise[
+
+- List the services on our cluster with one of these commands:
+  ```bash
+  kubectl get services
+  kubectl get svc
+  ```
+
+]
+
+--
+
+There should be no services. This is because you're not running anything yet. But there are some services running in other namespaces.
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## Services
+
+- A *service* is a stable endpoint to connect to "something"
+
+  (In the initial proposal, they were called "portals")
+
+.exercise[
+
+- List the services on our cluster with one of these commands:
+  ```bash
+  kubectl get services --all-namespaces
+  kubectl get svc -A
+  ```
+
+]
+
+--
+
+There's a bunch of services already running that are used in the operations of the Kubernetes cluster.
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## ClusterIP services
+
+- A `ClusterIP` service is internal, available from the cluster only
+
+- This is useful for introspection from within containers
+
+*The Cluster IP is only accessible from inside the cluster. We'll explore other ways to expose a service later.*
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## Listing running containers
+
+- Containers are manipulated through *pods*
+
+- A pod is a group of containers:
+
+ - running together (on the same node)
+
+ - sharing resources (RAM, CPU; but also network, volumes)
+
+.exercise[
+
+- List pods on our cluster:
+  ```bash
+  kubectl get pods
+  ```
+
+]
+
+--
+
+*Where are the pods that we saw just a moment earlier?!?*
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## Namespaces
+
+- Namespaces allow us to segregate resources
+
+.exercise[
+
+- List the namespaces on our cluster with one of these commands:
+  ```bash
+  kubectl get namespaces
+  kubectl get namespace
+  kubectl get ns
+  ```
+
+]
+
+--
+
+*You know what ... This `kube-system` thing looks interesting.*
+
+*In fact, I'm pretty sure it showed up earlier, when we did:*
+
+`kubectl describe node`
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## Accessing namespaces
+
+- By default, `kubectl` uses the `default` namespace
+
+- We can see resources in all namespaces with `--all-namespaces`
+
+.exercise[
+
+- List the pods in all namespaces:
+  ```bash
+  kubectl get pods --all-namespaces
+  ```
+
+- Since Kubernetes 1.14, we can also use `-A` as a shorter version:
+  ```bash
+  kubectl get pods -A
+  ```
+
+]
+
+*Here are our system pods!*
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## What are all these control plane pods?
+
+- `kube-apiserver` is the API server
+
+- `coredns` provides DNS-based service discovery ([replacing kube-dns as of 1.11](https://kubernetes.io/blog/2018/07/10/coredns-ga-for-kubernetes-cluster-dns/))
+
+
+- the `READY` column indicates the number of containers in each pod
+
+  (1 for most pods, but `coredns` has 3, for instance)
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## Scoping another namespace
+
+- We can also look at a different namespace (other than `default`)
+
+.exercise[
+
+- List only the pods in the `kube-system` namespace:
+  ```bash
+  kubectl get pods --namespace=kube-system
+  kubectl get pods -n kube-system
+  ```
+
+]
+
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+## Namespaces and other `kubectl` commands
+
+- We can use `-n`/`--namespace` with almost every `kubectl` command
+
+- Example:
+
+  - `kubectl create --namespace=X` to create something in namespace X
+
+- We can use `-A`/`--all-namespaces` with most commands that manipulate multiple objects
+
+- Examples:
+
+  - `kubectl delete` can delete resources across multiple namespaces
+
+  - `kubectl label` can add/remove/update labels across multiple namespaces
+
+--
+
+**These commands will not work for you, as you are restricted by Role Based Authentication to only have write access inside your own namespace.**
+.debug[[pks/kubectlget.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlget.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/container-housing.jpg)]
+
+---
+
+name: toc-running-our-first-containers-on-kubernetes
+class: title
+
+ Running our first containers on Kubernetes
+
+.nav[
+[Previous section](#toc-first-contact-with-kubectl)
+|
+[Back to table of contents](#toc-chapter-2)
+|
+[Next section](#toc-exposing-containers)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Running our first containers on Kubernetes
+
+- First things first: we cannot run a container
+
+--
+
+- We are going to run a pod, and in that pod there will be a single container
+
+--
+
+- In that container in the pod, we are going to run a simple `ping` command
+
+- Then we are going to start additional copies of the pod
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Starting a simple pod with `kubectl run`
+
+- We need to specify at least a *name* and the image we want to use
+
+.exercise[
+
+- Let's ping the address of `localhost`, the loopback interface:
+  ```bash
+  kubectl run pingpong --image alpine ping 127.0.0.1
+  ```
+
+<!-- ```hide kubectl wait deploy/pingpong --for condition=available``` -->
+
+]
+
+--
+
+(Starting with Kubernetes 1.12, we get a message telling us that
+`kubectl run` is deprecated. Let's ignore it for now.)
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Behind the scenes of `kubectl run`
+
+- Let's look at the resources that were created by `kubectl run`
+
+.exercise[
+
+- List most resource types:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+--
+
+We should see the following things:
+- `deployment.apps/pingpong` (the *deployment* that we just created)
+- `replicaset.apps/pingpong-xxxxxxxxxx` (a *replica set* created by the deployment)
+- `pod/pingpong-xxxxxxxxxx-yyyyy` (a *pod* created by the replica set)
+
+Note: as of 1.10.1, resource types are displayed in more detail.
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## What are these different things?
+
+- A *deployment* is a high-level construct
+
+  - allows scaling, rolling updates, rollbacks
+
+  - multiple deployments can be used together to implement a
+    [canary deployment](https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/#canary-deployments)
+
+  - delegates pods management to *replica sets*
+
+- A *replica set* is a low-level construct
+
+  - makes sure that a given number of identical pods are running
+
+  - allows scaling
+
+  - rarely used directly
+
+- A *replication controller* is the (deprecated) predecessor of a replica set
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Our `pingpong` deployment
+
+- `kubectl run` created a *deployment*, `deployment.apps/pingpong`
+
+```
+NAME                       DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/pingpong   1         1         1            1           10m
+```
+
+- That deployment created a *replica set*, `replicaset.apps/pingpong-xxxxxxxxxx`
+
+```
+NAME                                  DESIRED   CURRENT   READY     AGE
+replicaset.apps/pingpong-7c8bbcd9bc   1         1         1         10m
+```
+
+- That replica set created a *pod*, `pod/pingpong-xxxxxxxxxx-yyyyy`
+
+```
+NAME                            READY     STATUS    RESTARTS   AGE
+pod/pingpong-7c8bbcd9bc-6c9qz   1/1       Running   0          10m
+```
+
+- We'll see later how these folks play together for:
+
+  - scaling, high availability, rolling updates
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Viewing container output
+
+- Let's use the `kubectl logs` command
+
+- We will pass either a *pod name*, or a *type/name*
+
+  (E.g. if we specify a deployment or replica set, it will get the first pod in it)
+
+- Unless specified otherwise, it will only show logs of the first container in the pod
+
+  (Good thing there's only one in ours!)
+
+.exercise[
+
+- View the result of our `ping` command:
+  ```bash
+  kubectl logs deploy/pingpong
+  ```
+
+]
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Streaming logs in real time
+
+- Just like `docker logs`, `kubectl logs` supports convenient options:
+
+  - `-f`/`--follow` to stream logs in real time (à la `tail -f`)
+
+  - `--tail` to indicate how many lines you want to see (from the end)
+
+  - `--since` to get logs only after a given timestamp
+
+.exercise[
+
+- View the latest logs of our `ping` command:
+  ```bash
+  kubectl logs deploy/pingpong --tail 1 --follow
+  ```
+
+- Leave that command running, so that we can keep an eye on these logs
+
+<!--
+```wait seq=3```
+```tmux split-pane -h```
+-->
+
+]
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Scaling our application
+
+- We can create additional copies of our container (I mean, our pod) with `kubectl scale`
+
+.exercise[
+
+- Scale our `pingpong` deployment:
+  ```bash
+  kubectl scale deploy/pingpong --replicas 3
+  ```
+
+- Note that this command does exactly the same thing:
+  ```bash
+  kubectl scale deployment pingpong --replicas 3
+  ```
+
+]
+
+Note: what if we tried to scale `replicaset.apps/pingpong-xxxxxxxxxx`?
+
+We could! But the *deployment* would notice it right away, and scale back to the initial level.
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Log streaming
+
+- Let's look again at the output of `kubectl logs`
+
+  (the one we started before scaling up)
+
+- `kubectl logs` shows us one line per second
+
+- We could expect 3 lines per second
+
+  (since we should now have 3 pods running `ping`)
+
+- Let's try to figure out what's happening!
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Streaming logs of multiple pods
+
+- What happens if we restart `kubectl logs`?
+
+.exercise[
+
+- Interrupt `kubectl logs` (with Ctrl-C)
+
+<!--
+```tmux last-pane```
+```key ^C```
+-->
+
+- Restart it:
+  ```bash
+  kubectl logs deploy/pingpong --tail 1 --follow
+  ```
+
+<!--
+```wait using pod/pingpong-```
+```tmux last-pane```
+-->
+
+]
+
+`kubectl logs` will warn us that multiple pods were found, and that it's showing us only one of them.
+
+Let's leave `kubectl logs` running while we keep exploring.
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+
+## Resilience
+
+- The *deployment* `pingpong` watches its *replica set*
+
+- The *replica set* ensures that the right number of *pods* are running
+
+- What happens if pods disappear?
+
+.exercise[
+
+- In a separate window, watch the list of pods:
+  ```bash
+  watch kubectl get pods
+  ```
+
+<!--
+```wait Every 2.0s```
+```tmux split-pane -v```
+-->
+
+- Destroy the pod currently shown by `kubectl logs`:
+  ```
+  kubectl delete pod pingpong-xxxxxxxxxx-yyyyy
+  ```
+
+<!--
+```tmux select-pane -t 0```
+```copy pingpong-[^-]*-.....```
+```tmux last-pane```
+```keys kubectl delete pod ```
+```paste```
+```key ^J```
+```check```
+```key ^D```
+```tmux select-pane -t 1```
+```key ^C```
+```key ^D```
+-->
+
+]
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## What happened?
+
+- `kubectl delete pod` terminates the pod gracefully
+
+  (sending it the TERM signal and waiting for it to shutdown)
+
+- As soon as the pod is in "Terminating" state, the Replica Set replaces it
+
+- But we can still see the output of the "Terminating" pod in `kubectl logs`
+
+- Until 30 seconds later, when the grace period expires
+
+- The pod is then killed, and `kubectl logs` exits
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+
+## What if we wanted something different?
+
+- What if we wanted to start a "one-shot" container that *doesn't* get restarted?
+
+- We could use `kubectl run --restart=OnFailure` or `kubectl run --restart=Never`
+
+- These commands would create *jobs* or *pods* instead of *deployments*
+
+- Under the hood, `kubectl run` invokes "generators" to create resource descriptions
+
+- We could also write these resource descriptions ourselves (typically in YAML),
+  <br/>and create them on the cluster with `kubectl apply -f` (discussed later)
+
+- With `kubectl run --schedule=...`, we can also create *cronjobs*
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Scheduling periodic background work
+
+- A Cron Job is a job that will be executed at specific intervals
+
+  (the name comes from the traditional cronjobs executed by the UNIX crond)
+
+- It requires a *schedule*, represented as five space-separated fields:
+
+  - minute [0,59]
+  - hour [0,23]
+  - day of the month [1,31]
+  - month of the year [1,12]
+  - day of the week ([0,6] with 0=Sunday)
+
+- `*` means "all valid values"; `/N` means "every N"
+
+- Example: `*/3 * * * *` means "every three minutes"
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Creating a Cron Job
+
+- Let's create a simple job to be executed every three minutes
+
+- Cron Jobs need to terminate, otherwise they'd run forever
+
+.exercise[
+
+- Create the Cron Job:
+  ```bash
+  kubectl create cronjob every3mins --image alpine \
+  --schedule='*/3 * * * *' --restart OnFailure \
+  -- ping -c 3 1.1.1.1
+  ```
+
+- Check the resource that was created:
+  ```bash
+  kubectl get cronjobs
+  ```
+
+]
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Cron Jobs in action
+
+- At the specified schedule, the Cron Job will create a Job
+
+- The Job will create a Pod
+
+- The Job will make sure that the Pod completes
+
+  (re-creating another one if it fails, for instance if its node fails)
+
+.exercise[
+
+- Check the Jobs that are created:
+  ```bash
+  kubectl get jobs
+  ```
+
+]
+
+(It will take a few minutes before the first job is scheduled.)
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+
+## What about that deprecation warning?
+
+- As we can see from the previous slide, `kubectl run` can do many things
+
+- The exact type of resource created is not obvious
+
+- To make things more explicit, it is better to use `kubectl create`:
+
+  - `kubectl create deployment` to create a deployment
+
+  - `kubectl create job` to create a job
+
+  - `kubectl create cronjob` to run a job periodically
+    <br/>(since Kubernetes 1.14)
+
+- Eventually, `kubectl run` will be used only to start one-shot pods
+
+  (see https://github.com/kubernetes/kubernetes/pull/68132)
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Various ways of creating resources
+
+- `kubectl run`
+
+  - easy way to get started
+  - versatile
+
+- `kubectl create <resource>`
+
+  - explicit, but lacks some features
+  - can't create a CronJob before Kubernetes 1.14
+  - can't pass command-line arguments to deployments
+
+- `kubectl create -f foo.yaml` or `kubectl apply -f foo.yaml`
+
+  - all features are available
+  - requires writing YAML
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## kubectl create pingpong
+
+How could we replace the `kubectl run` for the original pingpong deployment ?
+
+- `kubectl create deployment` doesn't let you specify command/args for the container.
+
+- We could run `kubectl create deployment pingpong --image alpine --dry-run -o yaml > /tmp/pingpong.yaml` and then modify the manifest.
+
+- We could use `kubectl patch`:
+
+```bash
+kubectl create deployment pingpong2 --image alpine
+kubectl patch deployment pingpong2 -p '
+{"spec":{"template": {"spec": {"containers":
+[{"name":"alpine","image":"alpine","command":
+["ping","1.1.1.1"]}]}}}}'
+
+```
+
+--
+
+Yay JSON on the commandline
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Viewing logs of multiple pods
+
+- When we specify a deployment name, only one single pod's logs are shown
+
+- We can view the logs of multiple pods by specifying a *selector*
+
+- A selector is a logic expression using *labels*
+
+- Conveniently, when you `kubectl run somename`, the associated objects have a `run=somename` label
+
+.exercise[
+
+- View the last line of log from all pods with the `run=pingpong` label:
+  ```bash
+  kubectl logs -l run=pingpong --tail 1
+  ```
+
+]
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+### Streaming logs of multiple pods
+
+- Can we stream the logs of all our `pingpong` pods?
+
+.exercise[
+
+- Combine `-l` and `-f` flags:
+  ```bash
+  kubectl logs -l run=pingpong --tail 1 -f
+  ```
+
+<!--
+```wait seq=```
+```key ^C```
+-->
+
+]
+
+*Note: combining `-l` and `-f` is only possible since Kubernetes 1.14!*
+
+*Let's try to understand why ...*
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+class: extra-details
+
+### Streaming logs of many pods
+
+- Let's see what happens if we try to stream the logs for more than 5 pods
+
+.exercise[
+
+- Scale up our deployment:
+  ```bash
+  kubectl scale deployment pingpong --replicas=8
+  ```
+
+- Stream the logs:
+  ```bash
+  kubectl logs -l run=pingpong --tail 1 -f
+  ```
+
+<!-- ```wait error:``` -->
+
+]
+
+We see a message like the following one:
+```
+error: you are attempting to follow 8 log streams,
+but maximum allowed concurency is 5,
+use --max-log-requests to increase the limit
+```
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+class: extra-details
+
+## Why can't we stream the logs of many pods?
+
+- `kubectl` opens one connection to the API server per pod
+
+- For each pod, the API server opens one extra connection to the corresponding kubelet
+
+- If there are 1000 pods in our deployment, that's 1000 inbound + 1000 outbound connections on the API server
+
+- This could easily put a lot of stress on the API server
+
+- Prior Kubernetes 1.14, it was decided to *not* allow multiple connections
+
+- From Kubernetes 1.14, it is allowed, but limited to 5 connections
+
+  (this can be changed with `--max-log-requests`)
+
+- For more details about the rationale, see
+  [PR #67573](https://github.com/kubernetes/kubernetes/pull/67573)
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+## Shortcomings of `kubectl logs`
+
+- We don't see which pod sent which log line
+
+- If pods are restarted / replaced, the log stream stops
+
+- If new pods are added, we don't see their logs
+
+- To stream the logs of multiple pods, we need to write a selector
+
+- There are external tools to address these shortcomings
+
+  (e.g.: [Stern](https://github.com/wercker/stern))
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+class: extra-details
+
+## `kubectl logs -l ... --tail N`
+
+- If we run this with Kubernetes 1.12, the last command shows multiple lines
+
+- This is a regression when `--tail` is used together with `-l`/`--selector`
+
+- It always shows the last 10 lines of output for each container
+
+  (instead of the number of lines specified on the command line)
+
+- The problem was fixed in Kubernetes 1.13
+
+*See [#70554](https://github.com/kubernetes/kubernetes/issues/70554) for details.*
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+class: extra-details
+
+## Party tricks involving IP addresses
+
+- It is possible to specify an IP address with less than 4 bytes
+
+  (example: `127.1`)
+
+- Zeroes are then inserted in the middle
+
+- As a result, `127.1` expands to `127.0.0.1`
+
+- So we can `ping 127.1` to ping `localhost`!
+
+(See [this blog post](https://ma.ttias.be/theres-more-than-one-way-to-write-an-ip-address/
+) for more details.)
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+
+class: extra-details
+
+## More party tricks with IP addresses
+
+- We can also ping `1.1`
+
+- `1.1` will expand to `1.0.0.1`
+
+- This is one of the addresses of Cloudflare's
+  [public DNS resolver](https://blog.cloudflare.com/announcing-1111/)
+
+- This is a quick way to check connectivity
+
+  (if we can reach 1.1, we probably have internet access)
+
+.debug[[pks/kubectlrun.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlrun.md)]
+---
+## 19,000 words
+
+They say, "a picture is worth one thousand words."
+
+The following 19 slides show what really happens when we run:
+
+```bash
+kubectl run web --image=nginx --replicas=3
+```
+
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/01.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/02.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/03.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/04.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/05.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/06.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/07.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/08.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/09.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/10.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/11.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/12.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/13.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/14.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/15.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/16.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/17.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/18.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-run-slideshow/19.svg)
+
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/deploymentslideshow.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/containers-by-the-water.jpg)]
+
+---
+
+name: toc-exposing-containers
+class: title
+
+ Exposing containers
+
+.nav[
+[Previous section](#toc-running-our-first-containers-on-kubernetes)
+|
+[Back to table of contents](#toc-chapter-2)
+|
+[Next section](#toc-rolling-updates)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Exposing containers
+
+- `kubectl expose` creates a *service* for existing pods
+
+- A *service* is a stable address for a pod (or a bunch of pods)
+
+- If we want to connect to our pod(s), we need to create a *service*
+
+- Once a service is created, CoreDNS will allow us to resolve it by name
+
+  (i.e. after creating service `hello`, the name `hello` will resolve to something)
+
+- There are different types of services, detailed on the following slides:
+
+  `ClusterIP`, `NodePort`, `LoadBalancer`, `ExternalName`
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## Basic service types
+
+- `ClusterIP` (default type)
+
+  - a virtual IP address is allocated for the service (in an internal, private range)
+  - this IP address is reachable only from within the cluster (nodes and pods)
+  - our code can connect to the service using the original port number
+
+- `NodePort`
+
+  - a port is allocated for the service (by default, in the 30000-32768 range)
+  - that port is made available *on all our nodes* and anybody can connect to it
+  - our code must be changed to connect to that new port number
+
+These service types are always available.
+
+Under the hood: `kube-proxy` is using a userland proxy and a bunch of `iptables` rules.
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## More service types
+
+- `LoadBalancer`
+
+  - an external load balancer is allocated for the service
+  - the load balancer is configured accordingly
+    <br/>(e.g.: a `NodePort` service is created, and the load balancer sends traffic to that port)
+  - available only when the underlying infrastructure provides some "load balancer as a service"
+    <br/>(e.g. AWS, Azure, GCE, OpenStack...)
+
+- `ExternalName`
+
+  - the DNS entry managed by CoreDNS will just be a `CNAME` to a provided record
+  - no port, no IP address, no nothing else is allocated
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+class: extra-details
+
+## If we don't need a clusterIP load balancer
+
+- Sometimes, we want to access our scaled services directly:
+
+  - if we want to save a tiny little bit of latency (typically less than 1ms)
+
+  - if we need to connect over arbitrary ports (instead of a few fixed ones)
+
+  - if we need to communicate over another protocol than UDP or TCP
+
+  - if we want to decide how to balance the requests client-side
+
+  - ...
+
+- In that case, we can use a "headless service"
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+class: extra-details
+
+## Headless services
+
+- A headless service is obtained by setting the `clusterIP` field to `None`
+
+  (Either with `--cluster-ip=None`, or by providing a custom YAML)
+
+- As a result, the service doesn't have a virtual IP address
+
+- Since there is no virtual IP address, there is no load balancer either
+
+- CoreDNS will return the pods' IP addresses as multiple `A` records
+
+- This gives us an easy way to discover all the replicas for a deployment
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## Running containers with open ports
+
+- Since `ping` doesn't have anything to connect to, we'll have to run something else
+
+- We could use the `nginx` official image, but ...
+
+  ... we wouldn't be able to tell the backends from each other!
+
+- We are going to use `jpetazzo/httpenv`, a tiny HTTP server written in Go
+
+- `jpetazzo/httpenv` listens on port 8888
+
+- It serves its environment variables in JSON format
+
+- The environment variables will include `HOSTNAME`, which will be the pod name
+
+  (and therefore, will be different on each backend)
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## Creating a deployment for our HTTP server
+
+- We *could* do `kubectl run httpenv --image=jpetazzo/httpenv` ...
+
+- But since `kubectl run` is being deprecated, let's see how to use `kubectl create` instead
+
+.exercise[
+
+- In another window, watch the pods (to see when they are created):
+  ```bash
+  kubectl get pods -w
+  ```
+
+<!-- ```keys ^C``` -->
+
+- Create a deployment for this very lightweight HTTP server:
+  ```bash
+  kubectl create deployment httpenv --image=jpetazzo/httpenv
+  ```
+
+- Scale it to 10 replicas:
+  ```bash
+  kubectl scale deployment httpenv --replicas=10
+  ```
+
+]
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## Exposing our deployment
+
+- We'll create a default `ClusterIP` service
+
+.exercise[
+
+- Expose the HTTP port of our server:
+  ```bash
+  kubectl expose deployment httpenv --port 8888
+  ```
+
+- Look up which IP address was allocated:
+  ```bash
+  kubectl get service httpenv
+  ```
+
+]
+
+--
+
+The cluster IP is a private IP, you can't access it.
+
+```
+NAME      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+httpenv   ClusterIP   10.100.200.147   <none>        8888/TCP   3m
+```
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## Services are layer 4 constructs
+
+- You can assign IP addresses to services, but they are still *layer 4*
+
+  (i.e. a service is not an IP address; it's an IP address + protocol + port)
+
+- This is caused by the current implementation of `kube-proxy`
+
+  (it relies on mechanisms that don't support layer 3)
+
+- As a result: you *have to* indicate the port number for your service
+
+- Running services with arbitrary port (or port ranges) requires hacks
+
+  (e.g. host networking mode)
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## Testing our service
+
+- Our service is listening to a private **ClusterIP**.
+
+- If we want to access it we need to expose it as a **NodePort** or a **LoadBalancer**
+
+- Or you can cheat and forward a port using `kubectl port-forward`
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## port forwarding
+
+- Forwards a local port from your machine into a pod
+
+.exercise[
+
+- Forward a port into your deployment:
+  ```bash
+  kubectl port-forward service/httpenv 8888:8888
+  ```
+
+- In a new window run curl a few times:
+  ```bash
+  curl localhost:8888
+  curl localhost:8888
+  curl localhost:8888
+  ```
+
+- Hit `ctrl-c` in the original window to terminate the port-forward
+]
+
+--
+
+The response was the same from each request. This is because `kubectl port-forward` forwards to a specific pod, not to the cluster-ip.
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+class: extra-details
+
+## Services and endpoints
+
+- A service has a number of "endpoints"
+
+- Each endpoint is a host + port where the service is available
+
+- The endpoints are maintained and updated automatically by Kubernetes
+
+.exercise[
+
+- Check the endpoints that Kubernetes has associated with our `httpenv` service:
+  ```bash
+  kubectl describe service httpenv
+  ```
+
+]
+
+In the output, there will be a line starting with `Endpoints:`.
+
+That line will list a bunch of addresses in `host:port` format.
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+class: extra-details
+
+## Viewing endpoint details
+
+- When we have many endpoints, our display commands truncate the list
+  ```bash
+  kubectl get endpoints
+  ```
+
+- If we want to see the full list, we can use one of the following commands:
+  ```bash
+  kubectl describe endpoints httpenv
+  kubectl get endpoints httpenv -o yaml
+  ```
+
+- These commands will show us a list of IP addresses
+
+- These IP addresses should match the addresses of the corresponding pods:
+  ```bash
+  kubectl get pods -l app=httpenv -o wide
+  ```
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+class: extra-details
+
+## `endpoints` not `endpoint`
+
+- `endpoints` is the only resource that cannot be singular
+
+```bash
+$ kubectl get endpoint
+error: the server doesn't have a resource type "endpoint"
+```
+
+- This is because the type itself is plural (unlike every other resource)
+
+- There is no `endpoint` object: `type Endpoints struct`
+
+- The type doesn't represent a single endpoint, but a list of endpoints
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## Exposing services to the outside world
+
+- The default type (ClusterIP) only works for internal traffic
+
+- If we want to accept external traffic, we can use one of these:
+
+  - NodePort (expose a service on a TCP port between 30000-32768)
+
+  - LoadBalancer (provision a cloud load balancer for our service)
+
+  - ExternalIP (use one node's external IP address)
+
+  - Ingress (a special mechanism for HTTP services)
+
+*We'll see NodePorts and Ingresses more in detail later.*
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## Exposing services to the outside world
+
+.exercise[
+
+- Take a copy of the httpenv service:
+  ```bash
+  kubectl get svc httpenv -o yaml > /tmp/httpenv.yaml
+  ```
+
+- Edit `/tmp/httpenv.yaml` and set the service to be of type `Loadbalancer`, and update the ports:
+
+```yaml
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8888
+  type: LoadBalancer
+
+```
+
+]
+
+--
+
+this is what a kubernetes manifest looks like!
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## Service Manifest
+
+.exercise[
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: httpenv
+  name: httpenv
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8888
+    name: http
+  selector:
+    app: httpenv
+  type: LoadBalancer
+```
+
+]
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## kubectl apply
+
+.exercise[
+
+  - Apply your changes:
+  ```bash
+  kubectl delete svc httpenv
+  kubectl apply -f /tmp/httpenv.yaml
+  ```
+
+]
+
+--
+
+Why did we delete the svc? Running a `kubectl apply` on a imperatively created resource can cause problems.
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+## yay loadbalancing
+
+.exercise[
+- Check for the IP of the loadbalancer:
+  ```bash
+  kubectl get svc httpenv
+  ```
+
+- Test access via the loadbalancer:
+  ```bash
+  curl <external-ip>:8888
+  ```
+]
+
+.debug[[pks/kubectlexpose.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/kubectlexpose.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/distillery-containers.jpg)]
+
+---
+
+name: toc-rolling-updates
+class: title
+
+ Rolling updates
+
+.nav[
+[Previous section](#toc-exposing-containers)
+|
+[Back to table of contents](#toc-chapter-2)
+|
+[Next section](#toc-managing-stacks-with-helm)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Rolling updates
+
+- By default (without rolling updates), when a scaled resource is updated:
+
+  - new pods are created
+
+  - old pods are terminated
+
+  - ... all at the same time
+
+  - if something goes wrong, ¯\\\_(ツ)\_/¯
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Rolling updates
+
+- With rolling updates, when a Deployment is updated, it happens progressively
+
+- The Deployment controls multiple Replica Sets
+
+- Each Replica Set is a group of identical Pods
+
+  (with the same image, arguments, parameters ...)
+
+- During the rolling update, we have at least two Replica Sets:
+
+  - the "new" set (corresponding to the "target" version)
+
+  - at least one "old" set
+
+- We can have multiple "old" sets
+
+  (if we start another update before the first one is done)
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Update strategy
+
+- Two parameters determine the pace of the rollout: `maxUnavailable` and `maxSurge`
+
+- They can be specified in absolute number of pods, or percentage of the `replicas` count
+
+- At any given time ...
+
+  - there will always be at least `replicas`-`maxUnavailable` pods available
+
+  - there will never be more than `replicas`+`maxSurge` pods in total
+
+  - there will therefore be up to `maxUnavailable`+`maxSurge` pods being updated
+
+- We have the possibility of rolling back to the previous version
+  <br/>(if the update fails or is unsatisfactory in any way)
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Checking current rollout parameters
+
+- Recall how we build custom reports with `kubectl` and `jq`:
+
+.exercise[
+
+- Show the rollout plan for our deployments:
+  ```bash
+    kubectl get deploy -o json |
+            jq ".items[] | {name:.metadata.name} + .spec.strategy.rollingUpdate"
+  ```
+
+]
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Rolling updates in practice
+
+- As of Kubernetes 1.8, we can do rolling updates with:
+
+  `deployments`, `daemonsets`, `statefulsets`
+
+- Editing one of these resources will automatically result in a rolling update
+
+- Rolling updates can be monitored with the `kubectl rollout` subcommand
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Rolling out the new `worker` service
+
+.exercise[
+
+- Let's monitor what's going on by opening a few terminals, and run:
+  ```bash
+  kubectl get pods -w
+  kubectl get replicasets -w
+  kubectl get deployments -w
+  ```
+
+<!--
+```wait NAME```
+```key ^C```
+-->
+
+- Update `httpenv` either with `kubectl edit`, or by running:
+  ```bash
+  kubectl set env -e "hello=world" deployment httpenv
+  ```
+]
+--
+
+
+Deployments treat environment variable changes as a upgrade. You should see the rollout occur.
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Verify rollout
+
+- Remember our `httpenv` app prints out our env variables...
+
+.exercise[
+
+- get the IP of the service:
+  ```bash
+    IP=`kubectl get svc httpenv \
+    -o jsonpath="{.status.loadBalancer.ingress[*].ip}"`
+    echo $IP
+  ```
+
+- check the app now shows this new environment variable:
+
+  ```bash
+  curl $IP:8888
+  ```
+  or 
+  ```bash
+  curl -s $IP:8888 | jq .hello
+  ```
+]
+
+--
+
+"hello": "world"
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Rolling out something invalid
+
+- What happens if we make a mistake?
+
+.exercise[
+
+- Update `httpenv` by specifying a non-existent image:
+  ```bash
+  kubectl set image deploy httpenv httpenv=not-a-real-image
+  ```
+
+- Check what's going on:
+  ```bash
+  kubectl rollout status deploy httpenv
+  ```
+
+<!--
+```wait Waiting for deployment...```
+```key ^C```
+-->
+
+]
+
+--
+
+Our rollout is stuck. However, the app is not dead.
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## What's going on with our rollout?
+
+- Let's look at our app:
+
+.exercise[
+
+  - Check our pods:
+  ```bash
+  kubectl get pods
+  ```
+]
+
+--
+
+We have 8 running pods, and 5 failing pods.
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+Why do we have 8 running pods? we should have 10
+
+- Because `MaxUnavailable=25%`
+
+  ... So the rollout terminated 2 replicas out of 10 available
+
+- Okay, but why do we see 5 new replicas being rolled out?
+
+- Because `MaxSurge=25%`
+
+  ... So in addition to replacing 2 replicas, the rollout is also starting 3 more
+
+- It rounded down the number of MaxUnavailable pods conservatively,
+  <br/>
+  but the total number of pods being rolled out is allowed to be 25+25=50%
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+class: extra-details
+
+## The nitty-gritty details
+
+- We start with 10 pods running for the `httpenv` deployment
+
+- Current settings: MaxUnavailable=25% and MaxSurge=25%
+
+- When we start the rollout:
+
+  - two replicas are taken down (as per MaxUnavailable=25%)
+  - two others are created (with the new version) to replace them
+  - three others are created (with the new version) per MaxSurge=25%)
+
+- Now we have 8 replicas up and running, and 5 being deployed
+
+- Our rollout is stuck at this point!
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Recovering from a bad rollout
+
+- We could push the missing image to our registry
+
+  (the pod retry logic will eventually catch it and the rollout will proceed)
+
+- Or we could invoke a manual rollback
+
+.exercise[
+
+<!-- ```key ^C``` -->
+
+- Cancel the deployment and wait for the dust to settle:
+  ```bash
+  kubectl rollout undo deploy httpenv
+  kubectl rollout status deploy httpenv
+  ```
+
+]
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Rolling back to an older version
+
+- We reverted to our original working image :)
+
+- We have 10 replicas running again.
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Multiple "undos"
+
+- What happens if we try `kubectl rollout undo` again?
+
+.exercise[
+
+- Try it:
+  ```bash
+  kubectl rollout undo deployment httpenv
+  ```
+
+- Check the web UI, the list of pods ...
+
+]
+
+🤔 That didn't work.
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Multiple "undos" don't work
+
+- If we see successive versions as a stack:
+
+  - `kubectl rollout undo` doesn't "pop" the last element from the stack
+
+  - it copies the N-1th element to the top
+
+- Multiple "undos" just swap back and forth between the last two versions!
+
+.exercise[
+
+- Go back to the original version again:
+  ```bash
+  kubectl rollout undo deployment httpenv
+  ```
+]
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Listing versions
+
+- We can list successive versions of a Deployment with `kubectl rollout history`
+
+.exercise[
+
+- Look at our successive versions:
+  ```bash
+  kubectl rollout history deployment httpenv
+  ```
+
+]
+
+We don't see *all* revisions.
+
+We might see something like 1, 4, 5.
+
+(Depending on how many "undos" we did before.)
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Explaining deployment revisions
+
+- These revisions correspond to our Replica Sets
+
+- This information is stored in the Replica Set annotations
+
+.exercise[
+
+- Check the annotations for our replica sets:
+  ```bash
+  kubectl describe replicasets -l app=httpenv | grep -A3 ^Annotations
+  ```
+
+]
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+class: extra-details
+
+## What about the missing revisions?
+
+- The missing revisions are stored in another annotation:
+
+  `deployment.kubernetes.io/revision-history`
+
+- These are not shown in `kubectl rollout history`
+
+- We could easily reconstruct the full list with a script
+
+  (if we wanted to!)
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Rolling back to an older version
+
+- `kubectl rollout undo` can work with a revision number
+
+.exercise[
+
+- Roll back to the "known good" deployment version:
+  ```bash
+  kubectl rollout undo deployment httpenv --to-revision=1
+  ```
+
+- Check the web UI via curl again
+  ```bash
+  curl $IP:8888
+  ```
+--
+
+the `hello world` environment variable has gone as we're right back to the original revision of our application.
+
+]
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+## Cleanup
+
+.exercise[
+
+- Delete all of the deployments, services, and cronjobs:
+
+  ```bash
+  kubectl delete deployments,cronjobs,services --all
+  ```
+
+]
+
+--
+
+Using `--all` on a delete is really destructive, be very careful with it.
+
+.debug[[pks/httpenv-update.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/httpenv-update.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/lots-of-containers.jpg)]
+
+---
+
+name: toc-managing-stacks-with-helm
+class: title
+
+ Managing stacks with Helm
+
+.nav[
+[Previous section](#toc-rolling-updates)
+|
+[Back to table of contents](#toc-chapter-2)
+|
+[Next section](#toc-creating-a-basic-chart)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Managing stacks with Helm
+
+- We created our first resources with `kubectl run`, `kubectl expose` ...
+
+- We have also created resources by loading YAML files with `kubectl apply -f`
+
+- For larger stacks, managing thousands of lines of YAML is unreasonable
+
+- These YAML bundles need to be customized with variable parameters
+
+  (E.g.: number of replicas, image version to use ...)
+
+- It would be nice to have an organized, versioned collection of bundles
+
+- It would be nice to be able to upgrade/rollback these bundles carefully
+
+- [Helm](https://helm.sh/) is an open source project offering all these things!
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Helm concepts
+
+- `helm` is a CLI tool
+
+- It is used to find, install, upgrade *charts*
+
+- A chart is an archive containing templatized YAML bundles
+
+- Charts are versioned
+
+- Charts can be stored on private or public repositories
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Differences between charts and packages
+
+- A package (deb, rpm...) contains binaries, libraries, etc.
+
+- A chart contains YAML manifests
+
+  (the binaries, libraries, etc. are in the images referenced by the chart)
+
+- On most distributions, a package can only be installed once
+
+  (installing another version replaces the installed one)
+
+- A chart can be installed multiple times
+
+- Each installation is called a *release*
+
+- This allows to install e.g. 10 instances of MongoDB
+
+  (with potentially different versions and configurations)
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+class: extra-details
+
+## Wait a minute ...
+
+*But, on my Debian system, I have Python 2 **and** Python 3.
+<br/>
+Also, I have multiple versions of the Postgres database engine!*
+
+Yes!
+
+But they have different package names:
+
+- `python2.7`, `python3.8`
+
+- `postgresql-10`, `postgresql-11`
+
+Good to know: the Postgres package in Debian includes
+provisions to deploy multiple Postgres servers on the
+same system, but it's an exception (and it's a lot of
+work done by the package maintainer, not by the `dpkg`
+or `apt` tools).
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Helm 2 vs Helm 3
+
+- Helm 3 was released [November 13, 2019](https://helm.sh/blog/helm-3-released/)
+
+- Charts remain compatible between Helm 2 and Helm 3
+
+- The CLI is very similar (with minor changes to some commands)
+
+- The main difference is that Helm 2 uses `tiller`, a server-side component
+
+- Helm 3 doesn't use `tiller` at all, making it simpler (yay!)
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+class: extra-details
+
+## With or without `tiller`
+
+- With Helm 3:
+
+  - the `helm` CLI communicates directly with the Kubernetes API
+
+  - it creates resources (deployments, services...) with our credentials
+
+- With Helm 2:
+
+  - the `helm` CLI communicates with `tiller`, telling `tiller` what to do
+
+  - `tiller` then communicates with the Kubernetes API, using its own credentials
+
+- This indirect model caused significant permissions headaches
+
+  (`tiller` required very broad permissions to function)
+
+- `tiller` was removed in Helm 3 to simplify the security aspects
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Installing Helm
+
+- If the `helm` CLI is not installed in your environment, install it
+
+.exercise[
+
+- Check if `helm` is installed:
+  ```bash
+  helm version
+  ```
+
+- If it's not installed (or its helm 2), run the following command:
+  ```bash
+  curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get-helm-3 \
+  | bash
+  ```
+
+]
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Charts and repositories
+
+- A *repository* (or repo in short) is a collection of charts
+
+- It's just a bunch of files
+
+  (they can be hosted by a static HTTP server, or on a local directory)
+
+- We can add "repos" to Helm, giving them a nickname
+
+- The nickname is used when referring to charts on that repo
+
+  (for instance, if we try to install `hello/world`, that
+  means the chart `world` on the repo `hello`; and that repo
+  `hello` might be something like https://blahblah.hello.io/charts/)
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Managing repositories
+
+- Let's check what repositories we have, and add the `stable` repo
+
+  (the `stable` repo contains a set of official-ish charts)
+
+.exercise[
+
+- List our repos:
+  ```bash
+  helm repo list
+  ```
+
+- Add the `stable` repo:
+  ```bash
+  helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+  ```
+
+]
+
+Adding a repo can take a few seconds (it downloads the list of charts from the repo).
+
+It's OK to add a repo that already exists (it will merely update it).
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Search available charts
+
+- We can search available charts with `helm search`
+
+- We need to specify where to search (only our repos, or Helm Hub)
+
+- Let's search for all charts mentioning tomcat!
+
+.exercise[
+
+- Search for tomcat in the repo that we added earlier:
+  ```bash
+  helm search repo tomcat
+  ```
+
+- Search for tomcat on the Helm Hub:
+  ```bash
+  helm search hub tomcat
+  ```
+
+]
+
+[Helm Hub](https://hub.helm.sh/) indexes many repos, using the [Monocular](https://github.com/helm/monocular) server.
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Charts and releases
+
+- "Installing a chart" means creating a *release*
+
+- We need to name that release
+
+  (or use the `--generate-name` to get Helm to generate one for us)
+
+.exercise[
+
+- Install the tomcat chart that we found earlier:
+  ```bash
+  helm install java4ever stable/tomcat
+  ```
+
+- List the releases:
+  ```bash
+  helm list
+  ```
+
+]
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Viewing resources of a release
+
+- This specific chart labels all its resources with a `release` label
+
+- We can use a selector to see these resources
+
+.exercise[
+
+- List all the resources created by this release:
+  ```bash
+  kubectl get all --selector=release=java4ever
+  ```
+
+]
+
+Note: this `release` label wasn't added automatically by Helm.
+<br/>
+It is defined in that chart. In other words, not all charts will provide this label.
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Configuring a release
+
+- By default, `stable/tomcat` creates a service of type `LoadBalancer`
+
+- We would like to change that to a `NodePort`
+
+- We could use `kubectl edit service java4ever-tomcat`, but ...
+
+  ... our changes would get overwritten next time we update that chart!
+
+- Instead, we are going to *set a value*
+
+- Values are parameters that the chart can use to change its behavior
+
+- Values have default values
+
+- Each chart is free to define its own values and their defaults
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Checking possible values
+
+- We can inspect a chart with `helm show` or `helm inspect`
+
+.exercise[
+
+- Look at the README for tomcat:
+  ```bash
+  helm show readme stable/tomcat
+  ```
+
+- Look at the values and their defaults:
+  ```bash
+  helm show values stable/tomcat
+  ```
+
+]
+
+The `values` may or may not have useful comments.
+
+The `readme` may or may not have (accurate) explanations for the values.
+
+(If we're unlucky, there won't be any indication about how to use the values!)
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Setting values
+
+- Values can be set when installing a chart, or when upgrading it
+
+- We are going to update `java4ever` to change the type of the service
+
+.exercise[
+
+- Update `java4ever`:
+  ```bash
+  helm upgrade java4ever stable/tomcat --set service.type=NodePort
+  ```
+
+]
+
+Note that we have to specify the chart that we use (`stable/tomcat`),
+even if we just want to update some values.
+
+We can set multiple values. If we want to set many values, we can use `-f`/`--values` and pass a YAML file with all the values.
+
+All unspecified values will take the default values defined in the chart.
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+## Connecting to tomcat
+
+- Let's check the tomcat server that we just installed
+
+- Note: its readiness probe has a 60s delay
+
+  (so it will take 60s after the initial deployment before the service works)
+
+.exercise[
+
+- Check the node port allocated to the service:
+  ```bash
+  kubectl get service java4ever-tomcat
+  PORT=$(kubectl get service java4ever-tomcat -o jsonpath={..nodePort})
+  ```
+
+- Connect to it, checking the demo app on `/sample/`:
+  ```bash
+  curl localhost:$PORT/sample/
+  ```
+
+]
+
+.debug[[pks/helm-intro.md](https://github.com/paulczar/container.training/tree/pks/slides/pks/helm-intro.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/plastic-containers.JPG)]
+
+---
+
+name: toc-creating-a-basic-chart
+class: title
+
+ Creating a basic chart
+
+.nav[
+[Previous section](#toc-managing-stacks-with-helm)
+|
+[Back to table of contents](#toc-chapter-2)
+|
+[Next section](#toc-next-steps)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Creating a basic chart
+
+- We are going to show a way to create a *very simplified* chart
+
+- In a real chart, *lots of things* would be templatized
+
+  (Resource names, service types, number of replicas...)
+
+.exercise[
+
+- Create a sample chart:
+  ```bash
+  helm create dockercoins
+  ```
+
+- Move away the sample templates and create an empty template directory:
+  ```bash
+  mv dockercoins/templates dockercoins/default-templates
+  mkdir dockercoins/templates
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Exporting the YAML for our application
+
+- The following section assumes that DockerCoins is currently running
+
+- If DockerCoins is not running, see next slide
+
+.exercise[
+
+- Create one YAML file for each resource that we need:
+  .small[
+  ```bash
+
+	while read kind name; do
+	  kubectl get -o yaml $kind $name > dockercoins/templates/$name-$kind.yaml
+	done <<EOF
+	deployment worker
+	deployment hasher
+	daemonset rng
+	deployment webui
+	deployment redis
+	service hasher
+	service rng
+	service webui
+	service redis
+	EOF
+  ```
+  ]
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Obtaining DockerCoins YAML
+
+- If DockerCoins is not running, we can also obtain the YAML from a public repository
+
+.exercise[
+
+- Clone the kubercoins repository:
+  ```bash
+  git clone https://github.com/jpetazzo/kubercoins
+  ```
+
+- Copy the YAML files to the `templates/` directory:
+  ```bash
+  cp kubercoins/*.yaml dockercoins/templates/
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Testing our helm chart
+
+.exercise[
+
+- Let's install our helm chart!
+  ```
+  helm install helmcoins dockercoins
+  ```
+  (`helmcoins` is the name of the release; `dockercoins` is the local path of the chart)
+
+]
+
+--
+
+- Since the application is already deployed, this will fail:
+```
+Error: rendered manifests contain a resource that already exists.
+Unable to continue with install: existing resource conflict:
+kind: Service, namespace: default, name: hasher
+```
+
+- To avoid naming conflicts, we will deploy the application in another *namespace*
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Switching to another namespace
+
+- We need create a new namespace
+
+  (Helm 2 creates namespaces automatically; Helm 3 doesn't anymore)
+
+- We need to tell Helm which namespace to use
+
+.exercise[
+
+- Create a new namespace:
+  ```bash
+  kubectl create namespace helmcoins
+  ```
+
+- Deploy our chart in that namespace:
+  ```bash
+  helm install helmcoins dockercoins --namespace=helmcoins
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Helm releases are namespaced
+
+- Let's try to see the release that we just deployed
+
+.exercise[
+
+- List Helm releases:
+  ```bash
+  helm list
+  ```
+
+]
+
+Our release doesn't show up!
+
+We have to specify its namespace (or switch to that namespace).
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Specifying the namespace
+
+- Try again, with the correct namespace
+
+.exercise[
+
+- List Helm releases in `helmcoins`:
+  ```bash
+  helm list --namespace=helmcoins
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Checking our new copy of DockerCoins
+
+- We can check the worker logs, or the web UI
+
+.exercise[
+
+- Retrieve the NodePort number of the web UI:
+  ```bash
+  kubectl get service webui --namespace=helmcoins
+  ```
+
+- Open it in a web browser
+
+- Look at the worker logs:
+  ```bash
+  kubectl logs deploy/worker --tail=10 --follow --namespace=helmcoins
+  ```
+
+]
+
+Note: it might take a minute or two for the worker to start.
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Discussion, shortcomings
+
+- Helm (and Kubernetes) best practices recommend to add a number of annotations
+
+  (e.g. `app.kubernetes.io/name`, `helm.sh/chart`, `app.kubernetes.io/instance` ...)
+
+- Our basic chart doesn't have any of these
+
+- Our basic chart doesn't use any template tag
+
+- Does it make sense to use Helm in that case?
+
+- *Yes,* because Helm will:
+
+  - track the resources created by the chart
+
+  - save successive revisions, allowing us to rollback
+
+[Helm docs](https://helm.sh/docs/topics/chart_best_practices/labels/)
+and [Kubernetes docs](https://kubernetes.io/docs/concepts/overview/working-with-objects/common-labels/)
+have details about recommended annotations and labels.
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/helm-create-basic-chart.md)]
+---
+
+## Cleaning up
+
+- Let's remove that chart before moving on
+
+.exercise[
+
+- Delete the release (don't forget to specify the namespace):
+  ```bash
+  helm delete helmcoins --namespace=helmcoins
+  ```
+
+]
+
+.debug[[k8s/helm-create-basic-chart.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/helm-create-basic-chart.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/train-of-containers-1.jpg)]
+
+---
+
+name: toc-next-steps
+class: title
+
+ Next steps
+
+.nav[
+[Previous section](#toc-creating-a-basic-chart)
+|
+[Back to table of contents](#toc-chapter-2)
+|
+[Next section](#toc-links-and-resources)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Next steps
+
+*Alright, how do I get started and containerize my apps?*
+
+--
+
+Suggested containerization checklist:
+
+.checklist[
+- write a Dockerfile for one service in one app
+- write Dockerfiles for the other (buildable) services
+- write a Compose file for that whole app
+- make sure that devs are empowered to run the app in containers
+- set up automated builds of container images from the code repo
+- set up a CI pipeline using these container images
+- set up a CD pipeline (for staging/QA) using these images
+]
+
+And *then* it is time to look at orchestration!
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+
+## Options for our first production cluster
+
+- Get a managed cluster from a major cloud provider (AKS, EKS, GKE...)
+
+  (price: $, difficulty: medium)
+
+- Hire someone to deploy it for us
+
+  (price: $$, difficulty: easy)
+
+- Do it ourselves
+
+  (price: $-$$$, difficulty: hard)
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## One big cluster vs. multiple small ones
+
+- Yes, it is possible to have prod+dev in a single cluster
+
+  (and implement good isolation and security with RBAC, network policies...)
+
+- But it is not a good idea to do that for our first deployment
+
+- Start with a production cluster + at least a test cluster
+
+- Implement and check RBAC and isolation on the test cluster
+
+  (e.g. deploy multiple test versions side-by-side)
+
+- Make sure that all our devs have usable dev clusters
+
+  (whether it's a local minikube or a full-blown multi-node cluster)
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## Namespaces
+
+- Namespaces let you run multiple identical stacks side by side
+
+- Two namespaces (e.g. `blue` and `green`) can each have their own `redis` service
+
+- Each of the two `redis` services has its own `ClusterIP`
+
+- CoreDNS creates two entries, mapping to these two `ClusterIP` addresses:
+
+  `redis.blue.svc.cluster.local` and `redis.green.svc.cluster.local`
+
+- Pods in the `blue` namespace get a *search suffix* of `blue.svc.cluster.local`
+
+- As a result, resolving `redis` from a pod in the `blue` namespace yields the "local" `redis`
+
+.warning[This does not provide *isolation*! That would be the job of network policies.]
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## Relevant sections
+
+- [Namespaces](kube-selfpaced.yml.html#toc-namespaces)
+
+- [Network Policies](kube-selfpaced.yml.html#toc-network-policies)
+
+- [Role-Based Access Control](kube-selfpaced.yml.html#toc-authentication-and-authorization)
+
+  (covers permissions model, user and service accounts management ...)
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## Stateful services (databases etc.)
+
+- As a first step, it is wiser to keep stateful services *outside* of the cluster
+
+- Exposing them to pods can be done with multiple solutions:
+
+  - `ExternalName` services
+    <br/>
+    (`redis.blue.svc.cluster.local` will be a `CNAME` record)
+
+  - `ClusterIP` services with explicit `Endpoints`
+    <br/>
+    (instead of letting Kubernetes generate the endpoints from a selector)
+
+  - Ambassador services
+    <br/>
+    (application-level proxies that can provide credentials injection and more)
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## Stateful services (second take)
+
+- If we want to host stateful services on Kubernetes, we can use:
+
+  - a storage provider
+
+  - persistent volumes, persistent volume claims
+
+  - stateful sets
+
+- Good questions to ask:
+
+  - what's the *operational cost* of running this service ourselves?
+
+  - what do we gain by deploying this stateful service on Kubernetes?
+
+- Relevant sections:
+  [Volumes](kube-selfpaced.yml.html#toc-volumes)
+  |
+  [Stateful Sets](kube-selfpaced.yml.html#toc-stateful-sets)
+  |
+  [Persistent Volumes](kube-selfpaced.yml.html#toc-highly-available-persistent-volumes)
+
+- Excellent [blog post](http://www.databasesoup.com/2018/07/should-i-run-postgres-on-kubernetes.html) tackling the question: “Should I run Postgres on Kubernetes?”
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## HTTP traffic handling
+
+- *Services* are layer 4 constructs
+
+- HTTP is a layer 7 protocol
+
+- It is handled by *ingresses* (a different resource kind)
+
+- *Ingresses* allow:
+
+  - virtual host routing
+  - session stickiness
+  - URI mapping
+  - and much more!
+
+- [This section](kube-selfpaced.yml.html#toc-exposing-http-services-with-ingress-resources) shows how to expose multiple HTTP apps using [Træfik](https://docs.traefik.io/user-guide/kubernetes/)
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## Logging
+
+- Logging is delegated to the container engine
+
+- Logs are exposed through the API
+
+- Logs are also accessible through local files (`/var/log/containers`)
+
+- Log shipping to a central platform is usually done through these files
+
+  (e.g. with an agent bind-mounting the log directory)
+
+- [This section](kube-selfpaced.yml.html#toc-centralized-logging) shows how to do that with [Fluentd](https://docs.fluentd.org/v0.12/articles/kubernetes-fluentd) and the EFK stack
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## Metrics
+
+- The kubelet embeds [cAdvisor](https://github.com/google/cadvisor), which exposes container metrics
+
+  (cAdvisor might be separated in the future for more flexibility)
+
+- It is a good idea to start with [Prometheus](https://prometheus.io/)
+
+  (even if you end up using something else)
+
+- Starting from Kubernetes 1.8, we can use the [Metrics API](https://kubernetes.io/docs/tasks/debug-application-cluster/core-metrics-pipeline/)
+
+- [Heapster](https://github.com/kubernetes/heapster) was a popular add-on
+
+  (but is being [deprecated](https://github.com/kubernetes/heapster/blob/master/docs/deprecation.md) starting with Kubernetes 1.11)
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## Managing the configuration of our applications
+
+- Two constructs are particularly useful: secrets and config maps
+
+- They allow to expose arbitrary information to our containers
+
+- **Avoid** storing configuration in container images
+
+  (There are some exceptions to that rule, but it's generally a Bad Idea)
+
+- **Never** store sensitive information in container images
+
+  (It's the container equivalent of the password on a post-it note on your screen)
+
+- [This section](kube-selfpaced.yml.html#toc-managing-configuration) shows how to manage app config with config maps (among others)
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## Managing stack deployments
+
+- The best deployment tool will vary, depending on:
+
+  - the size and complexity of your stack(s)
+  - how often you change it (i.e. add/remove components)
+  - the size and skills of your team
+
+- A few examples:
+
+  - shell scripts invoking `kubectl`
+  - YAML resources descriptions committed to a repo
+  - [Helm](https://github.com/kubernetes/helm) (~package manager)
+  - [Spinnaker](https://www.spinnaker.io/) (Netflix' CD platform)
+  - [Brigade](https://brigade.sh/) (event-driven scripting; no YAML)
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## Cluster federation
+
+--
+
+![Star Trek Federation](images/startrek-federation.jpg)
+
+--
+
+Sorry Star Trek fans, this is not the federation you're looking for!
+
+--
+
+(If I add "Your cluster is in another federation" I might get a 3rd fandom wincing!)
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## Cluster federation
+
+- Kubernetes master operation relies on etcd
+
+- etcd uses the [Raft](https://raft.github.io/) protocol
+
+- Raft recommends low latency between nodes
+
+- What if our cluster spreads to multiple regions?
+
+--
+
+- Break it down in local clusters
+
+- Regroup them in a *cluster federation*
+
+- Synchronize resources across clusters
+
+- Discover resources across clusters
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+## Developer experience
+
+*We've put this last, but it's pretty important!*
+
+- How do you on-board a new developer?
+
+- What do they need to install to get a dev stack?
+
+- How does a code change make it from dev to prod?
+
+- How does someone add a component to a stack?
+
+.debug[[k8s/whatsnext.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/whatsnext.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next chapter](https://gallant-turing-d0d520.netlify.com/containers/train-of-containers-2.jpg)]
+
+---
+
+name: toc-links-and-resources
+class: title
+
+ Links and resources
+
+.nav[
+[Previous section](#toc-next-steps)
+|
+[Back to table of contents](#toc-chapter-2)
+|
+[Next section](#toc-)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Links and resources
+
+- [Microsoft Learn](https://docs.microsoft.com/learn/)
+
+- [Azure Kubernetes Service](https://docs.microsoft.com/azure/aks/)
+
+- [Cloud Developer Advocates](https://developer.microsoft.com/advocates/)
+
+- [Kubernetes Community](https://kubernetes.io/community/) - Slack, Google Groups, meetups
+
+- [Local meetups](https://www.meetup.com/)
+
+- [devopsdays](https://www.devopsdays.org/)
+
+.footnote[These slides (and future updates) are on → http://container.training/]
+
+.debug[[k8s/links-bridget.md](https://github.com/paulczar/container.training/tree/pks/slides/k8s/links-bridget.md)]
+---
+class: title, self-paced
+
+Thank you!
+
+.debug[[shared/thankyou.md](https://github.com/paulczar/container.training/tree/pks/slides/shared/thankyou.md)]
+---
+
+class: title, in-person
+
+That's all, folks! <br/> Questions?
+
+![end](images/end.jpg)
+
+.debug[[shared/thankyou.md](https://github.com/paulczar/container.training/tree/pks/slides/shared/thankyou.md)]</textarea>
+    <script src="remark.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:9',
+        highlightSpans: true,
+        slideNumberFormat: '%current%/%total%',
+        excludedClasses: ["self-paced"]
+      });
+    </script>
+    
+    <!-- 
+    These two scripts will be available only when loading the
+    content using the pub/sub server. Otherwise, they'll just
+    404 and that's OK.
+    -->
+    <script src="/socket.io/socket.io.js">
+    </script>
+    <script src="/remote.js">
+    </script>
+
+  </body>
+</html>
