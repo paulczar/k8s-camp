@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>OSDN Kubernetes Workshop </title>
+    <title>Deploying and Scaling Microservices with Kubernetes </title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="workshop.css">
   </head>
@@ -23,29 +23,26 @@
     -->
     <textarea id="source">class: title, self-paced
 
-OSDN Kubernetes Workshop<br/>
+Deploying and Scaling Microservices<br/>with Kubernetes<br/>
 
 .nav[*Self-paced version*]
 
 .debug[
 ```
- M slides/kube-fullday-namespaced.yml
- M slides/pks/connecting.md
- M slides/pks/logistics.md
- M slides/shared/about-slides.md
-?? slides/pks/title.md
+ M slides/pks/helm.md
+ M slides/pks/prereqs.md
 
 ```
 
-These slides have been built from commit: af0e2f4
+These slides have been built from commit: 4d35b81
 
 
-[pks/title.md](https://github.com/paulczar/container.training.git/tree/pks/slides/pks/title.md)]
+[shared/title.md](https://github.com/paulczar/container.training.git/tree/pks/slides/shared/title.md)]
 ---
 
 class: title, in-person
 
-OSDN Kubernetes Workshop<br/><br/></br>
+Deploying and Scaling Microservices<br/>with Kubernetes<br/><br/></br>
 
 .footnote[
 **Be kind to the WiFi!**<br/>
@@ -54,13 +51,14 @@ OSDN Kubernetes Workshop<br/><br/></br>
 *Don't stream videos or download big files during the workshop[.](https://www.youtube.com/watch?v=h16zyxiwDLY)*<br/>
 *Thank you!*
 
-**Slides: https://k8s.camp/osdn**<br/>
-**Login: https://gangway.workshop.paulczar.wtf**
+**Slides: http://container.training/**
 ]
 
-.debug[[pks/title.md](https://github.com/paulczar/container.training.git/tree/pks/slides/pks/title.md)]
+.debug[[shared/title.md](https://github.com/paulczar/container.training.git/tree/pks/slides/shared/title.md)]
 ---
 ## Intros
+
+- This slide should be customized by the tutorial instructor(s).
 
 - Hello! We are:
 
@@ -68,11 +66,17 @@ OSDN Kubernetes Workshop<br/><br/></br>
    - .emoji[👨🏾‍🎓] Tyler Britten ([@tybritten](https://twitter.com/tybritten), Pivotal Software)
 
 
-- The workshop will run until 17:30
+- The workshop will run from ...
+
+- There will be a lunch break at ...
+
+  (And coffee breaks!)
 
 - Feel free to interrupt for questions at any time
 
 - *Especially when you see full screen container pictures!*
+
+- Live feedback, questions, help: In person!
 
 .debug[[pks/logistics.md](https://github.com/paulczar/container.training.git/tree/pks/slides/pks/logistics.md)]
 ---
@@ -81,7 +85,7 @@ OSDN Kubernetes Workshop<br/><br/></br>
 - This was initially written by [Jérôme Petazzoni](https://twitter.com/jpetazzo) to support in-person,
   instructor-led workshops and tutorials
   
-- Credit is also due to [multiple contributors](https://github.com/paulczar/container.training/graphs/contributors) — thank you!
+- Credit is also due to [multiple contributors](https://github.com/jpetazzo/container.training/graphs/contributors) — thank you!
 
 - You can also follow along on your own, at your own pace
 
@@ -121,15 +125,15 @@ class: self-paced
 
 - All the content is available in a public GitHub repository:
 
-  https://github.com/paulczar/container.training
+  https://github.com/jpetazzo/container.training
 
 - You can get updated "builds" of the slides there:
 
-  https://k8s.camp/osdn
+  http://container.training/
 
 <!--
 .exercise[
-```open https://github.com/paulczar/container.training```
+```open https://github.com/jpetazzo/container.training```
 ```open http://container.training/```
 ]
 -->
@@ -142,7 +146,7 @@ class: self-paced
 
 <!--
 .exercise[
-```open https://github.com/paulczar/container.training/tree/master/slides/common/about-slides.md```
+```open https://github.com/jpetazzo/container.training/tree/master/slides/common/about-slides.md```
 ]
 -->
 
@@ -347,11 +351,11 @@ Misattributed to Benjamin Franklin
 
 - This is the stuff you're supposed to do!
 
-- Go to https://k8s.camp/osdn to view these slides
+- Go to http://container.training/ to view these slides
 
 - Join the chat room: In person!
 
-<!-- ```open https://k8s.camp/osdn``` -->
+<!-- ```open http://container.training/``` -->
 
 ]
 
@@ -409,7 +413,7 @@ class: in-person
 
 .exercise[
 
-- Log into https://gangway.workshop.paulczar.wtf with your provided credentials (sorry about the [self-signed cert](https://gist.githubusercontent.com/paulczar/6e3f48a03e544627952aaa399a29a4af/raw/9e530371d8929ab573a205238dd0f2c718edc64c/ca.cert))
+- Log into https://workshop.paulczar.wtf with your provided credentials
 
 - Follow the instructions on the auth portal to set up a `kubeconfig` file.
 
@@ -444,7 +448,7 @@ If anything goes wrong — ask for help!
   Small setup effort; small cost; flexible environments
 
 - Create a bunch of clusters for you and your friends
-    ([instructions](https://github.com/paulczar/container.training/tree/master/prepare-vms))
+    ([instructions](https://github.com/jpetazzo/container.training/tree/master/prepare-vms))
 
   Bigger setup effort; ideal for group training
 
@@ -3086,7 +3090,7 @@ How did we set up these Kubernetes clusters that we're using?
 
     6. Copy the configuration file generated by `kubeadm init`
 
-- Check the [prepare VMs README](https://github.com/paulczar/container.training/blob/master/prepare-vms/README.md) for more details
+- Check the [prepare VMs README](https://github.com/jpetazzo/container.training/blob/master/prepare-vms/README.md) for more details
 
 .debug[[pks/setup-k8s.md](https://github.com/paulczar/container.training.git/tree/pks/slides/pks/setup-k8s.md)]
 ---

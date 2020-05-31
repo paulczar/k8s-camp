@@ -1,0 +1,5300 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Introduction to Containers </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="workshop.css">
+  </head>
+  <body>
+    <!--
+    <div style="position: absolute; left: 20%; right: 20%; top: 30%;">
+      <h1 style="font-size: 3em;">Loading ...</h1>
+      The slides should show up here. If they don't, it might be
+      because you are accessing this file directly from your filesystem.
+      It needs to be served from a web server. You can try this:
+      <pre>
+        docker-compose up -d
+        open http://localhost:8888/workshop.html # on MacOS
+        xdg-open http://localhost:8888/workshop.html # on Linux
+      </pre>
+      Once the slides are loaded, this notice disappears when you
+      go full screen (e.g. by hitting "f").
+    </div>
+    -->
+    <textarea id="source">class: title, self-paced
+
+Introduction<br/>to Containers<br/>
+
+.nav[*Self-paced version*]
+
+.debug[
+```
+A  slides/k8s/batch-jobs-cleanup.md
+M  slides/k8s/configuration.md
+M  slides/k8s/kubectl-logs.md
+M  slides/k8s/kubectlexpose.md
+M  slides/k8s/kubectlget.md
+M  slides/k8s/labels-annotations.md
+M  slides/k8s/logs-cli.md
+M  slides/k8s/rollout.md
+M  slides/k8s/shippingimages.md
+M  slides/k8s/volumes.md
+MM slides/kube-fullday-namespaced.yml
+M  slides/markmaker.py
+M  slides/namespaced/connecting.md
+M  slides/namespaced/handson.md
+A  slides/namespaced/kubectlget.md
+M  slides/namespaced/ourapponkube.md
+A  slides/namespaced/rollout.md
+M  slides/namespaced/sampleapp.md
+
+```
+
+These slides have been built from commit: 6c74ac9
+
+
+[shared/title.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/shared/title.md)]
+---
+
+class: title, in-person
+
+Introduction<br/>to Containers<br/><br/></br>
+
+.footnote[
+**Slides[:](https://www.youtube.com/watch?v=h16zyxiwDLY) http://container.training/**
+]
+
+<!--
+WiFi: **Something**<br/>
+Password: **Something**
+
+**Be kind to the WiFi!**<br/>
+*Use the 5G network.*
+*Don't use your hotspot.*<br/>
+*Don't stream videos or download big files during the workshop*<br/>
+*Thank you!*
+-->
+
+.debug[[shared/title.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/shared/title.md)]
+---
+## Intros
+
+- This slide should be customized by the tutorial instructor(s).
+
+- Hello! We are:
+<ul>
+<li>👩🏻‍🏫 Ann O'Nymous <a href="https://twitter.com/annonypotomus">@annonypotomus</a>, Megacorp Inc
+<li>👨🏾‍🎓 Stu Dent <a href="https://twitter.com/stufromwakanda">@stufromwakanda</a>, University of Wakanda
+</ul>
+
+<!-- .dummy[
+   - .emoji[👩🏻‍🏫] Ann O'Nymous ([@...](https://twitter.com/...), Megacorp Inc)
+
+   - .emoji[👨🏾‍🎓] Stu Dent ([@...](https://twitter.com/...), University of Wakanda)
+
+   - .emoji[👷🏻‍♀️] AJ ([@s0ulshake](https://twitter.com/s0ulshake), Travis CI)
+
+   - .emoji[🚁] Alexandre ([@alexbuisine](https://twitter.com/alexbuisine), Enix SAS)
+
+   - .emoji[🐳] Jérôme ([@jpetazzo](https://twitter.com/jpetazzo), Enix SAS)
+
+   - .emoji[⛵] Jérémy ([@jeremygarrouste](twitter.com/jeremygarrouste), Inpiwee)
+
+   - .emoji[🎧] Romain ([@rdegez](https://twitter.com/rdegez), Enix SAS)
+
+] -->
+
+
+- The workshop will run from ...
+- There will be a lunch break at ...
+- Plus coffee breaks!
+
+- Feel free to interrupt for questions at any time
+
+- *Especially when you see full screen container pictures!*
+
+- Live feedback, questions, help: [Slack](https://dockercommunity.slack.com/messages/C7GKACWDV)
+
+.debug[[logistics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/logistics.md)]
+---
+## A brief introduction
+
+- This was initially written to support in-person, instructor-led workshops and tutorials
+
+- These materials are maintained by [Jérôme Petazzoni](https://twitter.com/jpetazzo) and [multiple contributors](https://github.com/jpetazzo/container.training/graphs/contributors)
+
+- You can also follow along on your own, at your own pace
+
+- We included as much information as possible in these slides
+
+- We recommend having a mentor to help you ...
+
+- ... Or be comfortable spending some time reading the Docker
+ [documentation](https://docs.docker.com/) ...
+
+- ... And looking for answers in the [Docker forums](forums.docker.com),
+  [StackOverflow](http://stackoverflow.com/questions/tagged/docker),
+  and other outlets
+
+.debug[[containers/intro.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/intro.md)]
+---
+
+class: self-paced
+
+## Hands on, you shall practice
+
+- Nobody ever became a Jedi by spending their lives reading Wookiepedia
+
+- Likewise, it will take more than merely *reading* these slides
+  to make you an expert
+
+- These slides include *tons* of exercises and examples
+
+- They assume that you have access to a machine running Docker
+
+- If you are attending a workshop or tutorial:
+  <br/>you will be given specific instructions to access a cloud VM
+
+- If you are doing this on your own:
+  <br/>we will tell you how to install Docker or access a Docker environment
+
+.debug[[containers/intro.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/intro.md)]
+---
+## Accessing these slides now
+
+- We recommend that you open these slides in your browser:
+
+  http://container.training/
+
+- Use arrows to move to next/previous slide
+
+  (up, down, left, right, page up, page down)
+
+- Type a slide number + ENTER to go to that slide
+
+- The slide number is also visible in the URL bar
+
+  (e.g. .../#123 for slide 123)
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/shared/about-slides.md)]
+---
+
+## Accessing these slides later
+
+- Slides will remain online so you can review them later if needed
+
+  (let's say we'll keep them online at least 1 year, how about that?)
+
+- You can download the slides using that URL:
+
+  http://container.training/slides.zip
+
+  (then open the file `intro-fullday.yml.html`)
+
+- You will to find new versions of these slides on:
+
+  https://container.training/
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/shared/about-slides.md)]
+---
+
+## These slides are open source
+
+- You are welcome to use, re-use, share these slides
+
+- These slides are written in markdown
+
+- The sources of these slides are available in a public GitHub repository:
+
+  https://github.com/jpetazzo/container.training
+
+- Typos? Mistakes? Questions? Feel free to hover over the bottom of the slide ...
+
+.footnote[.emoji[👇] Try it! The source file will be shown and you can view it on GitHub and fork and edit it.]
+
+<!--
+.exercise[
+```open https://github.com/jpetazzo/container.training/tree/master/slides/common/about-slides.md```
+]
+-->
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/shared/about-slides.md)]
+---
+
+class: extra-details
+
+## Extra details
+
+- This slide has a little magnifying glass in the top left corner
+
+- This magnifying glass indicates slides that provide extra details
+
+- Feel free to skip them if:
+
+  - you are in a hurry
+
+  - you are new to this and want to avoid cognitive overload
+
+  - you want only the most essential information
+
+- You can review these slides another time if you want, they'll be waiting for you ☺
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/shared/about-slides.md)]
+---
+## Chat room
+
+- We've set up a chat room that we will monitor during the workshop
+
+- Don't hesitate to use it to ask questions, or get help, or share feedback
+
+- The chat room will also be available after the workshop
+
+- Join the chat room: [Slack](https://dockercommunity.slack.com/messages/C7GKACWDV)
+
+- Say hi in the chat room!
+
+.debug[[shared/chat-room-im.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/shared/chat-room-im.md)]
+---
+
+name: toc-module-1
+
+## Module 1
+
+- [Our training environment](#toc-our-training-environment)
+
+- [Our first containers](#toc-our-first-containers)
+
+- [Background containers](#toc-background-containers)
+
+- [Naming and inspecting containers](#toc-naming-and-inspecting-containers)
+
+- [Getting inside a container](#toc-getting-inside-a-container)
+
+- [Understanding Docker images](#toc-understanding-docker-images)
+
+.debug[(auto-generated TOC)]
+---
+name: toc-module-2
+
+## Module 2
+
+- [Building images interactively](#toc-building-images-interactively)
+
+- [Building Docker images with a Dockerfile](#toc-building-docker-images-with-a-dockerfile)
+
+- [`CMD` and `ENTRYPOINT`](#toc-cmd-and-entrypoint)
+
+- [Copying files during the build](#toc-copying-files-during-the-build)
+
+- [Exercise — writing Dockerfiles](#toc-exercise--writing-dockerfiles)
+
+.debug[(auto-generated TOC)]
+---
+name: toc-module-3
+
+## Module 3
+
+- [Container networking basics](#toc-container-networking-basics)
+
+- [Local development workflow with Docker](#toc-local-development-workflow-with-docker)
+
+- [Compose for development stacks](#toc-compose-for-development-stacks)
+
+- [Exercise — writing a Compose file](#toc-exercise--writing-a-compose-file)
+
+.debug[(auto-generated TOC)]
+---
+name: toc-module-4
+
+## Module 4
+
+- [Reducing image size](#toc-reducing-image-size)
+
+- [Multi-stage builds](#toc-multi-stage-builds)
+
+- [Tips for efficient Dockerfiles](#toc-tips-for-efficient-dockerfiles)
+
+- [Dockerfile examples](#toc-dockerfile-examples)
+
+- [Exercise — writing better Dockerfiles](#toc-exercise--writing-better-dockerfiles)
+
+.debug[(auto-generated TOC)]
+---
+name: toc-module-5
+
+## Module 5
+
+- [Links and resources](#toc-links-and-resources)
+
+.debug[(auto-generated TOC)]
+
+
+
+.debug[[shared/toc.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/shared/toc.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/Container-Ship-Freighter-Navigation-Elbe-Romance-1782991.jpg)]
+
+---
+
+name: toc-our-training-environment
+class: title
+
+ Our training environment
+
+.nav[
+[Previous section](#toc-)
+|
+[Back to table of contents](#toc-module-1)
+|
+[Next section](#toc-our-first-containers)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Our training environment
+
+![SSH terminal](images/title-our-training-environment.jpg)
+
+.debug[[containers/Training_Environment.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Training_Environment.md)]
+---
+
+## Our training environment
+
+- If you are attending a tutorial or workshop:
+
+  - a VM has been provisioned for each student
+
+- If you are doing or re-doing this course on your own, you can:
+
+  - install Docker locally (as explained in the chapter "Installing Docker")
+
+  - install Docker on e.g. a cloud VM
+
+  - use https://www.play-with-docker.com/ to instantly get a training environment
+
+.debug[[containers/Training_Environment.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Training_Environment.md)]
+---
+
+## Our Docker VM
+
+*This section assumes that you are following this course as part of
+a tutorial, training or workshop, where each student is given an
+individual Docker VM.*
+
+- The VM is created just before the training.
+
+- It will stay up during the whole training.
+
+- It will be destroyed shortly after the training.
+
+- It comes pre-loaded with Docker and some other useful tools.
+
+.debug[[containers/Training_Environment.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Training_Environment.md)]
+---
+
+## What *is* Docker?
+
+- "Installing Docker" really means "Installing the Docker Engine and CLI".
+
+- The Docker Engine is a daemon (a service running in the background).
+
+- This daemon manages containers, the same way that a hypervisor manages VMs.
+
+- We interact with the Docker Engine by using the Docker CLI.
+
+- The Docker CLI and the Docker Engine communicate through an API.
+
+- There are many other programs and client libraries which use that API.
+
+.debug[[containers/Training_Environment.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Training_Environment.md)]
+---
+
+## Why don't we run Docker locally?
+
+- We are going to download container images and distribution packages.
+
+- This could put a bit of stress on the local WiFi and slow us down.
+
+- Instead, we use a remote VM that has a good connectivity
+
+- In some rare cases, installing Docker locally is challenging:
+
+  - no administrator/root access (computer managed by strict corp IT)
+
+  - 32-bit CPU or OS
+
+  - old OS version (e.g. CentOS 6, OSX pre-Yosemite, Windows 7)
+
+- It's better to spend time learning containers than fiddling with the installer!
+
+.debug[[containers/Training_Environment.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Training_Environment.md)]
+---
+
+## Connecting to your Virtual Machine
+
+You need an SSH client.
+
+* On OS X, Linux, and other UNIX systems, just use `ssh`:
+
+```bash
+$ ssh <login>@<ip-address>
+```
+
+* On Windows, if you don't have an SSH client, you can download:
+
+  * Putty (www.putty.org)
+
+  * Git BASH (https://git-for-windows.github.io/)
+
+  * MobaXterm (https://mobaxterm.mobatek.net/)
+
+.debug[[containers/Training_Environment.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Training_Environment.md)]
+---
+
+## Checking your Virtual Machine
+
+Once logged in, make sure that you can run a basic Docker command:
+
+.small[
+```bash
+$ docker version
+Client:
+ Version:       18.03.0-ce
+ API version:   1.37
+ Go version:    go1.9.4
+ Git commit:    0520e24
+ Built:         Wed Mar 21 23:10:06 2018
+ OS/Arch:       linux/amd64
+ Experimental:  false
+ Orchestrator:  swarm
+
+Server:
+ Engine:
+  Version:      18.03.0-ce
+  API version:  1.37 (minimum version 1.12)
+  Go version:   go1.9.4
+  Git commit:   0520e24
+  Built:        Wed Mar 21 23:08:35 2018
+  OS/Arch:      linux/amd64
+  Experimental: false
+```
+]
+
+If this doesn't work, raise your hand so that an instructor can assist you!
+
+???
+
+:EN:Container concepts
+:FR:Premier contact avec les conteneurs
+
+:EN:- What's a container engine?
+:FR:- Qu'est-ce qu'un *container engine* ?
+
+.debug[[containers/Training_Environment.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Training_Environment.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/ShippingContainerSFBay.jpg)]
+
+---
+
+name: toc-our-first-containers
+class: title
+
+ Our first containers
+
+.nav[
+[Previous section](#toc-our-training-environment)
+|
+[Back to table of contents](#toc-module-1)
+|
+[Next section](#toc-background-containers)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Our first containers
+
+![Colorful plastic tubs](images/title-our-first-containers.jpg)
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## Objectives
+
+At the end of this lesson, you will have:
+
+* Seen Docker in action.
+
+* Started your first containers.
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## Hello World
+
+In your Docker environment, just run the following command:
+
+```bash
+$ docker run busybox echo hello world
+hello world
+```
+
+(If your Docker install is brand new, you will also see a few extra lines,
+corresponding to the download of the `busybox` image.)
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## That was our first container!
+
+* We used one of the smallest, simplest images available: `busybox`.
+
+* `busybox` is typically used in embedded systems (phones, routers...)
+
+* We ran a single process and echo'ed `hello world`.
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## A more useful container
+
+Let's run a more exciting container:
+
+```bash
+$ docker run -it ubuntu
+root@04c0bb0a6c07:/#
+```
+
+* This is a brand new container.
+
+* It runs a bare-bones, no-frills `ubuntu` system.
+
+* `-it` is shorthand for `-i -t`.
+
+  * `-i` tells Docker to connect us to the container's stdin.
+
+  * `-t` tells Docker that we want a pseudo-terminal.
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## Do something in our container
+
+Try to run `figlet` in our container.
+
+```bash
+root@04c0bb0a6c07:/# figlet hello
+bash: figlet: command not found
+```
+
+Alright, we need to install it.
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## Install a package in our container
+
+We want `figlet`, so let's install it:
+
+```bash
+root@04c0bb0a6c07:/# apt-get update
+...
+Fetched 1514 kB in 14s (103 kB/s)
+Reading package lists... Done
+root@04c0bb0a6c07:/# apt-get install figlet
+Reading package lists... Done
+...
+```
+
+One minute later, `figlet` is installed!
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## Try to run our freshly installed program
+
+The `figlet` program takes a message as parameter.
+
+```bash
+root@04c0bb0a6c07:/# figlet hello
+ _          _ _       
+| |__   ___| | | ___  
+| '_ \ / _ \ | |/ _ \ 
+| | | |  __/ | | (_) |
+|_| |_|\___|_|_|\___/ 
+```
+
+Beautiful! .emoji[😍]
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+class: in-person
+
+## Counting packages in the container
+
+Let's check how many packages are installed there.
+
+```bash
+root@04c0bb0a6c07:/# dpkg -l | wc -l
+190
+```
+
+* `dpkg -l` lists the packages installed in our container
+
+* `wc -l` counts them
+
+How many packages do we have on our host?
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+class: in-person
+
+## Counting packages on the host
+
+Exit the container by logging out of the shell, like you would usually do.
+
+(E.g. with `^D` or `exit`)
+
+```bash
+root@04c0bb0a6c07:/# exit
+```
+
+Now, try to:
+
+* run `dpkg -l | wc -l`. How many packages are installed?
+
+* run `figlet`. Does that work?
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+class: self-paced
+
+## Comparing the container and the host
+
+Exit the container by logging out of the shell, with `^D` or `exit`.
+
+Now try to run `figlet`. Does that work?
+
+(It shouldn't; except if, by coincidence, you are running on a machine where figlet was installed before.)
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## Host and containers are independent things
+
+* We ran an `ubuntu` container on an Linux/Windows/macOS host.
+
+* They have different, independent packages.
+
+* Installing something on the host doesn't expose it to the container.
+
+* And vice-versa.
+
+* Even if both the host and the container have the same Linux distro!
+
+* We can run *any container* on *any host*.
+
+  (One exception: Windows containers cannot run on Linux machines; at least not yet.)
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## Where's our container?
+
+* Our container is now in a *stopped* state.
+
+* It still exists on disk, but all compute resources have been freed up.
+
+* We will see later how to get back to that container.
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## Starting another container
+
+What if we start a new container, and try to run `figlet` again?
+ 
+```bash
+$ docker run -it ubuntu
+root@b13c164401fb:/# figlet
+bash: figlet: command not found
+```
+
+* We started a *brand new container*.
+
+* The basic Ubuntu image was used, and `figlet` is not here.
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## Where's my container?
+
+* Can we reuse that container that we took time to customize?
+
+  *We can, but that's not the default workflow with Docker.*
+
+* What's the default workflow, then?
+
+  *Always start with a fresh container.*
+  <br/>
+  *If we need something installed in our container, build a custom image.*
+
+* That seems complicated!
+
+  *We'll see that it's actually pretty easy!*
+
+* And what's the point?
+
+  *This puts a strong emphasis on automation and repeatability. Let's see why ...*
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## Pets vs. Cattle
+
+* In the "pets vs. cattle" metaphor, there are two kinds of servers.
+
+* Pets:
+
+  * have distinctive names and unique configurations
+
+  * when they have an outage, we do everything we can to fix them
+
+* Cattle:
+
+  * have generic names (e.g. with numbers) and generic configuration
+
+  * configuration is enforced by configuration management, golden images ...
+
+  * when they have an outage, we can replace them immediately with a new server
+
+* What's the connection with Docker and containers?
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## Local development environments
+
+* When we use local VMs (with e.g. VirtualBox or VMware), our workflow looks like this:
+
+  * create VM from base template (Ubuntu, CentOS...)
+
+  * install packages, set up environment
+
+  * work on project
+
+  * when done, shut down VM
+
+  * next time we need to work on project, restart VM as we left it
+
+  * if we need to tweak the environment, we do it live
+
+* Over time, the VM configuration evolves, diverges.
+
+* We don't have a clean, reliable, deterministic way to provision that environment.
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+## Local development with Docker
+
+* With Docker, the workflow looks like this:
+
+  * create container image with our dev environment
+
+  * run container with that image
+
+  * work on project
+
+  * when done, shut down container
+
+  * next time we need to work on project, start a new container
+
+  * if we need to tweak the environment, we create a new image
+
+* We have a clear definition of our environment, and can share it reliably with others.
+
+* Let's see in the next chapters how to bake a custom image with `figlet`!
+
+???
+
+:EN:- Running our first container
+:FR:- Lancer nos premiers conteneurs
+
+.debug[[containers/First_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/First_Containers.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/aerial-view-of-containers.jpg)]
+
+---
+
+name: toc-background-containers
+class: title
+
+ Background containers
+
+.nav[
+[Previous section](#toc-our-first-containers)
+|
+[Back to table of contents](#toc-module-1)
+|
+[Next section](#toc-naming-and-inspecting-containers)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Background containers
+
+![Background containers](images/title-background-containers.jpg)
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## Objectives
+
+Our first containers were *interactive*.
+
+We will now see how to:
+
+* Run a non-interactive container.
+* Run a container in the background.
+* List running containers.
+* Check the logs of a container.
+* Stop a container.
+* List stopped containers.
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## A non-interactive container
+
+We will run a small custom container.
+
+This container just displays the time every second.
+
+```bash
+$ docker run jpetazzo/clock
+Fri Feb 20 00:28:53 UTC 2015
+Fri Feb 20 00:28:54 UTC 2015
+Fri Feb 20 00:28:55 UTC 2015
+...
+```
+
+* This container will run forever.
+* To stop it, press `^C`.
+* Docker has automatically downloaded the image `jpetazzo/clock`.
+* This image is a user image, created by `jpetazzo`.
+* We will hear more about user images (and other types of images) later.
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## Run a container in the background
+
+Containers can be started in the background, with the `-d` flag (daemon mode):
+
+```bash
+$ docker run -d jpetazzo/clock
+47d677dcfba4277c6cc68fcaa51f932b544cab1a187c853b7d0caf4e8debe5ad
+```
+
+* We don't see the output of the container.
+* But don't worry: Docker collects that output and logs it!
+* Docker gives us the ID of the container.
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## List running containers
+
+How can we check that our container is still running?
+
+With `docker ps`, just like the UNIX `ps` command, lists running processes.
+
+```bash
+$ docker ps
+CONTAINER ID  IMAGE           ...  CREATED        STATUS        ...
+47d677dcfba4  jpetazzo/clock  ...  2 minutes ago  Up 2 minutes  ...
+```
+
+Docker tells us:
+
+* The (truncated) ID of our container.
+* The image used to start the container.
+* That our container has been running (`Up`) for a couple of minutes.
+* Other information (COMMAND, PORTS, NAMES) that we will explain later.
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## Starting more containers
+
+Let's start two more containers.
+
+```bash
+$ docker run -d jpetazzo/clock
+57ad9bdfc06bb4407c47220cf59ce21585dce9a1298d7a67488359aeaea8ae2a
+```
+
+```bash
+$ docker run -d jpetazzo/clock
+068cc994ffd0190bbe025ba74e4c0771a5d8f14734af772ddee8dc1aaf20567d
+```
+
+Check that `docker ps` correctly reports all 3 containers.
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## Viewing only the last container started
+
+When many containers are already running, it can be useful to
+see only the last container that was started.
+
+This can be achieved with the `-l` ("Last") flag:
+
+```bash
+$ docker ps -l
+CONTAINER ID  IMAGE           ...  CREATED        STATUS        ...
+068cc994ffd0  jpetazzo/clock  ...  2 minutes ago  Up 2 minutes  ...
+```
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## View only the IDs of the containers
+
+Many Docker commands will work on container IDs: `docker stop`, `docker rm`...
+
+If we want to list only the IDs of our containers (without the other columns
+or the header line),
+we can use the `-q` ("Quiet", "Quick") flag:
+
+```bash
+$ docker ps -q
+068cc994ffd0
+57ad9bdfc06b
+47d677dcfba4
+```
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## Combining flags
+
+We can combine `-l` and `-q` to see only the ID of the last container started:
+
+```bash
+$ docker ps -lq
+068cc994ffd0
+```
+
+At a first glance, it looks like this would be particularly useful in scripts.
+
+However, if we want to start a container and get its ID in a reliable way,
+it is better to use `docker run -d`, which we will cover in a bit.
+
+(Using `docker ps -lq` is prone to race conditions: what happens if someone
+else, or another program or script, starts another container just before
+we run `docker ps -lq`?)
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## View the logs of a container
+
+We told you that Docker was logging the container output.
+
+Let's see that now.
+
+```bash
+$ docker logs 068
+Fri Feb 20 00:39:52 UTC 2015
+Fri Feb 20 00:39:53 UTC 2015
+...
+```
+
+* We specified a *prefix* of the full container ID.
+* You can, of course, specify the full ID.
+* The `logs` command will output the *entire* logs of the container.
+  <br/>(Sometimes, that will be too much. Let's see how to address that.)
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## View only the tail of the logs
+
+To avoid being spammed with eleventy pages of output,
+we can use the `--tail` option:
+
+```bash
+$ docker logs --tail 3 068
+Fri Feb 20 00:55:35 UTC 2015
+Fri Feb 20 00:55:36 UTC 2015
+Fri Feb 20 00:55:37 UTC 2015
+```
+
+* The parameter is the number of lines that we want to see.
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## Follow the logs in real time
+
+Just like with the standard UNIX command `tail -f`, we can
+follow the logs of our container:
+
+```bash
+$ docker logs --tail 1 --follow 068
+Fri Feb 20 00:57:12 UTC 2015
+Fri Feb 20 00:57:13 UTC 2015
+^C
+```
+
+* This will display the last line in the log file.
+* Then, it will continue to display the logs in real time.
+* Use `^C` to exit.
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## Stop our container
+
+There are two ways we can terminate our detached container.
+
+* Killing it using the `docker kill` command.
+* Stopping it using the `docker stop` command.
+
+The first one stops the container immediately, by using the
+`KILL` signal.
+
+The second one is more graceful. It sends a `TERM` signal,
+and after 10 seconds, if the container has not stopped, it
+sends `KILL.`
+
+Reminder: the `KILL` signal cannot be intercepted, and will
+forcibly terminate the container.
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## Stopping our containers
+
+Let's stop one of those containers:
+
+```bash
+$ docker stop 47d6
+47d6
+```
+
+This will take 10 seconds:
+
+* Docker sends the TERM signal;
+* the container doesn't react to this signal
+  (it's a simple Shell script with no special
+  signal handling);
+* 10 seconds later, since the container is still
+  running, Docker sends the KILL signal;
+* this terminates the container.
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## Killing the remaining containers
+
+Let's be less patient with the two other containers:
+
+```bash
+$ docker kill 068 57ad
+068
+57ad
+```
+
+The `stop` and `kill` commands can take multiple container IDs.
+
+Those containers will be terminated immediately (without
+the 10-second delay).
+
+Let's check that our containers don't show up anymore:
+
+```bash
+$ docker ps
+```
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+## List stopped containers
+
+We can also see stopped containers, with the `-a` (`--all`) option.
+
+```bash
+$ docker ps -a
+CONTAINER ID  IMAGE           ...  CREATED      STATUS
+068cc994ffd0  jpetazzo/clock  ...  21 min. ago  Exited (137) 3 min. ago
+57ad9bdfc06b  jpetazzo/clock  ...  21 min. ago  Exited (137) 3 min. ago
+47d677dcfba4  jpetazzo/clock  ...  23 min. ago  Exited (137) 3 min. ago
+5c1dfd4d81f1  jpetazzo/clock  ...  40 min. ago  Exited (0) 40 min. ago
+b13c164401fb  ubuntu          ...  55 min. ago  Exited (130) 53 min. ago
+```
+
+???
+
+:EN:- Foreground and background containers
+:FR:- Exécution interactive ou en arrière-plan
+
+.debug[[containers/Background_Containers.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Background_Containers.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/blue-containers.jpg)]
+
+---
+
+name: toc-naming-and-inspecting-containers
+class: title
+
+ Naming and inspecting containers
+
+.nav[
+[Previous section](#toc-background-containers)
+|
+[Back to table of contents](#toc-module-1)
+|
+[Next section](#toc-getting-inside-a-container)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Naming and inspecting containers
+
+![Markings on container door](images/title-naming-and-inspecting-containers.jpg)
+
+.debug[[containers/Naming_And_Inspecting.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Naming_And_Inspecting.md)]
+---
+
+## Objectives
+
+In this lesson, we will learn about an important
+Docker concept: container *naming*.
+
+Naming allows us to:
+
+* Reference easily a container.
+
+* Ensure unicity of a specific container.
+
+We will also see the `inspect` command, which gives a lot of details about a container.
+
+.debug[[containers/Naming_And_Inspecting.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Naming_And_Inspecting.md)]
+---
+
+## Naming our containers
+
+So far, we have referenced containers with their ID.
+
+We have copy-pasted the ID, or used a shortened prefix.
+
+But each container can also be referenced by its name.
+
+If a container is named `thumbnail-worker`, I can do:
+
+```bash
+$ docker logs thumbnail-worker
+$ docker stop thumbnail-worker
+etc.
+```
+
+.debug[[containers/Naming_And_Inspecting.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Naming_And_Inspecting.md)]
+---
+
+## Default names
+
+When we create a container, if we don't give a specific
+name, Docker will pick one for us.
+
+It will be the concatenation of:
+
+* A mood (furious, goofy, suspicious, boring...)
+
+* The name of a famous inventor (tesla, darwin, wozniak...)
+
+Examples: `happy_curie`, `clever_hopper`, `jovial_lovelace` ...
+
+.debug[[containers/Naming_And_Inspecting.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Naming_And_Inspecting.md)]
+---
+
+## Specifying a name
+
+You can set the name of the container when you create it.
+
+```bash
+$ docker run --name ticktock jpetazzo/clock
+```
+
+If you specify a name that already exists, Docker will refuse
+to create the container.
+
+This lets us enforce unicity of a given resource.
+
+.debug[[containers/Naming_And_Inspecting.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Naming_And_Inspecting.md)]
+---
+
+## Renaming containers
+
+* You can rename containers with `docker rename`.
+
+* This allows you to "free up" a name without destroying the associated container.
+
+.debug[[containers/Naming_And_Inspecting.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Naming_And_Inspecting.md)]
+---
+
+## Inspecting a container
+
+The `docker inspect` command will output a very detailed JSON map.
+
+```bash
+$ docker inspect <containerID>
+[{
+...
+(many pages of JSON here)
+...
+```
+
+There are multiple ways to consume that information.
+
+.debug[[containers/Naming_And_Inspecting.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Naming_And_Inspecting.md)]
+---
+
+## Parsing JSON with the Shell
+
+* You *could* grep and cut or awk the output of `docker inspect`.
+
+* Please, don't.
+
+* It's painful.
+
+* If you really must parse JSON from the Shell, use JQ! (It's great.)
+
+```bash
+$ docker inspect <containerID> | jq .
+```
+
+* We will see a better solution which doesn't require extra tools.
+
+.debug[[containers/Naming_And_Inspecting.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Naming_And_Inspecting.md)]
+---
+
+## Using `--format`
+
+You can specify a format string, which will be parsed by 
+Go's text/template package.
+
+```bash
+$ docker inspect --format '{{ json .Created }}' <containerID>
+"2015-02-24T07:21:11.712240394Z"
+```
+
+* The generic syntax is to wrap the expression with double curly braces.
+
+* The expression starts with a dot representing the JSON object.
+
+* Then each field or member can be accessed in dotted notation syntax.
+
+* The optional `json` keyword asks for valid JSON output.
+  <br/>(e.g. here it adds the surrounding double-quotes.)
+
+???
+
+:EN:Managing container lifecycle
+:EN:- Naming and inspecting containers
+
+:FR:Suivre ses conteneurs à la loupe
+:FR:- Obtenir des informations détaillées sur un conteneur
+:FR:- Associer un identifiant unique à un conteneur
+
+.debug[[containers/Naming_And_Inspecting.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Naming_And_Inspecting.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/chinook-helicopter-container.jpg)]
+
+---
+
+name: toc-getting-inside-a-container
+class: title
+
+ Getting inside a container
+
+.nav[
+[Previous section](#toc-naming-and-inspecting-containers)
+|
+[Back to table of contents](#toc-module-1)
+|
+[Next section](#toc-understanding-docker-images)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Getting inside a container
+
+![Person standing inside a container](images/getting-inside.png)
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+## Objectives
+
+On a traditional server or VM, we sometimes need to:
+
+* log into the machine (with SSH or on the console),
+
+* analyze the disks (by removing them or rebooting with a rescue system).
+
+In this chapter, we will see how to do that with containers.
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+## Getting a shell
+
+Every once in a while, we want to log into a machine.
+
+In an perfect world, this shouldn't be necessary.
+
+* You need to install or update packages (and their configuration)?
+
+  Use configuration management. (e.g. Ansible, Chef, Puppet, Salt...)
+
+* You need to view logs and metrics?
+
+  Collect and access them through a centralized platform.
+
+In the real world, though ... we often need shell access!
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+## Not getting a shell
+
+Even without a perfect deployment system, we can do many operations without getting a shell.
+
+* Installing packages can (and should) be done in the container image.
+
+* Configuration can be done at the image level, or when the container starts.
+
+* Dynamic configuration can be stored in a volume (shared with another container).
+
+* Logs written to stdout are automatically collected by the Docker Engine.
+
+* Other logs can be written to a shared volume.
+
+* Process information and metrics are visible from the host.
+
+_Let's save logging, volumes ... for later, but let's have a look at process information!_
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+## Viewing container processes from the host
+
+If you run Docker on Linux, container processes are visible on the host.
+
+```bash
+$ ps faux | less
+```
+
+* Scroll around the output of this command.
+
+* You should see the `jpetazzo/clock` container.
+
+* A containerized process is just like any other process on the host.
+
+* We can use tools like `lsof`, `strace`, `gdb` ... To analyze them.
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+class: extra-details
+
+## What's the difference between a container process and a host process?
+
+* Each process (containerized or not) belongs to *namespaces* and *cgroups*.
+
+* The namespaces and cgroups determine what a process can "see" and "do".
+
+* Analogy: each process (containerized or not) runs with a specific UID (user ID).
+
+* UID=0 is root, and has elevated privileges. Other UIDs are normal users.
+
+_We will give more details about namespaces and cgroups later._
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+## Getting a shell in a running container
+
+* Sometimes, we need to get a shell anyway.
+
+* We _could_ run some SSH server in the container ...
+
+* But it is easier to use `docker exec`.
+
+```bash
+$ docker exec -ti ticktock sh
+```
+
+* This creates a new process (running `sh`) _inside_ the container.
+
+* This can also be done "manually" with the tool `nsenter`.
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+## Caveats
+
+* The tool that you want to run needs to exist in the container.
+
+* Some tools (like `ip netns exec`) let you attach to _one_ namespace at a time.
+
+  (This lets you e.g. setup network interfaces, even if you don't have `ifconfig` or `ip` in the container.)
+
+* Most importantly: the container needs to be running.
+
+* What if the container is stopped or crashed?
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+## Getting a shell in a stopped container
+
+* A stopped container is only _storage_ (like a disk drive).
+
+* We cannot SSH into a disk drive or USB stick!
+
+* We need to connect the disk to a running machine.
+
+* How does that translate into the container world?
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+## Analyzing a stopped container
+
+As an exercise, we are going to try to find out what's wrong with `jpetazzo/crashtest`.
+
+```bash
+docker run jpetazzo/crashtest
+```
+
+The container starts, but then stops immediately, without any output.
+
+What would MacGyver&trade; do?
+
+First, let's check the status of that container.
+
+```bash
+docker ps -l
+```
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+## Viewing filesystem changes
+
+* We can use `docker diff` to see files that were added / changed / removed.
+
+```bash
+docker diff <container_id>
+```
+
+* The container ID was shown by `docker ps -l`.
+
+* We can also see it with `docker ps -lq`.
+
+* The output of `docker diff` shows some interesting log files!
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+## Accessing files
+
+* We can extract files with `docker cp`.
+
+```bash
+docker cp <container_id>:/var/log/nginx/error.log .
+```
+
+* Then we can look at that log file.
+
+```bash
+cat error.log
+```
+
+(The directory `/run/nginx` doesn't exist.)
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+## Exploring a crashed container
+
+* We can restart a container with `docker start` ...
+
+* ... But it will probably crash again immediately!
+
+* We cannot specify a different program to run with `docker start`
+
+* But we can create a new image from the crashed container
+
+```bash
+docker commit <container_id> debugimage
+```
+
+* Then we can run a new container from that image, with a custom entrypoint
+
+```bash
+docker run -ti --entrypoint sh debugimage
+```
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+class: extra-details
+
+## Obtaining a complete dump
+
+* We can also dump the entire filesystem of a container.
+
+* This is done with `docker export`.
+
+* It generates a tar archive.
+
+```bash
+docker export <container_id> | tar tv
+```
+
+This will give a detailed listing of the content of the container.
+
+???
+
+:EN:- Troubleshooting and getting inside a container
+:FR:- Inspecter un conteneur en détail, en *live* ou *post-mortem*
+
+.debug[[containers/Getting_Inside.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Getting_Inside.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/container-cranes.jpg)]
+
+---
+
+name: toc-understanding-docker-images
+class: title
+
+ Understanding Docker images
+
+.nav[
+[Previous section](#toc-getting-inside-a-container)
+|
+[Back to table of contents](#toc-module-1)
+|
+[Next section](#toc-building-images-interactively)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Understanding Docker images
+
+![image](images/title-understanding-docker-images.png)
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Objectives
+
+In this section, we will explain:
+
+* What is an image.
+
+* What is a layer.
+
+* The various image namespaces.
+
+* How to search and download images.
+
+* Image tags and when to use them.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## What is an image?
+
+* Image = files + metadata
+
+* These files form the root filesystem of our container.
+
+* The metadata can indicate a number of things, e.g.:
+
+  * the author of the image
+  * the command to execute in the container when starting it
+  * environment variables to be set
+  * etc.
+
+* Images are made of *layers*, conceptually stacked on top of each other.
+
+* Each layer can add, change, and remove files and/or metadata.
+
+* Images can share layers to optimize disk usage, transfer times, and memory use.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Example for a Java webapp
+
+Each of the following items will correspond to one layer:
+
+* CentOS base layer
+* Packages and configuration files added by our local IT
+* JRE
+* Tomcat
+* Our application's dependencies
+* Our application code and assets
+* Our application configuration
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+class: pic
+
+## The read-write layer
+
+![layers](images/container-layers.jpg)
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Differences between containers and images
+
+* An image is a read-only filesystem.
+
+* A container is an encapsulated set of processes,
+
+  running in a read-write copy of that filesystem.
+
+* To optimize container boot time, *copy-on-write* is used
+  instead of regular copy.
+
+* `docker run` starts a container from a given image.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+class: pic
+
+## Multiple containers sharing the same image
+
+![layers](images/sharing-layers.jpg)
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Comparison with object-oriented programming
+
+* Images are conceptually similar to *classes*.
+
+* Layers are conceptually similar to *inheritance*.
+
+* Containers are conceptually similar to *instances*.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Wait a minute...
+
+If an image is read-only, how do we change it?
+
+* We don't.
+
+* We create a new container from that image.
+
+* Then we make changes to that container.
+
+* When we are satisfied with those changes, we transform them into a new layer.
+
+* A new image is created by stacking the new layer on top of the old image.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## A chicken-and-egg problem
+
+* The only way to create an image is by "freezing" a container.
+
+* The only way to create a container is by instantiating an image.
+
+* Help!
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Creating the first images
+
+There is a special empty image called `scratch`.
+
+* It allows to *build from scratch*.
+
+The `docker import` command loads a tarball into Docker.
+
+* The imported tarball becomes a standalone image.
+* That new image has a single layer.
+
+Note: you will probably never have to do this yourself.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Creating other images
+
+`docker commit`
+
+* Saves all the changes made to a container into a new layer.
+* Creates a new image (effectively a copy of the container).
+
+`docker build` **(used 99% of the time)**
+
+* Performs a repeatable build sequence.
+* This is the preferred method!
+
+We will explain both methods in a moment.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Images namespaces
+
+There are three namespaces:
+
+* Official images
+
+    e.g. `ubuntu`, `busybox` ...
+
+* User (and organizations) images
+
+    e.g. `jpetazzo/clock`
+
+* Self-hosted images
+
+    e.g. `registry.example.com:5000/my-private/image`
+
+Let's explain each of them.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Root namespace
+
+The root namespace is for official images.
+
+They are gated by Docker Inc.
+
+They are generally authored and maintained by third parties.
+
+Those images include:
+
+* Small, "swiss-army-knife" images like busybox.
+
+* Distro images to be used as bases for your builds, like ubuntu, fedora...
+
+* Ready-to-use components and services, like redis, postgresql...
+
+* Over 150 at this point!
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## User namespace
+
+The user namespace holds images for Docker Hub users and organizations.
+
+For example:
+
+```bash
+jpetazzo/clock
+```
+
+The Docker Hub user is:
+
+```bash
+jpetazzo
+```
+
+The image name is:
+
+```bash
+clock
+```
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Self-hosted namespace
+
+This namespace holds images which are not hosted on Docker Hub, but on third
+party registries.
+
+They contain the hostname (or IP address), and optionally the port, of the
+registry server.
+
+For example:
+
+```bash
+localhost:5000/wordpress
+```
+
+* `localhost:5000` is the host and port of the registry
+* `wordpress` is the name of the image
+
+Other examples:
+
+```bash
+quay.io/coreos/etcd
+gcr.io/google-containers/hugo
+```
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## How do you store and manage images?
+
+Images can be stored:
+
+* On your Docker host.
+* In a Docker registry.
+
+You can use the Docker client to download (pull) or upload (push) images.
+
+To be more accurate: you can use the Docker client to tell a Docker Engine
+to push and pull images to and from a registry.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Showing current images
+
+Let's look at what images are on our host now.
+
+```bash
+$ docker images
+REPOSITORY       TAG       IMAGE ID       CREATED         SIZE
+fedora           latest    ddd5c9c1d0f2   3 days ago      204.7 MB
+centos           latest    d0e7f81ca65c   3 days ago      196.6 MB
+ubuntu           latest    07c86167cdc4   4 days ago      188 MB
+redis            latest    4f5f397d4b7c   5 days ago      177.6 MB
+postgres         latest    afe2b5e1859b   5 days ago      264.5 MB
+alpine           latest    70c557e50ed6   5 days ago      4.798 MB
+debian           latest    f50f9524513f   6 days ago      125.1 MB
+busybox          latest    3240943c9ea3   2 weeks ago     1.114 MB
+training/namer   latest    902673acc741   9 months ago    289.3 MB
+jpetazzo/clock   latest    12068b93616f   12 months ago   2.433 MB
+```
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Searching for images
+
+We cannot list *all* images on a remote registry, but
+we can search for a specific keyword:
+
+```bash
+$ docker search marathon
+NAME                     DESCRIPTION                     STARS  OFFICIAL  AUTOMATED
+mesosphere/marathon      A cluster-wide init and co...   105              [OK]
+mesoscloud/marathon      Marathon                        31               [OK]
+mesosphere/marathon-lb   Script to update haproxy b...   22               [OK]
+tobilg/mongodb-marathon  A Docker image to start a ...   4                [OK]
+```
+
+
+* "Stars" indicate the popularity of the image.
+
+* "Official" images are those in the root namespace.
+
+* "Automated" images are built automatically by the Docker Hub.
+  <br/>(This means that their build recipe is always available.)
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Downloading images
+
+There are two ways to download images.
+
+* Explicitly, with `docker pull`.
+
+* Implicitly, when executing `docker run` and the image is not found locally.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Pulling an image
+
+```bash
+$ docker pull debian:jessie
+Pulling repository debian
+b164861940b8: Download complete
+b164861940b8: Pulling image (jessie) from debian
+d1881793a057: Download complete
+```
+
+* As seen previously, images are made up of layers.
+
+* Docker has downloaded all the necessary layers.
+
+* In this example, `:jessie` indicates which exact version of Debian
+  we would like.
+
+  It is a *version tag*.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Image and tags
+
+* Images can have tags.
+
+* Tags define image versions or variants.
+
+* `docker pull ubuntu` will refer to `ubuntu:latest`.
+
+* The `:latest` tag is generally updated often.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## When to (not) use tags
+
+Don't specify tags:
+
+* When doing rapid testing and prototyping.
+* When experimenting.
+* When you want the latest version.
+
+Do specify tags:
+
+* When recording a procedure into a script.
+* When going to production.
+* To ensure that the same version will be used everywhere.
+* To ensure repeatability later.
+
+This is similar to what we would do with `pip install`, `npm install`, etc.
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+## Section summary
+
+We've learned how to:
+
+* Understand images and layers.
+* Understand Docker image namespacing.
+* Search and download images.
+
+???
+
+:EN:Building images
+:EN:- Containers, images, and layers
+:EN:- Image addresses and tags
+:EN:- Finding and transferring images
+
+:FR:Construire des images
+:FR:- La différence entre un conteneur et une image
+:FR:- La notion de *layer* partagé entre images
+
+.debug[[containers/Initial_Images.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Initial_Images.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/container-housing.jpg)]
+
+---
+
+name: toc-building-images-interactively
+class: title
+
+ Building images interactively
+
+.nav[
+[Previous section](#toc-understanding-docker-images)
+|
+[Back to table of contents](#toc-module-2)
+|
+[Next section](#toc-building-docker-images-with-a-dockerfile)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Building images interactively
+
+In this section, we will create our first container image.
+
+It will be a basic distribution image, but we will pre-install
+the package `figlet`.
+
+We will: 
+
+* Create a container from a base image.
+
+* Install software manually in the container, and turn it
+  into a new image.
+
+* Learn about new commands: `docker commit`, `docker tag`, and `docker diff`.
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_Interactively.md)]
+---
+
+## The plan
+
+1. Create a container (with `docker run`) using our base distro of choice.
+
+2. Run a bunch of commands to install and set up our software in the container.
+
+3. (Optionally) review changes in the container with `docker diff`.
+
+4. Turn the container into a new image with `docker commit`.
+
+5. (Optionally) add tags to the image with `docker tag`.
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_Interactively.md)]
+---
+
+## Setting up our container
+
+Start an Ubuntu container:
+
+```bash
+$ docker run -it ubuntu
+root@<yourContainerId>:#/
+```
+
+Run the command `apt-get update` to refresh the list of packages available to install.
+
+Then run the command `apt-get install figlet` to install the program we are interested in.
+
+```bash
+root@<yourContainerId>:#/ apt-get update && apt-get install figlet
+.... OUTPUT OF APT-GET COMMANDS ....
+```
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_Interactively.md)]
+---
+
+## Inspect the changes
+
+Type `exit` at the container prompt to leave the interactive session.
+
+Now let's run `docker diff` to see the difference between the base image
+and our container.
+
+```bash
+$ docker diff <yourContainerId>
+C /root
+A /root/.bash_history
+C /tmp
+C /usr
+C /usr/bin
+A /usr/bin/figlet
+...
+```
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_Interactively.md)]
+---
+
+class: x-extra-details
+
+## Docker tracks filesystem changes
+
+As explained before:
+
+* An image is read-only.
+
+* When we make changes, they happen in a copy of the image.
+
+* Docker can show the difference between the image, and its copy.
+
+* For performance, Docker uses copy-on-write systems.
+  <br/>(i.e. starting a container based on a big image
+  doesn't incur a huge copy.)
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_Interactively.md)]
+---
+
+## Copy-on-write security benefits
+
+* `docker diff` gives us an easy way to audit changes
+
+  (à la Tripwire)
+
+* Containers can also be started in read-only mode
+
+  (their root filesystem will be read-only, but they can still have read-write data volumes)
+
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_Interactively.md)]
+---
+
+## Commit our changes into a new image
+
+The `docker commit` command will create a new layer with those changes,
+and a new image using this new layer.
+
+```bash
+$ docker commit <yourContainerId>
+<newImageId>
+```
+
+The output of the `docker commit` command will be the ID for your newly created image.
+
+We can use it as an argument to `docker run`.
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_Interactively.md)]
+---
+
+## Testing our new image
+
+Let's run this image:
+
+```bash
+$ docker run -it <newImageId>
+root@fcfb62f0bfde:/# figlet hello
+ _          _ _       
+| |__   ___| | | ___  
+| '_ \ / _ \ | |/ _ \ 
+| | | |  __/ | | (_) |
+|_| |_|\___|_|_|\___/ 
+```
+
+It works! .emoji[🎉]
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_Interactively.md)]
+---
+
+## Tagging images
+
+Referring to an image by its ID is not convenient. Let's tag it instead.
+
+We can use the `tag` command:
+
+```bash
+$ docker tag <newImageId> figlet
+```
+
+But we can also specify the tag as an extra argument to `commit`:
+
+```bash
+$ docker commit <containerId> figlet
+```
+
+And then run it using its tag:
+
+```bash
+$ docker run -it figlet
+```
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_Interactively.md)]
+---
+
+## What's next?
+
+Manual process = bad.
+
+Automated process = good.
+
+In the next chapter, we will learn how to automate the build
+process by writing a `Dockerfile`.
+
+???
+
+:EN:- Building our first images interactively
+:FR:- Fabriquer nos premières images à la main
+
+.debug[[containers/Building_Images_Interactively.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_Interactively.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/containers-by-the-water.jpg)]
+
+---
+
+name: toc-building-docker-images-with-a-dockerfile
+class: title
+
+ Building Docker images with a Dockerfile
+
+.nav[
+[Previous section](#toc-building-images-interactively)
+|
+[Back to table of contents](#toc-module-2)
+|
+[Next section](#toc-cmd-and-entrypoint)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Building Docker images with a Dockerfile
+
+![Construction site with containers](images/title-building-docker-images-with-a-dockerfile.jpg)
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Objectives
+
+We will build a container image automatically, with a `Dockerfile`.
+
+At the end of this lesson, you will be able to:
+
+* Write a `Dockerfile`.
+
+* Build an image from a `Dockerfile`.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## `Dockerfile` overview
+
+* A `Dockerfile` is a build recipe for a Docker image.
+
+* It contains a series of instructions telling Docker how an image is constructed.
+
+* The `docker build` command builds an image from a `Dockerfile`.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Writing our first `Dockerfile`
+
+Our Dockerfile must be in a **new, empty directory**.
+
+1. Create a directory to hold our `Dockerfile`.
+
+```bash
+$ mkdir myimage
+```
+
+2. Create a `Dockerfile` inside this directory.
+
+```bash
+$ cd myimage
+$ vim Dockerfile
+```
+
+Of course, you can use any other editor of your choice.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Type this into our Dockerfile...
+
+```dockerfile
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install figlet
+```
+
+* `FROM` indicates the base image for our build.
+
+* Each `RUN` line will be executed by Docker during the build.
+
+* Our `RUN` commands **must be non-interactive.**
+  <br/>(No input can be provided to Docker during the build.)
+
+* In many cases, we will add the `-y` flag to `apt-get`.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Build it!
+
+Save our file, then execute:
+
+```bash
+$ docker build -t figlet .
+```
+
+* `-t` indicates the tag to apply to the image.
+
+* `.` indicates the location of the *build context*.
+
+We will talk more about the build context later.
+
+To keep things simple for now: this is the directory where our Dockerfile is located.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## What happens when we build the image?
+
+The output of `docker build` looks like this:
+
+.small[
+```bash
+docker build -t figlet .
+Sending build context to Docker daemon  2.048kB
+Step 1/3 : FROM ubuntu
+ ---> f975c5035748
+Step 2/3 : RUN apt-get update
+ ---> Running in e01b294dbffd
+(...output of the RUN command...)
+Removing intermediate container e01b294dbffd
+ ---> eb8d9b561b37
+Step 3/3 : RUN apt-get install figlet
+ ---> Running in c29230d70f9b
+(...output of the RUN command...)
+Removing intermediate container c29230d70f9b
+ ---> 0dfd7a253f21
+Successfully built 0dfd7a253f21
+Successfully tagged figlet:latest
+```
+]
+
+* The output of the `RUN` commands has been omitted.
+* Let's explain what this output means.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Sending the build context to Docker
+
+```bash
+Sending build context to Docker daemon 2.048 kB
+```
+
+* The build context is the `.` directory given to `docker build`.
+
+* It is sent (as an archive) by the Docker client to the Docker daemon.
+
+* This allows to use a remote machine to build using local files.
+
+* Be careful (or patient) if that directory is big and your link is slow.
+
+* You can speed up the process with a [`.dockerignore`](https://docs.docker.com/engine/reference/builder/#dockerignore-file) file 
+
+  * It tells docker to ignore specific files in the directory
+
+  * Only ignore files that you won't need in the build context!
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Executing each step
+
+```bash
+Step 2/3 : RUN apt-get update
+ ---> Running in e01b294dbffd
+(...output of the RUN command...)
+Removing intermediate container e01b294dbffd
+ ---> eb8d9b561b37
+```
+
+* A container (`e01b294dbffd`) is created from the base image.
+
+* The `RUN` command is executed in this container.
+
+* The container is committed into an image (`eb8d9b561b37`).
+
+* The build container (`e01b294dbffd`) is removed.
+
+* The output of this step will be the base image for the next one.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## The caching system
+
+If you run the same build again, it will be instantaneous. Why?
+
+* After each build step, Docker takes a snapshot of the resulting image.
+
+* Before executing a step, Docker checks if it has already built the same sequence.
+
+* Docker uses the exact strings defined in your Dockerfile, so:
+
+  * `RUN apt-get install figlet cowsay ` 
+    <br/> is different from
+    <br/> `RUN apt-get install cowsay figlet`
+  
+  * `RUN apt-get update` is not re-executed when the mirrors are updated
+
+You can force a rebuild with `docker build --no-cache ...`.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Running the image
+
+The resulting image is not different from the one produced manually.
+
+```bash
+$ docker run -ti figlet
+root@91f3c974c9a1:/# figlet hello
+ _          _ _       
+| |__   ___| | | ___  
+| '_ \ / _ \ | |/ _ \ 
+| | | |  __/ | | (_) |
+|_| |_|\___|_|_|\___/ 
+```
+
+
+Yay! .emoji[🎉]
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Using image and viewing history
+
+The `history` command lists all the layers composing an image.
+
+For each layer, it shows its creation time, size, and creation command.
+
+When an image was built with a Dockerfile, each layer corresponds to
+a line of the Dockerfile.
+
+```bash
+$ docker history figlet
+IMAGE         CREATED            CREATED BY                     SIZE
+f9e8f1642759  About an hour ago  /bin/sh -c apt-get install fi  1.627 MB
+7257c37726a1  About an hour ago  /bin/sh -c apt-get update      21.58 MB
+07c86167cdc4  4 days ago         /bin/sh -c #(nop) CMD ["/bin   0 B
+<missing>     4 days ago         /bin/sh -c sed -i 's/^#\s*\(   1.895 kB
+<missing>     4 days ago         /bin/sh -c echo '#!/bin/sh'    194.5 kB
+<missing>     4 days ago         /bin/sh -c #(nop) ADD file:b   187.8 MB
+```
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+class: extra-details
+
+## Why `sh -c`?
+
+* On UNIX, to start a new program, we need two system calls:
+
+  - `fork()`, to create a new child process;
+
+  - `execve()`, to replace the new child process with the program to run.
+
+* Conceptually, `execve()` works like this:
+
+  `execve(program, [list, of, arguments])`
+
+* When we run a command, e.g. `ls -l /tmp`, something needs to parse the command.
+
+  (i.e. split the program and its arguments into a list.)
+
+* The shell is usually doing that.
+
+  (It also takes care of expanding environment variables and special things like `~`.)
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+class: extra-details
+
+## Why `sh -c`?
+
+* When we do `RUN ls -l /tmp`, the Docker builder needs to parse the command.
+
+* Instead of implementing its own parser, it outsources the job to the shell.
+
+* That's why we see `sh -c ls -l /tmp` in that case.
+
+* But we can also do the parsing jobs ourselves.
+
+* This means passing `RUN` a list of arguments.
+
+* This is called the *exec syntax*.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Shell syntax vs exec syntax
+
+Dockerfile commands that execute something can have two forms:
+
+* plain string, or *shell syntax*:
+  <br/>`RUN apt-get install figlet`
+
+* JSON list, or *exec syntax*:
+  <br/>`RUN ["apt-get", "install", "figlet"]`
+
+We are going to change our Dockerfile to see how it affects the resulting image.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Using exec syntax in our Dockerfile
+
+Let's change our Dockerfile as follows!
+
+```dockerfile
+FROM ubuntu
+RUN apt-get update
+RUN ["apt-get", "install", "figlet"]
+```
+
+Then build the new Dockerfile.
+
+```bash
+$ docker build -t figlet .
+```
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## History with exec syntax
+
+Compare the new history:
+
+```bash
+$ docker history figlet
+IMAGE         CREATED            CREATED BY                     SIZE
+27954bb5faaf  10 seconds ago     apt-get install figlet         1.627 MB
+7257c37726a1  About an hour ago  /bin/sh -c apt-get update      21.58 MB
+07c86167cdc4  4 days ago         /bin/sh -c #(nop) CMD ["/bin   0 B
+<missing>     4 days ago         /bin/sh -c sed -i 's/^#\s*\(   1.895 kB
+<missing>     4 days ago         /bin/sh -c echo '#!/bin/sh'    194.5 kB
+<missing>     4 days ago         /bin/sh -c #(nop) ADD file:b   187.8 MB
+```
+
+* Exec syntax specifies an *exact* command to execute.
+
+* Shell syntax specifies a command to be wrapped within `/bin/sh -c "..."`.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## When to use exec syntax and shell syntax
+
+* shell syntax:
+
+  * is easier to write
+  * interpolates environment variables and other shell expressions
+  * creates an extra process (`/bin/sh -c ...`) to parse the string
+  * requires `/bin/sh` to exist in the container
+
+* exec syntax:
+
+  * is harder to write (and read!)
+  * passes all arguments without extra processing
+  * doesn't create an extra process
+  * doesn't require `/bin/sh` to exist in the container
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Pro-tip: the `exec` shell built-in
+
+POSIX shells have a built-in command named `exec`.
+
+`exec` should be followed by a program and its arguments.
+
+From a user perspective:
+
+- it looks like the shell exits right away after the command execution,
+
+- in fact, the shell exits just *before* command execution;
+
+- or rather, the shell gets *replaced* by the command.
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+## Example using `exec`
+
+```dockerfile
+CMD exec figlet -f script hello
+```
+
+In this example, `sh -c` will still be used, but
+`figlet` will be PID 1 in the container.
+
+The shell gets replaced by `figlet` when `figlet` starts execution.
+
+This allows to run processes as PID 1 without using JSON.
+
+???
+
+:EN:- Towards automated, reproducible builds
+:EN:- Writing our first Dockerfile
+:FR:- Rendre le processus automatique et reproductible
+:FR:- Écrire son premier Dockerfile
+
+.debug[[containers/Building_Images_With_Dockerfiles.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Building_Images_With_Dockerfiles.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/distillery-containers.jpg)]
+
+---
+
+name: toc-cmd-and-entrypoint
+class: title
+
+ `CMD` and `ENTRYPOINT`
+
+.nav[
+[Previous section](#toc-building-docker-images-with-a-dockerfile)
+|
+[Back to table of contents](#toc-module-2)
+|
+[Next section](#toc-copying-files-during-the-build)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# `CMD` and `ENTRYPOINT`
+
+![Container entry doors](images/entrypoint.jpg)
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Objectives
+
+In this lesson, we will learn about two important
+Dockerfile commands:
+
+`CMD` and `ENTRYPOINT`.
+
+These commands allow us to set the default command
+to run in a container.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Defining a default command
+
+When people run our container, we want to greet them with a nice hello message, and using a custom font.
+
+For that, we will execute:
+
+```bash
+figlet -f script hello
+```
+
+* `-f script` tells figlet to use a fancy font.
+
+* `hello` is the message that we want it to display.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Adding `CMD` to our Dockerfile
+
+Our new Dockerfile will look like this:
+
+```dockerfile
+FROM ubuntu
+RUN apt-get update
+RUN ["apt-get", "install", "figlet"]
+CMD figlet -f script hello
+```
+
+* `CMD` defines a default command to run when none is given.
+
+* It can appear at any point in the file.
+
+* Each `CMD` will replace and override the previous one.
+
+* As a result, while you can have multiple `CMD` lines, it is useless.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Build and test our image
+
+Let's build it:
+
+```bash
+$ docker build -t figlet .
+...
+Successfully built 042dff3b4a8d
+Successfully tagged figlet:latest
+```
+
+And run it:
+
+```bash
+$ docker run figlet
+ _          _   _       
+| |        | | | |      
+| |     _  | | | |  __  
+|/ \   |/  |/  |/  /  \_
+|   |_/|__/|__/|__/\__/ 
+```
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Overriding `CMD`
+
+If we want to get a shell into our container (instead of running
+`figlet`), we just have to specify a different program to run:
+
+```bash
+$ docker run -it figlet bash
+root@7ac86a641116:/# 
+```
+
+* We specified `bash`.
+
+* It replaced the value of `CMD`.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Using `ENTRYPOINT`
+
+We want to be able to specify a different message on the command line,
+while retaining `figlet` and some default parameters.
+
+In other words, we would like to be able to do this:
+
+```bash
+$ docker run figlet salut
+           _            
+          | |           
+ ,   __,  | |       _|_ 
+/ \_/  |  |/  |   |  |  
+ \/ \_/|_/|__/ \_/|_/|_/
+```
+
+
+We will use the `ENTRYPOINT` verb in Dockerfile.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Adding `ENTRYPOINT` to our Dockerfile
+
+Our new Dockerfile will look like this:
+
+```dockerfile
+FROM ubuntu
+RUN apt-get update
+RUN ["apt-get", "install", "figlet"]
+ENTRYPOINT ["figlet", "-f", "script"]
+```
+
+* `ENTRYPOINT` defines a base command (and its parameters) for the container.
+
+* The command line arguments are appended to those parameters.
+
+* Like `CMD`, `ENTRYPOINT` can appear anywhere, and replaces the previous value.
+
+Why did we use JSON syntax for our `ENTRYPOINT`?
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Implications of JSON vs string syntax
+
+* When CMD or ENTRYPOINT use string syntax, they get wrapped in `sh -c`.
+
+* To avoid this wrapping, we can use JSON syntax.
+
+What if we used `ENTRYPOINT` with string syntax?
+
+```bash
+$ docker run figlet salut
+```
+
+This would run the following command in the `figlet` image:
+
+```bash
+sh -c "figlet -f script" salut
+```
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Build and test our image
+
+Let's build it:
+
+```bash
+$ docker build -t figlet .
+...
+Successfully built 36f588918d73
+Successfully tagged figlet:latest
+```
+
+And run it:
+
+```bash
+$ docker run figlet salut
+           _            
+          | |           
+ ,   __,  | |       _|_ 
+/ \_/  |  |/  |   |  |  
+ \/ \_/|_/|__/ \_/|_/|_/
+```
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Using `CMD` and `ENTRYPOINT` together
+
+What if we want to define a default message for our container?
+
+Then we will use `ENTRYPOINT` and `CMD` together.
+
+* `ENTRYPOINT` will define the base command for our container.
+
+* `CMD` will define the default parameter(s) for this command.
+
+* They *both* have to use JSON syntax.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## `CMD` and `ENTRYPOINT` together
+
+Our new Dockerfile will look like this:
+
+```dockerfile
+FROM ubuntu
+RUN apt-get update
+RUN ["apt-get", "install", "figlet"]
+ENTRYPOINT ["figlet", "-f", "script"]
+CMD ["hello world"]
+```
+
+* `ENTRYPOINT` defines a base command (and its parameters) for the container.
+
+* If we don't specify extra command-line arguments when starting the container,
+  the value of `CMD` is appended.
+
+* Otherwise, our extra command-line arguments are used instead of `CMD`.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Build and test our image
+
+Let's build it:
+
+```bash
+$ docker build -t myfiglet .
+...
+Successfully built 6e0b6a048a07
+Successfully tagged myfiglet:latest
+```
+
+Run it without parameters:
+
+```bash
+$ docker run myfiglet
+ _          _   _                             _        
+| |        | | | |                           | |    |  
+| |     _  | | | |  __             __   ,_   | |  __|  
+|/ \   |/  |/  |/  /  \_  |  |  |_/  \_/  |  |/  /  |  
+|   |_/|__/|__/|__/\__/    \/ \/  \__/    |_/|__/\_/|_/
+```
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Overriding the image default parameters
+
+Now let's pass extra arguments to the image.
+
+```bash
+$ docker run myfiglet hola mundo
+ _           _                                               
+| |         | |                                      |       
+| |     __  | |  __,     _  _  _           _  _    __|   __  
+|/ \   /  \_|/  /  |    / |/ |/ |  |   |  / |/ |  /  |  /  \_
+|   |_/\__/ |__/\_/|_/    |  |  |_/ \_/|_/  |  |_/\_/|_/\__/ 
+```
+
+We overrode `CMD` but still used `ENTRYPOINT`.
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+## Overriding `ENTRYPOINT`
+
+What if we want to run a shell in our container?
+
+We cannot just do `docker run myfiglet bash` because
+that would just tell figlet to display the word "bash."
+
+We use the `--entrypoint` parameter:
+
+```bash
+$ docker run -it --entrypoint bash myfiglet
+root@6027e44e2955:/# 
+```
+
+???
+
+:EN:- CMD and ENTRYPOINT
+:FR:- CMD et ENTRYPOINT
+
+.debug[[containers/Cmd_And_Entrypoint.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Cmd_And_Entrypoint.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/lots-of-containers.jpg)]
+
+---
+
+name: toc-copying-files-during-the-build
+class: title
+
+ Copying files during the build
+
+.nav[
+[Previous section](#toc-cmd-and-entrypoint)
+|
+[Back to table of contents](#toc-module-2)
+|
+[Next section](#toc-exercise--writing-dockerfiles)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Copying files during the build
+
+![Monks copying books](images/title-copying-files-during-build.jpg)
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Copying_Files_During_Build.md)]
+---
+
+## Objectives
+
+So far, we have installed things in our container images
+by downloading packages.
+
+We can also copy files from the *build context* to the
+container that we are building.
+
+Remember: the *build context* is the directory containing
+the Dockerfile.
+
+In this chapter, we will learn a new Dockerfile keyword: `COPY`.
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Copying_Files_During_Build.md)]
+---
+
+## Build some C code
+
+We want to build a container that compiles a basic "Hello world" program in C.
+
+Here is the program, `hello.c`:
+
+```bash
+int main () {
+  puts("Hello, world!");
+  return 0;
+}
+```
+
+Let's create a new directory, and put this file in there.
+
+Then we will write the Dockerfile.
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Copying_Files_During_Build.md)]
+---
+
+## The Dockerfile
+
+On Debian and Ubuntu, the package `build-essential` will get us a compiler.
+
+When installing it, don't forget to specify the `-y` flag, otherwise the build will fail (since the build cannot be interactive).
+
+Then we will use `COPY` to place the source file into the container.
+
+```bash
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install -y build-essential
+COPY hello.c /
+RUN make hello
+CMD /hello
+```
+
+Create this Dockerfile.
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Copying_Files_During_Build.md)]
+---
+
+## Testing our C program
+
+* Create `hello.c` and `Dockerfile` in the same directory.
+
+* Run `docker build -t hello .` in this directory.
+
+* Run `docker run hello`, you should see `Hello, world!`.
+
+Success!
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Copying_Files_During_Build.md)]
+---
+
+## `COPY` and the build cache
+
+* Run the build again.
+
+* Now, modify `hello.c` and run the build again.
+
+* Docker can cache steps involving `COPY`.
+
+* Those steps will not be executed again if the files haven't been changed.
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Copying_Files_During_Build.md)]
+---
+
+## Details
+
+* You can `COPY` whole directories recursively.
+
+* Older Dockerfiles also have the `ADD` instruction.
+  <br/>It is similar but can automatically extract archives.
+
+* If we really wanted to compile C code in a container, we would:
+
+  * Place it in a different directory, with the `WORKDIR` instruction.
+
+  * Even better, use the `gcc` official image.
+
+???
+
+:EN:- The build cache
+:FR:- Tirer parti du cache afin d'optimiser la vitesse de *build*
+
+.debug[[containers/Copying_Files_During_Build.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Copying_Files_During_Build.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/plastic-containers.JPG)]
+
+---
+
+name: toc-exercise--writing-dockerfiles
+class: title
+
+ Exercise — writing Dockerfiles
+
+.nav[
+[Previous section](#toc-copying-files-during-the-build)
+|
+[Back to table of contents](#toc-module-2)
+|
+[Next section](#toc-container-networking-basics)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Exercise — writing Dockerfiles
+
+Let's write Dockerfiles for an existing application!
+
+The code is at: https://github.com/jpetazzo/wordsmith
+
+.debug[[containers/Exercise_Dockerfile_Basic.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Exercise_Dockerfile_Basic.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/train-of-containers-1.jpg)]
+
+---
+
+name: toc-container-networking-basics
+class: title
+
+ Container networking basics
+
+.nav[
+[Previous section](#toc-exercise--writing-dockerfiles)
+|
+[Back to table of contents](#toc-module-3)
+|
+[Next section](#toc-local-development-workflow-with-docker)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Container networking basics
+
+![A dense graph network](images/title-container-networking-basics.jpg)
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## Objectives
+
+We will now run network services (accepting requests) in containers.
+
+At the end of this section, you will be able to:
+
+* Run a network service in a container.
+
+* Manipulate container networking basics.
+
+* Find a container's IP address.
+
+We will also explain the different network models used by Docker.
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## A simple, static web server
+
+Run the Docker Hub image `nginx`, which contains a basic web server:
+
+```bash
+$ docker run -d -P nginx
+66b1ce719198711292c8f34f84a7b68c3876cf9f67015e752b94e189d35a204e
+```
+
+* Docker will download the image from the Docker Hub.
+
+* `-d` tells Docker to run the image in the background.
+
+* `-P` tells Docker to make this service reachable from other computers.
+  <br/>(`-P` is the short version of `--publish-all`.)
+
+But, how do we connect to our web server now?
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## Finding our web server port
+
+We will use `docker ps`:
+
+```bash
+$ docker ps
+CONTAINER ID  IMAGE  ...  PORTS                  ...
+e40ffb406c9e  nginx  ...  0.0.0.0:32768->80/tcp  ...
+```
+
+
+* The web server is running on port 80 inside the container.
+
+* This port is mapped to port 32768 on our Docker host.
+
+We will explain the whys and hows of this port mapping.
+
+But first, let's make sure that everything works properly.
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## Connecting to our web server (GUI)
+
+Point your browser to the IP address of your Docker host, on the port
+shown by `docker ps` for container port 80.
+
+![Screenshot](images/welcome-to-nginx.png)
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## Connecting to our web server (CLI)
+
+You can also use `curl` directly from the Docker host.
+
+Make sure to use the right port number if it is different
+from the example below:
+
+```bash
+$ curl localhost:32768
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+...
+```
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## How does Docker know which port to map?
+
+* There is metadata in the image telling "this image has something on port 80".
+
+* We can see that metadata with `docker inspect`:
+
+```bash
+$ docker inspect --format '{{.Config.ExposedPorts}}' nginx
+map[80/tcp:{}]
+```
+
+* This metadata was set in the Dockerfile, with the `EXPOSE` keyword.
+
+* We can see that with `docker history`:
+
+```bash
+$ docker history nginx
+IMAGE               CREATED             CREATED BY
+7f70b30f2cc6        11 days ago         /bin/sh -c #(nop)  CMD ["nginx" "-g" "…
+<missing>           11 days ago         /bin/sh -c #(nop)  STOPSIGNAL [SIGTERM]
+<missing>           11 days ago         /bin/sh -c #(nop)  EXPOSE 80/tcp
+```
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## Why are we mapping ports?
+
+* We are out of IPv4 addresses.
+
+* Containers cannot have public IPv4 addresses.
+
+* They have private addresses.
+
+* Services have to be exposed port by port.
+
+* Ports have to be mapped to avoid conflicts.
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## Finding the web server port in a script
+
+Parsing the output of `docker ps` would be painful.
+
+There is a command to help us:
+
+```bash
+$ docker port <containerID> 80
+32768
+```
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## Manual allocation of port numbers
+
+If you want to set port numbers yourself, no problem:
+
+```bash
+$ docker run -d -p 80:80 nginx
+$ docker run -d -p 8000:80 nginx
+$ docker run -d -p 8080:80 -p 8888:80 nginx
+```
+
+* We are running three NGINX web servers.
+* The first one is exposed on port 80.
+* The second one is exposed on port 8000.
+* The third one is exposed on ports 8080 and 8888.
+
+Note: the convention is `port-on-host:port-on-container`.
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## Plumbing containers into your infrastructure
+
+There are many ways to integrate containers in your network.
+
+* Start the container, letting Docker allocate a public port for it.
+  <br/>Then retrieve that port number and feed it to your configuration.
+
+* Pick a fixed port number in advance, when you generate your configuration.
+  <br/>Then start your container by setting the port numbers manually.
+
+* Use a network plugin, connecting your containers with e.g. VLANs, tunnels...
+
+* Enable *Swarm Mode* to deploy across a cluster.
+  <br/>The container will then be reachable through any node of the cluster.
+
+When using Docker through an extra management layer like Mesos or Kubernetes,
+these will usually provide their own mechanism to expose containers.
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## Finding the container's IP address
+
+We can use the `docker inspect` command to find the IP address of the
+container.
+
+```bash
+$ docker inspect --format '{{ .NetworkSettings.IPAddress }}' <yourContainerID>
+172.17.0.3
+```
+
+* `docker inspect` is an advanced command, that can retrieve a ton
+  of information about our containers.
+
+* Here, we provide it with a format string to extract exactly the
+  private IP address of the container.
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## Pinging our container
+
+We can test connectivity to the container using the IP address we've
+just discovered. Let's see this now by using the `ping` tool.
+
+```bash
+$ ping <ipAddress>
+64 bytes from <ipAddress>: icmp_req=1 ttl=64 time=0.085 ms
+64 bytes from <ipAddress>: icmp_req=2 ttl=64 time=0.085 ms
+64 bytes from <ipAddress>: icmp_req=3 ttl=64 time=0.085 ms
+```
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+## Section summary
+
+We've learned how to:
+
+* Expose a network port.
+
+* Manipulate container networking basics.
+
+* Find a container's IP address.
+
+In the next chapter, we will see how to connect
+containers together without exposing their ports.
+
+???
+
+:EN:Connecting containers
+:EN:- Container networking basics
+:EN:- Exposing a container
+
+:FR:Connecter les conteneurs
+:FR:- Description du modèle réseau des conteneurs
+:FR:- Exposer un conteneur
+
+.debug[[containers/Container_Networking_Basics.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Container_Networking_Basics.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/train-of-containers-2.jpg)]
+
+---
+
+name: toc-local-development-workflow-with-docker
+class: title
+
+ Local development workflow with Docker
+
+.nav[
+[Previous section](#toc-container-networking-basics)
+|
+[Back to table of contents](#toc-module-3)
+|
+[Next section](#toc-compose-for-development-stacks)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+class: title
+
+# Local development workflow with Docker
+
+![Construction site](images/title-local-development-workflow-with-docker.jpg)
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Objectives
+
+At the end of this section, you will be able to:
+
+* Share code between container and host.
+
+* Use a simple local development workflow.
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Local development in a container
+
+We want to solve the following issues:
+
+- "Works on my machine"
+
+- "Not the same version"
+
+- "Missing dependency"
+
+By using Docker containers, we will get a consistent development environment.
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Working on the "namer" application
+
+* We have to work on some application whose code is at:
+
+  https://github.com/jpetazzo/namer.
+
+* What is it? We don't know yet!
+
+* Let's download the code.
+
+```bash
+$ git clone https://github.com/jpetazzo/namer
+```
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Looking at the code
+
+```bash
+$ cd namer
+$ ls -1
+company_name_generator.rb
+config.ru
+docker-compose.yml
+Dockerfile
+Gemfile
+```
+
+--
+
+Aha, a `Gemfile`! This is Ruby. Probably. We know this. Maybe?
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Looking at the `Dockerfile`
+
+```dockerfile
+FROM ruby
+
+COPY . /src
+WORKDIR /src
+RUN bundler install
+
+CMD ["rackup", "--host", "0.0.0.0"]
+EXPOSE 9292
+```
+
+* This application is using a base `ruby` image.
+* The code is copied in `/src`.
+* Dependencies are installed with `bundler`.
+* The application is started with `rackup`.
+* It is listening on port 9292.
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Building and running the "namer" application
+
+* Let's build the application with the `Dockerfile`!
+
+--
+
+```bash
+$ docker build -t namer .
+```
+
+--
+
+* Then run it. *We need to expose its ports.*
+
+--
+
+```bash
+$ docker run -dP namer
+```
+
+--
+
+* Check on which port the container is listening.
+
+--
+
+```bash
+$ docker ps -l
+```
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Connecting to our application
+
+* Point our browser to our Docker node, on the port allocated to the container.
+
+--
+
+* Hit "reload" a few times.
+
+--
+
+* This is an enterprise-class, carrier-grade, ISO-compliant company name generator!
+
+  (With 50% more bullshit than the average competition!)
+
+  (Wait, was that 50% more, or 50% less? *Anyway!*)
+
+  ![web application 1](images/webapp-in-blue.png)
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Making changes to the code
+
+Option 1:
+
+* Edit the code locally
+* Rebuild the image
+* Re-run the container
+
+Option 2:
+
+* Enter the container (with `docker exec`)
+* Install an editor
+* Make changes from within the container
+
+Option 3:
+
+* Use a *volume* to mount local files into the container
+* Make changes locally
+* Changes are reflected in the container
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Our first volume
+
+We will tell Docker to map the current directory to `/src` in the container.
+
+```bash
+$ docker run -d -v $(pwd):/src -P namer
+```
+
+* `-d`: the container should run in detached mode (in the background).
+
+* `-v`: the following host directory should be mounted inside the container.
+
+* `-P`: publish all the ports exposed by this image.
+
+* `namer` is the name of the image we will run.
+
+* We don't specify a command to run because it is already set in the Dockerfile via `CMD`.
+
+Note: on Windows, replace `$(pwd)` with `%cd%` (or `${pwd}` if you use PowerShell).
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Mounting volumes inside containers
+
+The `-v` flag mounts a directory from your host into your Docker container.
+
+The flag structure is:
+
+```bash
+[host-path]:[container-path]:[rw|ro]
+```
+
+* `[host-path]` and `[container-path]` are created if they don't exist.
+
+* You can control the write status of the volume with the `ro` and
+  `rw` options.
+
+* If you don't specify `rw` or `ro`, it will be `rw` by default.
+
+There will be a full chapter about volumes!
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Testing the development container
+
+* Check the port used by our new container.
+
+```bash
+$ docker ps -l
+CONTAINER ID  IMAGE  COMMAND  CREATED        STATUS  PORTS                   NAMES
+045885b68bc5  namer  rackup   3 seconds ago  Up ...  0.0.0.0:32770->9292/tcp ...
+```
+
+* Open the application in your web browser.
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Making a change to our application
+
+Our customer really doesn't like the color of our text. Let's change it.
+
+```bash
+$ vi company_name_generator.rb
+```
+
+And change
+
+```css
+color: royalblue;
+```
+
+To:
+
+```css
+color: red;
+```
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Viewing our changes
+
+* Reload the application in our browser.
+
+--
+
+* The color should have changed.
+
+  ![web application 2](images/webapp-in-red.png)
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Understanding volumes
+
+* Volumes are *not* copying or synchronizing files between the host and the container.
+
+* Volumes are *bind mounts*: a kernel mechanism associating one path with another.
+
+* Bind mounts are *kind of* similar to symbolic links, but at a very different level.
+
+* Changes made on the host or on the container will be visible on the other side.
+
+  (Under the hood, it's the same file anyway.)
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Trash your servers and burn your code
+
+*(This is the title of a
+[2013 blog post](http://chadfowler.com/2013/06/23/immutable-deployments.html)
+by Chad Fowler, where he explains the concept of immutable infrastructure.)*
+
+--
+
+* Let's majorly mess up our container.
+
+  (Remove files or whatever.)
+
+* Now, how can we fix this?
+
+--
+
+* Our old container (with the blue version of the code) is still running.
+
+* See on which port it is exposed:
+  ```bash
+  docker ps
+  ```
+
+* Point our browser to it to confirm that it still works fine.
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Immutable infrastructure in a nutshell
+
+* Instead of *updating* a server, we deploy a new one.
+
+* This might be challenging with classical servers, but it's trivial with containers.
+
+* In fact, with Docker, the most logical workflow is to build a new image and run it.
+
+* If something goes wrong with the new image, we can always restart the old one.
+
+* We can even keep both versions running side by side.
+
+If this pattern sounds interesting, you might want to read about *blue/green deployment*
+and *canary deployments*.
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Recap of the development workflow
+
+1. Write a Dockerfile to build an image containing our development environment.
+   <br/>
+   (Rails, Django, ... and all the dependencies for our app)
+
+2. Start a container from that image.
+   <br/>
+   Use the `-v` flag to mount our source code inside the container.
+
+3. Edit the source code outside the container, using familiar tools.
+   <br/>
+   (vim, emacs, textmate...)
+
+4. Test the application.
+   <br/>
+   (Some frameworks pick up changes automatically.
+   <br/>Others require you to Ctrl-C + restart after each modification.)
+
+5. Iterate and repeat steps 3 and 4 until satisfied.
+
+6. When done, commit+push source code changes.
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+class: extra-details
+
+## Debugging inside the container
+
+Docker has a command called `docker exec`.
+
+It allows users to run a new process in a container which is already running.
+
+If sometimes you find yourself wishing you could SSH into a container: you can use `docker exec` instead.
+
+You can get a shell prompt inside an existing container this way, or run an arbitrary process for automation.
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+class: extra-details
+
+## `docker exec` example
+
+```bash
+$ # You can run ruby commands in the area the app is running and more!
+$ docker exec -it <yourContainerId> bash
+root@5ca27cf74c2e:/opt/namer# irb
+irb(main):001:0> [0, 1, 2, 3, 4].map {|x| x ** 2}.compact
+=> [0, 1, 4, 9, 16]
+irb(main):002:0> exit
+```
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+class: extra-details
+
+## Stopping the container
+
+Now that we're done let's stop our container.
+
+```bash
+$ docker stop <yourContainerID>
+```
+
+And remove it.
+
+```bash
+$ docker rm <yourContainerID>
+```
+
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+## Section summary
+
+We've learned how to:
+
+* Share code between container and host.
+
+* Set our working directory.
+
+* Use a simple local development workflow.
+
+???
+
+:EN:Developing with containers
+:EN:- “Containerize” a development environment
+
+:FR:Développer au jour le jour
+:FR:- « Containeriser » son environnement de développement
+.debug[[containers/Local_Development_Workflow.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Local_Development_Workflow.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/two-containers-on-a-truck.jpg)]
+
+---
+
+name: toc-compose-for-development-stacks
+class: title
+
+ Compose for development stacks
+
+.nav[
+[Previous section](#toc-local-development-workflow-with-docker)
+|
+[Back to table of contents](#toc-module-3)
+|
+[Next section](#toc-exercise--writing-a-compose-file)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Compose for development stacks
+
+Dockerfiles are great to build container images.
+
+But what if we work with a complex stack made of multiple containers?
+
+Eventually, we will want to write some custom scripts and automation to build, run, and connect
+our containers together.
+
+There is a better way: using Docker Compose.
+
+In this section, you will use Compose to bootstrap a development environment.
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## What is Docker Compose?
+
+Docker Compose (formerly known as `fig`) is an external tool.
+
+Unlike the Docker Engine, it is written in Python. It's open source as well.
+
+The general idea of Compose is to enable a very simple, powerful onboarding workflow:
+
+1. Checkout your code.
+
+2. Run `docker-compose up`.
+
+3. Your app is up and running!
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Compose overview
+
+This is how you work with Compose:
+
+* You describe a set (or stack) of containers in a YAML file called `docker-compose.yml`.
+
+* You run `docker-compose up`.
+
+* Compose automatically pulls images, builds containers, and starts them.
+
+* Compose can set up links, volumes, and other Docker options for you.
+
+* Compose can run the containers in the background, or in the foreground.
+
+* When containers are running in the foreground, their aggregated output is shown.
+
+Before diving in, let's see a small example of Compose in action.
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+class: pic
+
+![composeup](images/composeup.gif)
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Checking if Compose is installed
+
+If you are using the official training virtual machines, Compose has been
+pre-installed.
+
+If you are using Docker for Mac/Windows or the Docker Toolbox, Compose comes with them.
+
+If you are on Linux (desktop or server environment), you will need to install Compose from its [release page](https://github.com/docker/compose/releases) or with `pip install docker-compose`.
+
+You can always check that it is installed by running:
+
+```bash
+$ docker-compose --version
+```
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Launching Our First Stack with Compose
+
+First step: clone the source code for the app we will be working on.
+
+```bash
+$ cd
+$ git clone https://github.com/jpetazzo/trainingwheels
+...
+$ cd trainingwheels
+```
+
+
+Second step: start your app.
+
+```bash
+$ docker-compose up
+```
+
+Watch Compose build and run your app with the correct parameters,
+including linking the relevant containers together.
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Launching Our First Stack with Compose
+
+Verify that the app is running at `http://<yourHostIP>:8000`.
+
+![composeapp](images/composeapp.png)
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Stopping the app
+
+When you hit `^C`, Compose tries to gracefully terminate all of the containers.
+
+After ten seconds (or if you press `^C` again) it will forcibly kill
+them.
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## The `docker-compose.yml` file
+
+Here is the file used in the demo:
+
+.small[
+```yaml
+version: "2"
+
+services:
+  www:
+    build: www
+    ports:
+      - 8000:5000
+    user: nobody
+    environment:
+      DEBUG: 1
+    command: python counter.py
+    volumes:
+      - ./www:/src
+
+  redis:
+    image: redis
+```
+]
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Compose file structure
+
+A Compose file has multiple sections:
+
+* `version` is mandatory. (We should use `"2"` or later; version 1 is deprecated.)
+
+* `services` is mandatory. A service is one or more replicas of the same image running as containers.
+
+* `networks` is optional and indicates to which networks containers should be connected.
+  <br/>(By default, containers will be connected on a private, per-compose-file network.)
+
+* `volumes` is optional and can define volumes to be used and/or shared by the containers.
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Compose file versions
+
+* Version 1 is legacy and shouldn't be used.
+
+  (If you see a Compose file without `version` and `services`, it's a legacy v1 file.)
+
+* Version 2 added support for networks and volumes.
+
+* Version 3 added support for deployment options (scaling, rolling updates, etc).
+
+The [Docker documentation](https://docs.docker.com/compose/compose-file/)
+has excellent information about the Compose file format if you need to know more about versions.
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Containers in `docker-compose.yml`
+
+Each service in the YAML file must contain either `build`, or `image`.
+
+* `build` indicates a path containing a Dockerfile.
+
+* `image` indicates an image name (local, or on a registry).
+
+* If both are specified, an image will be built from the `build` directory and named `image`.
+
+The other parameters are optional.
+
+They encode the parameters that you would typically add to `docker run`.
+
+Sometimes they have several minor improvements.
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Container parameters
+
+* `command` indicates what to run (like `CMD` in a Dockerfile).
+
+* `ports` translates to one (or multiple) `-p` options to map ports.
+  <br/>You can specify local ports (i.e. `x:y` to expose public port `x`).
+
+* `volumes` translates to one (or multiple) `-v` options.
+  <br/>You can use relative paths here.
+
+For the full list, check: https://docs.docker.com/compose/compose-file/
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Compose commands
+
+We already saw `docker-compose up`, but another one is `docker-compose build`.
+
+It will execute `docker build` for all containers mentioning a `build` path.
+
+It can also be invoked automatically when starting the application:
+
+```bash
+docker-compose up --build
+```
+
+Another common option is to start containers in the background:
+
+```bash
+docker-compose up -d
+```
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Check container status
+
+It can be tedious to check the status of your containers with `docker ps`,
+especially when running multiple apps at the same time.
+
+Compose makes it easier; with `docker-compose ps` you will see only the status of the
+containers of the current stack:
+
+
+```bash
+$ docker-compose ps
+Name                      Command             State           Ports          
+----------------------------------------------------------------------------
+trainingwheels_redis_1   /entrypoint.sh red   Up      6379/tcp               
+trainingwheels_www_1     python counter.py    Up      0.0.0.0:8000->5000/tcp 
+```
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Cleaning up (1)
+
+If you have started your application in the background with Compose and
+want to stop it easily, you can use the `kill` command:
+
+```bash
+$ docker-compose kill
+```
+
+Likewise, `docker-compose rm` will let you remove containers (after confirmation):
+
+```bash
+$ docker-compose rm
+Going to remove trainingwheels_redis_1, trainingwheels_www_1
+Are you sure? [yN] y
+Removing trainingwheels_redis_1...
+Removing trainingwheels_www_1...
+```
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Cleaning up (2)
+
+Alternatively, `docker-compose down` will stop and remove containers.
+
+It will also remove other resources, like networks that were created for the application.
+
+```bash
+$ docker-compose down
+Stopping trainingwheels_www_1 ... done
+Stopping trainingwheels_redis_1 ... done
+Removing trainingwheels_www_1 ... done
+Removing trainingwheels_redis_1 ... done
+```
+
+Use `docker-compose down -v` to remove everything including volumes.
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Special handling of volumes
+
+Compose is smart. If your container uses volumes, when you restart your
+application, Compose will create a new container, but carefully re-use
+the volumes it was using previously.
+
+This makes it easy to upgrade a stateful service, by pulling its
+new image and just restarting your stack with Compose.
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Compose project name
+
+* When you run a Compose command, Compose infers the "project name" of your app.
+
+* By default, the "project name" is the name of the current directory.
+
+* For instance, if you are in `/home/zelda/src/ocarina`, the project name is `ocarina`.
+
+* All resources created by Compose are tagged with this project name.
+
+* The project name also appears as a prefix of the names of the resources.
+
+  E.g. in the previous example, service `www` will create a container `ocarina_www_1`.
+
+* The project name can be overridden with `docker-compose -p`.
+
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+## Running two copies of the same app
+
+If you want to run two copies of the same app simultaneously, all you have to do is to
+make sure that each copy has a different project name.
+
+You can:
+
+* copy your code in a directory with a different name
+
+* start each copy with `docker-compose -p myprojname up`
+
+Each copy will run in a different network, totally isolated from the other.
+
+This is ideal to debug regressions, do side-by-side comparisons, etc.
+
+???
+
+:EN:- Using compose to describe an environment
+:EN:- Connecting services together with a *Compose file*
+
+:FR:- Utiliser Compose pour décrire son environnement
+:FR:- Écrire un *Compose file* pour connecter les services entre eux
+.debug[[containers/Compose_For_Dev_Stacks.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Compose_For_Dev_Stacks.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/wall-of-containers.jpeg)]
+
+---
+
+name: toc-exercise--writing-a-compose-file
+class: title
+
+ Exercise — writing a Compose file
+
+.nav[
+[Previous section](#toc-compose-for-development-stacks)
+|
+[Back to table of contents](#toc-module-3)
+|
+[Next section](#toc-reducing-image-size)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Exercise — writing a Compose file
+
+Let's write a Compose file for the wordsmith app!
+
+The code is at: https://github.com/jpetazzo/wordsmith
+
+.debug[[containers/Exercise_Composefile.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Exercise_Composefile.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/Container-Ship-Freighter-Navigation-Elbe-Romance-1782991.jpg)]
+
+---
+
+name: toc-reducing-image-size
+class: title
+
+ Reducing image size
+
+.nav[
+[Previous section](#toc-exercise--writing-a-compose-file)
+|
+[Back to table of contents](#toc-module-4)
+|
+[Next section](#toc-multi-stage-builds)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Reducing image size
+
+* In the previous example, our final image contained:
+
+  * our `hello` program
+
+  * its source code
+
+  * the compiler
+
+* Only the first one is strictly necessary.
+
+* We are going to see how to obtain an image without the superfluous components.
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Can't we remove superfluous files with `RUN`?
+
+What happens if we do one of the following commands?
+
+- `RUN rm -rf ...`
+
+- `RUN apt-get remove ...`
+
+- `RUN make clean ...`
+
+--
+
+This adds a layer which removes a bunch of files.
+
+But the previous layers (which added the files) still exist.
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Removing files with an extra layer
+
+When downloading an image, all the layers must be downloaded.
+
+| Dockerfile instruction | Layer size | Image size |
+| ---------------------- | ---------- | ---------- |
+| `FROM ubuntu` | Size of base image | Size of base image |
+| `...` | ... | Sum of this layer <br/>+ all previous ones |
+| `RUN apt-get install somepackage` | Size of files added <br/>(e.g. a few MB) | Sum of this layer <br/>+ all previous ones |
+| `...` | ... | Sum of this layer <br/>+ all previous ones |
+| `RUN apt-get remove somepackage` | Almost zero <br/>(just metadata) | Same as previous one |
+
+Therefore, `RUN rm` does not reduce the size of the image or free up disk space.
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Removing unnecessary files
+
+Various techniques are available to obtain smaller images:
+
+- collapsing layers,
+
+- adding binaries that are built outside of the Dockerfile,
+
+- squashing the final image,
+
+- multi-stage builds.
+
+Let's review them quickly.
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Collapsing layers
+
+You will frequently see Dockerfiles like this:
+
+```dockerfile
+FROM ubuntu
+RUN apt-get update && apt-get install xxx && ... && apt-get remove xxx && ...
+```
+
+Or the (more readable) variant:
+
+```dockerfile
+FROM ubuntu
+RUN apt-get update \
+ && apt-get install xxx \
+ && ... \
+ && apt-get remove xxx \
+ && ...
+```
+
+This `RUN` command gives us a single layer.
+
+The files that are added, then removed in the same layer, do not grow the layer size.
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Collapsing layers: pros and cons
+
+Pros:
+
+- works on all versions of Docker
+
+- doesn't require extra tools
+
+Cons:
+
+- not very readable
+
+- some unnecessary files might still remain if the cleanup is not thorough
+
+- that layer is expensive (slow to build)
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Building binaries outside of the Dockerfile
+
+This results in a Dockerfile looking like this:
+
+```dockerfile
+FROM ubuntu
+COPY xxx /usr/local/bin
+```
+
+Of course, this implies that the file `xxx` exists in the build context.
+
+That file has to exist before you can run `docker build`.
+
+For instance, it can:
+
+- exist in the code repository,
+- be created by another tool (script, Makefile...),
+- be created by another container image and extracted from the image.
+
+See for instance the [busybox official image](https://github.com/docker-library/busybox/blob/fe634680e32659aaf0ee0594805f74f332619a90/musl/Dockerfile) or this [older busybox image](https://github.com/jpetazzo/docker-busybox).
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Building binaries outside: pros and cons
+
+Pros:
+
+- final image can be very small
+
+Cons:
+
+- requires an extra build tool
+
+- we're back in dependency hell and "works on my machine"
+
+Cons, if binary is added to code repository:
+
+- breaks portability across different platforms
+
+- grows repository size a lot if the binary is updated frequently
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Squashing the final image
+
+The idea is to transform the final image into a single-layer image.
+
+This can be done in (at least) two ways.
+
+- Activate experimental features and squash the final image:
+  ```bash
+  docker image build --squash ...
+  ```
+
+- Export/import the final image.
+  ```bash
+  docker build -t temp-image .
+  docker run --entrypoint true --name temp-container temp-image
+  docker export temp-container | docker import - final-image
+  docker rm temp-container
+  docker rmi temp-image
+  ```
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Squashing the image: pros and cons
+
+Pros:
+
+- single-layer images are smaller and faster to download
+
+- removed files no longer take up storage and network resources
+
+Cons:
+
+- we still need to actively remove unnecessary files
+
+- squash operation can take a lot of time (on big images)
+
+- squash operation does not benefit from cache
+  <br/>
+  (even if we change just a tiny file, the whole image needs to be re-squashed)
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Multi-stage builds
+
+Multi-stage builds allow us to have multiple *stages*.
+
+Each stage is a separate image, and can copy files from previous stages.
+
+We're going to see how they work in more detail.
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/ShippingContainerSFBay.jpg)]
+
+---
+
+name: toc-multi-stage-builds
+class: title
+
+ Multi-stage builds
+
+.nav[
+[Previous section](#toc-reducing-image-size)
+|
+[Back to table of contents](#toc-module-4)
+|
+[Next section](#toc-tips-for-efficient-dockerfiles)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+# Multi-stage builds
+
+* At any point in our `Dockerfile`, we can add a new `FROM` line.
+
+* This line starts a new stage of our build.
+
+* Each stage can access the files of the previous stages with `COPY --from=...`.
+
+* When a build is tagged (with `docker build -t ...`), the last stage is tagged.
+
+* Previous stages are not discarded: they will be used for caching, and can be referenced.
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Multi-stage builds in practice
+
+* Each stage is numbered, starting at `0`
+
+* We can copy a file from a previous stage by indicating its number, e.g.:
+
+  ```dockerfile
+  COPY --from=0 /file/from/first/stage /location/in/current/stage
+  ```
+
+* We can also name stages, and reference these names:
+
+  ```dockerfile
+  FROM golang AS builder
+  RUN ...
+  FROM alpine
+  COPY --from=builder /go/bin/mylittlebinary /usr/local/bin/
+  ```
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Multi-stage builds for our C program
+
+We will change our Dockerfile to:
+
+* give a nickname to the first stage: `compiler`
+
+* add a second stage using the same `ubuntu` base image
+
+* add the `hello` binary to the second stage
+
+* make sure that `CMD` is in the second stage 
+
+The resulting Dockerfile is on the next slide.
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Multi-stage build `Dockerfile`
+
+Here is the final Dockerfile:
+
+```dockerfile
+FROM ubuntu AS compiler
+RUN apt-get update
+RUN apt-get install -y build-essential
+COPY hello.c /
+RUN make hello
+FROM ubuntu
+COPY --from=compiler /hello /hello
+CMD /hello
+```
+
+Let's build it, and check that it works correctly:
+
+```bash
+docker build -t hellomultistage .
+docker run hellomultistage
+```
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Comparing single/multi-stage build image sizes
+
+List our images with `docker images`, and check the size of:
+
+- the `ubuntu` base image,
+
+- the single-stage `hello` image,
+
+- the multi-stage `hellomultistage` image.
+
+We can achieve even smaller images if we use smaller base images.
+
+However, if we use common base images (e.g. if we standardize on `ubuntu`),
+these common images will be pulled only once per node, so they are
+virtually "free."
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+## Build targets
+
+* We can also tag an intermediary stage with `docker build --target STAGE --tag NAME`
+
+* This will create an image (named `NAME`) corresponding to stage `STAGE`
+
+* This can be used to easily access an intermediary stage for inspection
+
+  (Instead of parsing the output of `docker build` to find out the image ID)
+
+* This can also be used to describe multiple images from a single Dockerfile
+
+  (Instead of using multiple Dockerfiles, which could go out of sync)
+
+* Sometimes, we want to inspect a specific intermediary build stage.
+
+* Or, we want to describe multiple images using a single Dockerfile.
+
+???
+
+:EN:Optimizing our images and their build process
+:EN:- Leveraging multi-stage builds
+
+:FR:Optimiser les images et leur construction
+:FR:- Utilisation d'un *multi-stage build*
+
+.debug[[containers/Multi_Stage_Builds.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Multi_Stage_Builds.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/aerial-view-of-containers.jpg)]
+
+---
+
+name: toc-tips-for-efficient-dockerfiles
+class: title
+
+ Tips for efficient Dockerfiles
+
+.nav[
+[Previous section](#toc-multi-stage-builds)
+|
+[Back to table of contents](#toc-module-4)
+|
+[Next section](#toc-dockerfile-examples)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Tips for efficient Dockerfiles
+
+We will see how to:
+
+* Reduce the number of layers.
+
+* Leverage the build cache so that builds can be faster.
+
+* Embed unit testing in the build process.
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Reducing the number of layers
+
+* Each line in a `Dockerfile` creates a new layer.
+
+* Build your `Dockerfile` to take advantage of Docker's caching system.
+
+* Combine commands by using `&&` to continue commands and `\` to wrap lines.
+
+Note: it is frequent to build a Dockerfile line by line:
+
+```dockerfile
+RUN apt-get install thisthing
+RUN apt-get install andthatthing andthatotherone
+RUN apt-get install somemorestuff
+```
+
+And then refactor it trivially before shipping:
+
+```dockerfile
+RUN apt-get install thisthing andthatthing andthatotherone somemorestuff
+```
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Avoid re-installing dependencies at each build
+
+* Classic Dockerfile problem:
+
+  "each time I change a line of code, all my dependencies are re-installed!"
+
+* Solution: `COPY` dependency lists (`package.json`, `requirements.txt`, etc.)
+  by themselves to avoid reinstalling unchanged dependencies every time.
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Example "bad" `Dockerfile`
+
+The dependencies are reinstalled every time, because the build system does not know if `requirements.txt` has been updated.
+
+```bash
+FROM python
+WORKDIR /src
+COPY . .
+RUN pip install -qr requirements.txt
+EXPOSE 5000
+CMD ["python", "app.py"]
+```
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Fixed `Dockerfile`
+
+Adding the dependencies as a separate step means that Docker can cache more efficiently and only install them when `requirements.txt` changes.
+
+```bash
+FROM python
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install -qr /tmp/requirements.txt
+WORKDIR /src
+COPY . .
+EXPOSE 5000
+CMD ["python", "app.py"]
+```
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Be careful with `chown`, `chmod`, `mv`
+
+* Layers cannot store efficiently changes in permissions or ownership.
+
+* Layers cannot represent efficiently when a file is moved either.
+
+* As a result, operations like `chown`, `chown`, `mv` can be expensive.
+
+* For instance, in the Dockerfile snippet below, each `RUN` line
+  creates a layer with an entire copy of `some-file`.
+
+  ```dockerfile
+  COPY some-file .
+  RUN chown www-data:www-data some-file
+  RUN chmod 644 some-file
+  RUN mv some-file /var/www
+  ```
+
+* How can we avoid that?
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Put files on the right place
+
+* Instead of using `mv`, directly put files at the right place.
+
+* When extracting archives (tar, zip...), merge operations in a single layer.
+
+  Example:
+
+  ```dockerfile
+    ...
+    RUN wget http://.../foo.tar.gz \
+     && tar -zxf foo.tar.gz \
+     && mv foo/fooctl /usr/local/bin \
+     && rm -rf foo
+  ...
+  ```
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Use `COPY --chown`
+
+* The Dockerfile instruction `COPY` can take a `--chown` parameter.
+
+  Examples:
+
+  ```dockerfile
+  ...
+  COPY --chown=1000 some-file .
+  COPY --chown=1000:1000 some-file .
+  COPY --chown=www-data:www-data some-file .
+  ```
+
+* The `--chown` flag can specify a user, or a user:group pair.
+
+* The user and group can be specified as names or numbers.
+
+* When using names, the names must exist in `/etc/passwd` or `/etc/group`.
+
+  *(In the container, not on the host!)*
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Set correct permissions locally
+
+* Instead of using `chmod`, set the right file permissions locally.
+
+* When files are copied with `COPY`, permissions are preserved.
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Embedding unit tests in the build process
+
+```dockerfile
+FROM <baseimage>
+RUN <install dependencies>
+COPY <code>
+RUN <build code>
+RUN <install test dependencies>
+COPY <test data sets and fixtures>
+RUN <unit tests>
+FROM <baseimage>
+RUN <install dependencies>
+COPY <code>
+RUN <build code>
+CMD, EXPOSE ...
+```
+
+* The build fails as soon as an instruction fails
+* If `RUN <unit tests>` fails, the build doesn't produce an image
+* If it succeeds, it produces a clean image (without test libraries and data)
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/blue-containers.jpg)]
+
+---
+
+name: toc-dockerfile-examples
+class: title
+
+ Dockerfile examples
+
+.nav[
+[Previous section](#toc-tips-for-efficient-dockerfiles)
+|
+[Back to table of contents](#toc-module-4)
+|
+[Next section](#toc-exercise--writing-better-dockerfiles)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+# Dockerfile examples
+
+There are a number of tips, tricks, and techniques that we can use in Dockerfiles.
+
+But sometimes, we have to use different (and even opposed) practices depending on:
+
+- the complexity of our project,
+
+- the programming language or framework that we are using,
+
+- the stage of our project (early MVP vs. super-stable production),
+
+- whether we're building a final image or a base for further images,
+
+- etc.
+
+We are going to show a few examples using very different techniques.
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## When to optimize an image
+
+When authoring official images, it is a good idea to reduce as much as possible:
+
+- the number of layers,
+
+- the size of the final image.
+
+This is often done at the expense of build time and convenience for the image maintainer;
+but when an image is downloaded millions of time, saving even a few seconds of pull time
+can be worth it.
+
+.small[
+```dockerfile
+RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev && rm -rf /var/lib/apt/lists/* \
+	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
+	&& docker-php-ext-install gd
+...
+RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_UPSTREAM_VERSION}.tar.gz \
+	&& echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
+	&& tar -xzf wordpress.tar.gz -C /usr/src/ \
+	&& rm wordpress.tar.gz \
+	&& chown -R www-data:www-data /usr/src/wordpress
+```
+]
+
+(Source: [Wordpress official image](https://github.com/docker-library/wordpress/blob/618490d4bdff6c5774b84b717979bfe3d6ba8ad1/apache/Dockerfile))
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## When to *not* optimize an image
+
+Sometimes, it is better to prioritize *maintainer convenience*.
+
+In particular, if:
+
+- the image changes a lot,
+
+- the image has very few users (e.g. only 1, the maintainer!),
+
+- the image is built and run on the same machine,
+
+- the image is built and run on machines with a very fast link ...
+
+In these cases, just keep things simple!
+
+(Next slide: a Dockerfile that can be used to preview a Jekyll / github pages site.)
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+```dockerfile
+FROM debian:sid
+
+RUN apt-get update -q
+RUN apt-get install -yq build-essential make
+RUN apt-get install -yq zlib1g-dev
+RUN apt-get install -yq ruby ruby-dev
+RUN apt-get install -yq python-pygments
+RUN apt-get install -yq nodejs
+RUN apt-get install -yq cmake
+RUN gem install --no-rdoc --no-ri github-pages
+
+COPY . /blog
+WORKDIR /blog
+
+VOLUME /blog/_site
+
+EXPOSE 4000
+CMD ["jekyll", "serve", "--host", "0.0.0.0", "--incremental"]
+```
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Multi-dimensional versioning systems
+
+Images can have a tag, indicating the version of the image.
+
+But sometimes, there are multiple important components, and we need to indicate the versions
+for all of them.
+
+This can be done with environment variables:
+
+```dockerfile
+ENV PIP=9.0.3 \
+    ZC_BUILDOUT=2.11.2 \
+    SETUPTOOLS=38.7.0 \
+    PLONE_MAJOR=5.1 \
+    PLONE_VERSION=5.1.0 \
+    PLONE_MD5=76dc6cfc1c749d763c32fff3a9870d8d
+```
+
+(Source: [Plone official image](https://github.com/plone/plone.docker/blob/master/5.1/5.1.0/alpine/Dockerfile))
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Entrypoints and wrappers
+
+It is very common to define a custom entrypoint.
+
+That entrypoint will generally be a script, performing any combination of:
+
+- pre-flights checks (if a required dependency is not available, display
+  a nice error message early instead of an obscure one in a deep log file),
+
+- generation or validation of configuration files,
+
+- dropping privileges (with e.g. `su` or `gosu`, sometimes combined with `chown`),
+
+- and more.
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## A typical entrypoint script
+
+```dockerfile
+ #!/bin/sh
+ set -e
+ 
+ # first arg is '-f' or '--some-option'
+ # or first arg is 'something.conf'
+ if [ "${1#-}" != "$1" ] || [ "${1%.conf}" != "$1" ]; then
+ 	set -- redis-server "$@"
+ fi
+ 
+ # allow the container to be started with '--user'
+ if [ "$1" = 'redis-server' -a "$(id -u)" = '0' ]; then
+ 	chown -R redis .
+ 	exec su-exec redis "$0" "$@"
+ fi
+ 
+ exec "$@"
+```
+
+(Source: [Redis official image](https://github.com/docker-library/redis/blob/d24f2be82673ccef6957210cc985e392ebdc65e4/4.0/alpine/docker-entrypoint.sh))
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Factoring information
+
+To facilitate maintenance (and avoid human errors), avoid to repeat information like:
+
+- version numbers,
+
+- remote asset URLs (e.g. source tarballs) ...
+
+Instead, use environment variables.
+
+.small[
+```dockerfile
+ENV NODE_VERSION 10.2.1
+...
+RUN ...
+    && curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION.tar.xz" \
+    && curl -fsSLO --compressed "https://nodejs.org/dist/v$NODE_VERSION/SHASUMS256.txt.asc" \
+    && gpg --batch --decrypt --output SHASUMS256.txt SHASUMS256.txt.asc \
+    && grep " node-v$NODE_VERSION.tar.xz\$" SHASUMS256.txt | sha256sum -c - \
+    && tar -xf "node-v$NODE_VERSION.tar.xz" \
+    && cd "node-v$NODE_VERSION" \
+...
+```
+]
+
+(Source: [Nodejs official image](https://github.com/nodejs/docker-node/blob/master/10/alpine/Dockerfile))
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Overrides
+
+In theory, development and production images should be the same.
+
+In practice, we often need to enable specific behaviors in development (e.g. debug statements).
+
+One way to reconcile both needs is to use Compose to enable these behaviors.
+
+Let's look at the [trainingwheels](https://github.com/jpetazzo/trainingwheels) demo app for an example.
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Production image
+
+This Dockerfile builds an image leveraging gunicorn:
+
+```dockerfile
+FROM python
+RUN pip install flask
+RUN pip install gunicorn
+RUN pip install redis
+COPY . /src
+WORKDIR /src
+CMD gunicorn --bind 0.0.0.0:5000 --workers 10 counter:app
+EXPOSE 5000
+```
+
+(Source: [trainingwheels Dockerfile](https://github.com/jpetazzo/trainingwheels/blob/master/www/Dockerfile))
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## Development Compose file
+
+This Compose file uses the same image, but with a few overrides for development:
+
+- the Flask development server is used (overriding `CMD`),
+
+- the `DEBUG` environment variable is set,
+
+- a volume is used to provide a faster local development workflow.
+
+.small[
+```yaml
+services:
+  www:
+    build: www
+    ports:
+      - 8000:5000
+    user: nobody
+    environment:
+      DEBUG: 1
+    command: python counter.py
+    volumes:
+      - ./www:/src
+```
+]
+
+(Source: [trainingwheels Compose file](https://github.com/jpetazzo/trainingwheels/blob/master/docker-compose.yml))
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+## How to know which best practices are better?
+
+- The main goal of containers is to make our lives easier.
+
+- In this chapter, we showed many ways to write Dockerfiles.
+
+- These Dockerfiles use sometimes diametrally opposed techniques.
+
+- Yet, they were the "right" ones *for a specific situation.*
+
+- It's OK (and even encouraged) to start simple and evolve as needed.
+
+- Feel free to review this chapter later (after writing a few Dockerfiles) for inspiration!
+
+???
+
+:EN:- Dockerfile tips, tricks, and best practices
+:FR:- Bonnes pratiques pour la construction des images
+
+.debug[[containers/Dockerfile_Tips.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Dockerfile_Tips.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/chinook-helicopter-container.jpg)]
+
+---
+
+name: toc-exercise--writing-better-dockerfiles
+class: title
+
+ Exercise — writing better Dockerfiles
+
+.nav[
+[Previous section](#toc-dockerfile-examples)
+|
+[Back to table of contents](#toc-module-4)
+|
+[Next section](#toc-links-and-resources)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Exercise — writing better Dockerfiles
+
+Let's update our Dockerfiles to leverage multi-stage builds!
+
+The code is at: https://github.com/jpetazzo/wordsmith
+
+Use a different tag for these images, so that we can compare their sizes.
+
+What's the size difference between single-stage and multi-stage builds?
+
+.debug[[containers/Exercise_Dockerfile_Advanced.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/Exercise_Dockerfile_Advanced.md)]
+---
+class: title, self-paced
+
+Thank you!
+
+.debug[[shared/thankyou.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/shared/thankyou.md)]
+---
+
+class: title, in-person
+
+That's all, folks! <br/> Questions?
+
+![end](images/end.jpg)
+
+.debug[[shared/thankyou.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/shared/thankyou.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/container-cranes.jpg)]
+
+---
+
+name: toc-links-and-resources
+class: title
+
+ Links and resources
+
+.nav[
+[Previous section](#toc-exercise--writing-better-dockerfiles)
+|
+[Back to table of contents](#toc-module-5)
+|
+[Next section](#toc-)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Links and resources
+
+- [Docker Community Slack](https://community.docker.com/registrations/groups/4316)
+- [Docker Community Forums](https://forums.docker.com/)
+- [Docker Hub](https://hub.docker.com)
+- [Docker Blog](https://blog.docker.com/)
+- [Docker documentation](https://docs.docker.com/)
+- [Docker on StackOverflow](https://stackoverflow.com/questions/tagged/docker)
+- [Docker on Twitter](https://twitter.com/docker)
+- [Play With Docker Hands-On Labs](https://training.play-with-docker.com/)
+
+.footnote[These slides (and future updates) are on → https://container.training/]
+
+.debug[[containers/links.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/containers/links.md)]</textarea>
+    <script src="remark.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:9',
+        highlightSpans: true,
+        slideNumberFormat: '%current%/%total%',
+        excludedClasses: ["self-paced"]
+      });
+    </script>
+    
+    <!-- 
+    These two scripts will be available only when loading the
+    content using the pub/sub server. Otherwise, they'll just
+    404 and that's OK.
+    -->
+    <script src="/socket.io/socket.io.js">
+    </script>
+    <script src="/remote.js">
+    </script>
+
+  </body>
+</html>
