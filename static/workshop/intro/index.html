@@ -30,18 +30,18 @@ Deploying and Scaling Microservices<br/>with Kubernetes<br/>
 .debug[
 ```
 A  slides/k8s/batch-jobs-cleanup.md
-M  slides/k8s/configuration.md
+MM slides/k8s/configuration.md
 M  slides/k8s/kubectl-logs.md
 M  slides/k8s/kubectlexpose.md
 M  slides/k8s/kubectlget.md
 M  slides/k8s/labels-annotations.md
 M  slides/k8s/logs-cli.md
-M  slides/k8s/rollout.md
+MM slides/k8s/rollout.md
 M  slides/k8s/shippingimages.md
-M  slides/k8s/volumes.md
+MM slides/k8s/volumes.md
 MM slides/kube-fullday-namespaced.yml
 M  slides/markmaker.py
-M  slides/namespaced/connecting.md
+MM slides/namespaced/connecting.md
 M  slides/namespaced/handson.md
 A  slides/namespaced/kubectlget.md
 M  slides/namespaced/ourapponkube.md
@@ -548,7 +548,7 @@ $ kubectl cluster-info
 .debug[[namespaced/connecting.md](https://github.com/paulczar/container.training/tree/jun-workshop/slides/namespaced/connecting.md)]
 ---
 
-## Role Based Authorization Control
+## Role Based Access Control
 
 As mentioned earlier, you are restricted to a subset of Kubernetes resources in your own namespace. Just like in a real world enterprise cluster.
 
@@ -5257,6 +5257,8 @@ class: extra-details
 
 ## That's it for `dockercoin` time to clean it up.
 
+.exercise[
+
 1. Delete the services
 
 ```execute
@@ -5269,6 +5271,7 @@ kubectl delete svc hasher redis rng webui
 kubectl delete deployment hasher redis rng webui worker
 ```
 
+]
 
 ???
 
@@ -5432,8 +5435,7 @@ It runs a single NGINX container.
 
 - Send a request with curl:
   ```bash
-  kubectl run shpod -i --tty --image=jpetazzo/shpod \
-   --restart=Never --rm -- curl -s $IPADDR
+  kubectl exec shpod -- curl -s $IPADDR
   ```
 
 ]
@@ -5505,8 +5507,7 @@ spec:
 
 - Send a request with curl:
   ```bash
-  kubectl run shpod -i --tty --image=jpetazzo/shpod --restart=Never \
-    --rm -- curl -s $IPADDR
+  kubectl exec shpod -- curl -s $IPADDR
   ```
 
 ]
@@ -5627,8 +5628,7 @@ spec:
 kubectl wait pod/nginx-with-git --for condition=initialized
 kubectl get pod nginx-with-git -o jsonpath={.status.podIP}
 IP=$(!!)
-kubectl run shpod -i --tty --image=jpetazzo/shpod \
-  --restart=Never --rm -- \
+kubectl exec shpod -- \
   /bin/sh -c "while ! curl -s $IP; do sleep 1; done"
   ```
 
@@ -5765,8 +5765,7 @@ spec:
   ```execute
   kubectl get pod nginx-with-init -o jsonpath={.status.podIP}
   IP=$(!!)
-  kubectl run shpod -i --tty --image=jpetazzo/shpod \
-    --restart=Never --rm -- \
+  kubectl exec shpod -- \
     /bin/sh -c "while ! curl -s $IP; do sleep 1; done"
   ```
 
@@ -6206,14 +6205,10 @@ We'll cover them just after!*
 
 .exercise[
 
-- Go to the `k8s` directory in the repository:
-  ```bash
-  cd ~/container.training/k8s
-  ```
-
 - Create a configmap named `haproxy` and holding the configuration file:
   ```bash
-  kubectl create configmap haproxy --from-file=haproxy.cfg
+  cat ~/container.training/k8s/haproxy.cfg
+  kubectl create configmap haproxy --from-file=!*
   ```
 
 - Check what our configmap looks like:
