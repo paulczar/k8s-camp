@@ -1,0 +1,6574 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Kubernetes for Admins and Ops </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="workshop.css">
+  </head>
+  <body>
+    <!--
+    <div style="position: absolute; left: 20%; right: 20%; top: 30%;">
+      <h1 style="font-size: 3em;">Loading ...</h1>
+      The slides should show up here. If they don't, it might be
+      because you are accessing this file directly from your filesystem.
+      It needs to be served from a web server. You can try this:
+      <pre>
+        docker-compose up -d
+        open http://localhost:8888/workshop.html # on MacOS
+        xdg-open http://localhost:8888/workshop.html # on Linux
+      </pre>
+      Once the slides are loaded, this notice disappears when you
+      go full screen (e.g. by hitting "f").
+    </div>
+    -->
+    <textarea id="source">class: title, self-paced
+
+Kubernetes<br/>for Admins and Ops<br/>
+
+.nav[*Self-paced version*]
+
+.debug[
+```
+ M slides/kube-fullday-namespaced.yml
+
+```
+
+These slides have been built from commit: df037cd
+
+
+[shared/title.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/shared/title.md)]
+---
+
+class: title, in-person
+
+Kubernetes<br/>for Admins and Ops<br/><br/></br>
+
+.footnote[
+**Slides[:](https://www.youtube.com/watch?v=h16zyxiwDLY) http://container.training/**
+]
+
+<!--
+WiFi: **Something**<br/>
+Password: **Something**
+
+**Be kind to the WiFi!**<br/>
+*Use the 5G network.*
+*Don't use your hotspot.*<br/>
+*Don't stream videos or download big files during the workshop*<br/>
+*Thank you!*
+-->
+
+.debug[[shared/title.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/shared/title.md)]
+---
+## Intros
+
+- This slide should be customized by the tutorial instructor(s).
+
+- Hello! We are:
+<ul>
+<li>👩🏻‍🏫 Ann O'Nymous <a href="https://twitter.com/annonypotomus">@annonypotomus</a>, Megacorp Inc
+<li>👨🏾‍🎓 Stu Dent <a href="https://twitter.com/stufromwakanda">@stufromwakanda</a>, University of Wakanda
+</ul>
+
+<!-- .dummy[
+   - .emoji[👩🏻‍🏫] Ann O'Nymous ([@...](https://twitter.com/...), Megacorp Inc)
+
+   - .emoji[👨🏾‍🎓] Stu Dent ([@...](https://twitter.com/...), University of Wakanda)
+
+   - .emoji[👷🏻‍♀️] AJ ([@s0ulshake](https://twitter.com/s0ulshake), Travis CI)
+
+   - .emoji[🚁] Alexandre ([@alexbuisine](https://twitter.com/alexbuisine), Enix SAS)
+
+   - .emoji[🐳] Jérôme ([@jpetazzo](https://twitter.com/jpetazzo), Enix SAS)
+
+   - .emoji[⛵] Jérémy ([@jeremygarrouste](twitter.com/jeremygarrouste), Inpiwee)
+
+   - .emoji[🎧] Romain ([@rdegez](https://twitter.com/rdegez), Enix SAS)
+
+] -->
+
+
+- The workshop will run from ...
+- There will be a lunch break at ...
+- Plus coffee breaks!
+
+- Feel free to interrupt for questions at any time
+
+- *Especially when you see full screen container pictures!*
+
+- Live feedback, questions, help: In person!
+
+.debug[[logistics.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/logistics.md)]
+---
+## A brief introduction
+
+- This was initially written by [Jérôme Petazzoni](https://twitter.com/jpetazzo) to support in-person,
+  instructor-led workshops and tutorials
+  
+- Credit is also due to [multiple contributors](https://github.com/jpetazzo/container.training/graphs/contributors) — thank you!
+
+- You can also follow along on your own, at your own pace
+
+- We included as much information as possible in these slides
+
+- We recommend having a mentor to help you ...
+
+- ... Or be comfortable spending some time reading the Kubernetes [documentation](https://kubernetes.io/docs/) ...
+
+- ... And looking for answers on [StackOverflow](http://stackoverflow.com/questions/tagged/kubernetes) and other outlets
+
+.debug[[k8s/intro.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/intro.md)]
+---
+
+class: self-paced
+
+## Hands on, you shall practice
+
+- Nobody ever became a Jedi by spending their lives reading Wookiepedia
+
+- Likewise, it will take more than merely *reading* these slides
+  to make you an expert
+
+- These slides include *tons* of exercises and examples
+
+- They assume that you have access to a Kubernetes cluster
+
+- If you are attending a workshop or tutorial:
+  <br/>you will be given specific instructions to access your cluster
+
+- If you are doing this on your own:
+  <br/>the first chapter will give you various options to get your own cluster
+
+.debug[[k8s/intro.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/intro.md)]
+---
+## Accessing these slides now
+
+- We recommend that you open these slides in your browser:
+
+  http://container.training/
+
+- Use arrows to move to next/previous slide
+
+  (up, down, left, right, page up, page down)
+
+- Type a slide number + ENTER to go to that slide
+
+- The slide number is also visible in the URL bar
+
+  (e.g. .../#123 for slide 123)
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/shared/about-slides.md)]
+---
+
+## Accessing these slides later
+
+- Slides will remain online so you can review them later if needed
+
+  (let's say we'll keep them online at least 1 year, how about that?)
+
+- You can download the slides using that URL:
+
+  http://container.training/slides.zip
+
+  (then open the file `kadm-fullday.yml.html`)
+
+- You will to find new versions of these slides on:
+
+  https://container.training/
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/shared/about-slides.md)]
+---
+
+## These slides are open source
+
+- You are welcome to use, re-use, share these slides
+
+- These slides are written in markdown
+
+- The sources of these slides are available in a public GitHub repository:
+
+  https://github.com/jpetazzo/container.training
+
+- Typos? Mistakes? Questions? Feel free to hover over the bottom of the slide ...
+
+.footnote[.emoji[👇] Try it! The source file will be shown and you can view it on GitHub and fork and edit it.]
+
+<!--
+.exercise[
+```open https://github.com/jpetazzo/container.training/tree/master/slides/common/about-slides.md```
+]
+-->
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/shared/about-slides.md)]
+---
+
+class: extra-details
+
+## Extra details
+
+- This slide has a little magnifying glass in the top left corner
+
+- This magnifying glass indicates slides that provide extra details
+
+- Feel free to skip them if:
+
+  - you are in a hurry
+
+  - you are new to this and want to avoid cognitive overload
+
+  - you want only the most essential information
+
+- You can review these slides another time if you want, they'll be waiting for you ☺
+
+.debug[[shared/about-slides.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/shared/about-slides.md)]
+---
+## Chat room
+
+- We've set up a chat room that we will monitor during the workshop
+
+- Don't hesitate to use it to ask questions, or get help, or share feedback
+
+- The chat room will also be available after the workshop
+
+- Join the chat room: In person!
+
+- Say hi in the chat room!
+
+.debug[[shared/chat-room-im.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/shared/chat-room-im.md)]
+---
+
+name: toc-module-1
+
+## Module 1
+
+- [Pre-requirements](#toc-pre-requirements)
+
+- [Kubernetes architecture](#toc-kubernetes-architecture)
+
+- [The Kubernetes API](#toc-the-kubernetes-api)
+
+- [Other control plane components](#toc-other-control-plane-components)
+
+- [Building our own cluster](#toc-building-our-own-cluster)
+
+.debug[(auto-generated TOC)]
+---
+name: toc-module-2
+
+## Module 2
+
+- [Adding nodes to the cluster](#toc-adding-nodes-to-the-cluster)
+
+- [The Container Network Interface](#toc-the-container-network-interface)
+
+- [Interconnecting clusters](#toc-interconnecting-clusters)
+
+.debug[(auto-generated TOC)]
+---
+name: toc-module-3
+
+## Module 3
+
+- [API server availability](#toc-api-server-availability)
+
+- [Upgrading clusters](#toc-upgrading-clusters)
+
+- [Backing up clusters](#toc-backing-up-clusters)
+
+- [Static pods](#toc-static-pods)
+
+.debug[(auto-generated TOC)]
+---
+name: toc-module-4
+
+## Module 4
+
+- [Securing the control plane](#toc-securing-the-control-plane)
+
+- [Pod Security Policies](#toc-pod-security-policies)
+
+- [The CSR API](#toc-the-csr-api)
+
+- [OpenID Connect](#toc-openid-connect)
+
+.debug[(auto-generated TOC)]
+---
+name: toc-module-5
+
+## Module 5
+
+- [Links and resources](#toc-links-and-resources)
+
+.debug[(auto-generated TOC)]
+
+
+
+.debug[[shared/toc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/shared/toc.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/Container-Ship-Freighter-Navigation-Elbe-Romance-1782991.jpg)]
+
+---
+
+name: toc-pre-requirements
+class: title
+
+ Pre-requirements
+
+.nav[
+[Previous section](#toc-)
+|
+[Back to table of contents](#toc-module-1)
+|
+[Next section](#toc-kubernetes-architecture)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Pre-requirements
+
+- Kubernetes concepts
+
+  (pods, deployments, services, labels, selectors)
+
+- Hands-on experience working with containers
+
+  (building images, running them; doesn't matter how exactly)
+
+- Familiar with the UNIX command-line
+
+  (navigating directories, editing files, using `kubectl`)
+
+.debug[[k8s/prereqs-admin.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/prereqs-admin.md)]
+---
+
+## Labs and exercises
+
+- We are going to build and break multiple clusters
+
+- Everyone will get their own private environment(s)
+
+- You are invited to reproduce all the demos (but you don't have to)
+
+- All hands-on sections are clearly identified, like the gray rectangle below
+
+.exercise[
+
+- This is the stuff you're supposed to do!
+
+- Go to http://container.training/ to view these slides
+
+<!-- ```open http://container.training/``` -->
+
+]
+
+.debug[[k8s/prereqs-admin.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/prereqs-admin.md)]
+---
+
+## Private environments
+
+- Each person gets their own private set of VMs
+
+- Each person should have a printed card with connection information
+
+- We will connect to these VMs with SSH
+
+  (if you don't have an SSH client, install one **now!**)
+
+.debug[[k8s/prereqs-admin.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/prereqs-admin.md)]
+---
+
+## Doing or re-doing this on your own?
+
+- We are using basic cloud VMs with Ubuntu LTS
+
+- Kubernetes [packages] or [binaries] have been installed
+
+  (depending on what we want to accomplish in the lab)
+
+- We disabled IP address checks
+
+  - we want to route pod traffic directly between nodes
+
+  - most cloud providers will treat pod IP addresses as invalid
+
+  - ... and filter them out; so we disable that filter
+
+[packages]: https://kubernetes.io/docs/setup/independent/install-kubeadm/#installing-kubeadm-kubelet-and-kubectl
+
+[binaries]: https://kubernetes.io/docs/setup/release/notes/#server-binaries
+
+.debug[[k8s/prereqs-admin.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/prereqs-admin.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/ShippingContainerSFBay.jpg)]
+
+---
+
+name: toc-kubernetes-architecture
+class: title
+
+ Kubernetes architecture
+
+.nav[
+[Previous section](#toc-pre-requirements)
+|
+[Back to table of contents](#toc-module-1)
+|
+[Next section](#toc-the-kubernetes-api)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Kubernetes architecture
+
+We can arbitrarily split Kubernetes in two parts:
+
+- the *nodes*, a set of machines that run our containerized workloads;
+
+- the *control plane*, a set of processes implementing the Kubernetes APIs.
+
+Kubernetes also relies on underlying infrastructure:
+
+- servers, network connectivity (obviously!),
+
+- optional components like storage systems, load balancers ...
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## Control plane location
+
+The control plane can run:
+
+- in containers, on the same nodes that run other application workloads
+
+  (example: [Minikube](https://github.com/kubernetes/minikube); 1 node runs everything, [kind](https://kind.sigs.k8s.io/))
+
+- on a dedicated node
+
+  (example: a cluster installed with kubeadm)
+
+- on a dedicated set of nodes
+
+  (example: [Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way); [kops](https://github.com/kubernetes/kops))
+
+- outside of the cluster
+
+  (example: most managed clusters like AKS, EKS, GKE)
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+class: pic
+
+![Kubernetes architecture diagram: control plane and nodes](images/k8s-arch2.png)
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## What runs on a node
+
+- Our containerized workloads
+
+- A container engine like Docker, CRI-O, containerd...
+
+  (in theory, the choice doesn't matter, as the engine is abstracted by Kubernetes)
+
+- kubelet: an agent connecting the node to the cluster
+
+  (it connects to the API server, registers the node, receives instructions)
+
+- kube-proxy: a component used for internal cluster communication
+
+  (note that this is *not* an overlay network or a CNI plugin!)
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## What's in the control plane
+
+- Everything is stored in etcd
+
+  (it's the only stateful component)
+
+- Everyone communicates exclusively through the API server:
+
+  - we (users) interact with the cluster through the API server
+
+  - the nodes register and get their instructions through the API server
+
+  - the other control plane components also register with the API server
+
+- API server is the only component that reads/writes from/to etcd
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## Communication protocols: API server
+
+- The API server exposes a REST API
+
+  (except for some calls, e.g. to attach interactively to a container)
+
+- Almost all requests and responses are JSON following a strict format
+
+- For performance, the requests and responses can also be done over protobuf
+
+  (see this [design proposal](https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/protobuf.md) for details)
+
+- In practice, protobuf is used for all internal communication
+
+  (between control plane components, and with kubelet)
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## Communication protocols: on the nodes
+
+The kubelet agent uses a number of special-purpose protocols and interfaces, including:
+
+- CRI (Container Runtime Interface)
+
+  - used for communication with the container engine
+  - abstracts the differences between container engines
+  - based on gRPC+protobuf
+
+- [CNI (Container Network Interface)](https://github.com/containernetworking/cni/blob/master/SPEC.md)
+
+  - used for communication with network plugins
+  - network plugins are implemented as executable programs invoked by kubelet
+  - network plugins provide IPAM
+  - network plugins set up network interfaces in pods
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+class: pic
+
+![Kubernetes architecture diagram: communication between components](images/k8s-arch4-thanks-luxas.png)
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/aerial-view-of-containers.jpg)]
+
+---
+
+name: toc-the-kubernetes-api
+class: title
+
+ The Kubernetes API
+
+.nav[
+[Previous section](#toc-kubernetes-architecture)
+|
+[Back to table of contents](#toc-module-1)
+|
+[Next section](#toc-other-control-plane-components)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+# The Kubernetes API
+
+[
+*The Kubernetes API server is a "dumb server" which offers storage, versioning, validation, update, and watch semantics on API resources.*
+](
+https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/protobuf.md#proposal-and-motivation
+)
+
+([Clayton Coleman](https://twitter.com/smarterclayton), Kubernetes Architect and Maintainer)
+
+What does that mean?
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## The Kubernetes API is declarative
+
+- We cannot tell the API, "run a pod"
+
+- We can tell the API, "here is the definition for pod X"
+
+- The API server will store that definition (in etcd)
+
+- *Controllers* will then wake up and create a pod matching the definition
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## The core features of the Kubernetes API
+
+- We can create, read, update, and delete objects
+
+- We can also *watch* objects
+
+  (be notified when an object changes, or when an object of a given type is created)
+
+- Objects are strongly typed
+
+- Types are *validated* and *versioned*
+
+- Storage and watch operations are provided by etcd
+
+  (note: the [k3s](https://k3s.io/) project allows us to use sqlite instead of etcd)
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## Let's experiment a bit!
+
+- For the exercises in this section, connect to the first node of the `test` cluster
+
+.exercise[
+
+- SSH to the first node of the test cluster
+
+- Check that the cluster is operational:
+  ```bash
+  kubectl get nodes
+  ```
+
+- All nodes should be `Ready`
+
+]
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## Create
+
+- Let's create a simple object
+
+.exercise[
+
+- Create a namespace with the following command:
+  ```bash
+    kubectl create -f- <<EOF
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: hello
+    EOF
+  ```
+
+]
+
+This is equivalent to `kubectl create namespace hello`.
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## Read
+
+- Let's retrieve the object we just created
+
+.exercise[
+
+- Read back our object:
+  ```bash
+  kubectl get namespace hello -o yaml
+  ```
+
+]
+
+We see a lot of data that wasn't here when we created the object.
+
+Some data was automatically added to the object (like `spec.finalizers`).
+
+Some data is dynamic (typically, the content of `status`.)
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## API requests and responses
+
+- Almost every Kubernetes API payload (requests and responses) has the same format:
+  ```yaml
+    apiVersion: xxx
+    kind: yyy
+    metadata:
+      name: zzz
+      (more metadata fields here)
+    (more fields here)
+  ```
+
+- The fields shown above are mandatory, except for some special cases
+
+  (e.g.: in lists of resources, the list itself doesn't have a `metadata.name`)
+
+- We show YAML for convenience, but the API uses JSON
+
+  (with optional protobuf encoding)
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+class: extra-details
+
+## API versions
+
+- The `apiVersion` field corresponds to an *API group*
+
+- It can be either `v1` (aka "core" group or "legacy group"), or `group/versions`; e.g.:
+
+  - `apps/v1`
+  - `rbac.authorization.k8s.io/v1`
+  - `extensions/v1beta1`
+
+- It does not indicate which version of Kubernetes we're talking about
+
+- It *indirectly* indicates the version of the `kind`
+
+  (which fields exist, their format, which ones are mandatory...)
+
+- A single resource type (`kind`) is rarely versioned alone
+
+  (e.g.: the `batch` API group contains `jobs` and `cronjobs`)
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## Update
+
+- Let's update our namespace object
+
+- There are many ways to do that, including:
+
+  - `kubectl apply` (and provide an updated YAML file)
+  - `kubectl edit`
+  - `kubectl patch`
+  - many helpers, like `kubectl label`, or `kubectl set`
+
+- In each case, `kubectl` will:
+
+  - get the current definition of the object
+  - compute changes
+  - submit the changes (with `PATCH` requests)
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## Adding a label
+
+- For demonstration purposes, let's add a label to the namespace
+
+- The easiest way is to use `kubectl label`
+
+.exercise[
+
+- In one terminal, watch namespaces:
+  ```bash
+  kubectl get namespaces --show-labels -w
+  ```
+
+- In the other, update our namespace:
+  ```bash
+  kubectl label namespaces hello color=purple
+  ```
+
+]
+
+We demonstrated *update* and *watch* semantics.
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## What's special about *watch*?
+
+- The API server itself doesn't do anything: it's just a fancy object store
+
+- All the actual logic in Kubernetes is implemented with *controllers*
+
+- A *controller* watches a set of resources, and takes action when they change
+
+- Examples:
+
+  - when a Pod object is created, it gets scheduled and started
+
+  - when a Pod belonging to a ReplicaSet terminates, it gets replaced
+
+  - when a Deployment object is updated, it can trigger a rolling update
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/blue-containers.jpg)]
+
+---
+
+name: toc-other-control-plane-components
+class: title
+
+ Other control plane components
+
+.nav[
+[Previous section](#toc-the-kubernetes-api)
+|
+[Back to table of contents](#toc-module-1)
+|
+[Next section](#toc-building-our-own-cluster)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+
+# Other control plane components
+
+- API server ✔️
+
+- etcd ✔️
+
+- Controller manager
+
+- Scheduler
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## Controller manager
+
+- This is a collection of loops watching all kinds of objects
+
+- That's where the actual logic of Kubernetes lives
+
+- When we create a Deployment (e.g. with `kubectl create deployment web --image=nginx`),
+
+  - we create a Deployment object
+
+  - the Deployment controller notices it, and creates a ReplicaSet
+
+  - the ReplicaSet controller notices the ReplicaSet, and creates a Pod
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+
+## Scheduler
+
+- When a pod is created, it is in `Pending` state
+
+- The scheduler (or rather: *a scheduler*) must bind it to a node
+
+  - Kubernetes comes with an efficient scheduler with many features
+
+  - if we have special requirements, we can add another scheduler
+    <br/>
+    (example: this [demo scheduler](https://github.com/kelseyhightower/scheduler) uses the cost of nodes, stored in node annotations)
+
+- A pod might stay in `Pending` state for a long time:
+
+  - if the cluster is full
+
+  - if the pod has special constraints that can't be met
+
+  - if the scheduler is not running (!)
+
+???
+
+:EN:- Kubernetes architecture review
+:FR:- Passage en revue de l'architecture de Kubernetes
+
+.debug[[k8s/architecture.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/architecture.md)]
+---
+## 19,000 words
+
+They say, "a picture is worth one thousand words."
+
+The following 19 slides show what really happens when we run:
+
+```bash
+kubectl create deployment web --image=nginx
+```
+
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/01.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/02.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/03.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/04.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/05.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/06.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/07.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/08.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/09.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/10.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/11.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/12.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/13.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/14.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/15.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/16.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/17.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/18.svg)
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+class: pic
+![](images/kubectl-create-deployment-slideshow/19.svg)
+
+.debug[[k8s/deploymentslideshow.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/deploymentslideshow.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/chinook-helicopter-container.jpg)]
+
+---
+
+name: toc-building-our-own-cluster
+class: title
+
+ Building our own cluster
+
+.nav[
+[Previous section](#toc-other-control-plane-components)
+|
+[Back to table of contents](#toc-module-1)
+|
+[Next section](#toc-adding-nodes-to-the-cluster)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Building our own cluster
+
+- Let's build our own cluster!
+
+  *Perfection is attained not when there is nothing left to add, but when there is nothing left to take away. (Antoine de Saint-Exupery)*
+
+- Our goal is to build a minimal cluster allowing us to:
+
+  - create a Deployment (with `kubectl create deployment`)
+  - expose it with a Service
+  - connect to that service
+
+
+- "Minimal" here means:
+
+  - smaller number of components
+  - smaller number of command-line flags
+  - smaller number of configuration files
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Non-goals
+
+- For now, we don't care about security
+
+- For now, we don't care about scalability
+
+- For now, we don't care about high availability
+
+- All we care about is *simplicity*
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Our environment
+
+- We will use the machine indicated as `dmuc1`
+
+  (this stands for "Dessine Moi Un Cluster" or "Draw Me A Sheep",
+  <br/>in homage to Saint-Exupery's "The Little Prince")
+
+- This machine:
+
+  - runs Ubuntu LTS
+
+  - has Kubernetes, Docker, and etcd binaries installed
+
+  - but nothing is running
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Checking our environment
+
+- Let's make sure we have everything we need first
+
+.exercise[
+
+- Log into the `dmuc1` machine
+
+- Get root:
+  ```bash
+  sudo -i
+  ```
+
+- Check available versions:
+  ```bash
+  etcd -version
+  kube-apiserver --version
+  dockerd --version
+  ```
+
+]
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## The plan
+
+1. Start API server
+
+2. Interact with it (create Deployment and Service)
+
+3. See what's broken
+
+4. Fix it and go back to step 2 until it works!
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Dealing with multiple processes
+
+- We are going to start many processes
+
+- Depending on what you're comfortable with, you can:
+
+  - open multiple windows and multiple SSH connections
+
+  - use a terminal multiplexer like screen or tmux
+
+  - put processes in the background with `&`
+    <br/>(warning: log output might get confusing to read!)
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Starting API server
+
+.exercise[
+
+- Try to start the API server:
+  ```bash
+  kube-apiserver
+  # It will fail with "--etcd-servers must be specified"
+  ```
+
+]
+
+Since the API server stores everything in etcd,
+it cannot start without it.
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Starting etcd
+
+.exercise[
+
+- Try to start etcd:
+  ```bash
+  etcd
+  ```
+
+]
+
+Success!
+
+Note the last line of output:
+```
+serving insecure client requests on 127.0.0.1:2379, this is strongly discouraged!
+```
+
+*Sure, that's discouraged. But thanks for telling us the address!*
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Starting API server (for real)
+
+- Try again, passing the `--etcd-servers` argument
+
+- That argument should be a comma-separated list of URLs
+
+.exercise[
+
+- Start API server:
+  ```bash
+  kube-apiserver --etcd-servers http://127.0.0.1:2379
+  ```
+
+]
+
+Success!
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Interacting with API server
+
+- Let's try a few "classic" commands
+
+.exercise[
+
+- List nodes:
+  ```bash
+  kubectl get nodes
+  ```
+
+- List services:
+  ```bash
+  kubectl get services
+  ```
+
+]
+
+We should get `No resources found.` and the `kubernetes` service, respectively.
+
+Note: the API server automatically created the `kubernetes` service entry.
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+class: extra-details
+
+## What about `kubeconfig`?
+
+- We didn't need to create a `kubeconfig` file
+
+- By default, the API server is listening on `localhost:8080`
+
+  (without requiring authentication)
+
+- By default, `kubectl` connects to `localhost:8080`
+
+  (without providing authentication)
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Creating a Deployment
+
+- Let's run a web server!
+
+.exercise[
+
+- Create a Deployment with NGINX:
+  ```bash
+  kubectl create deployment web --image=nginx
+  ```
+
+]
+
+Success?
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Checking our Deployment status
+
+.exercise[
+
+- Look at pods, deployments, etc.:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+Our Deployment is in bad shape:
+```
+NAME                  READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/web   0/1     0            0           2m26s
+```
+
+And, there is no ReplicaSet, and no Pod.
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## What's going on?
+
+- We stored the definition of our Deployment in etcd
+
+  (through the API server)
+
+- But there is no *controller* to do the rest of the work
+
+- We need to start the *controller manager*
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Starting the controller manager
+
+.exercise[
+
+- Try to start the controller manager:
+  ```bash
+  kube-controller-manager
+  ```
+
+]
+
+The final error message is:
+```
+invalid configuration: no configuration has been provided
+```
+
+But the logs include another useful piece of information:
+```
+Neither --kubeconfig nor --master was specified.
+Using the inClusterConfig.  This might not work.
+```
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Reminder: everyone talks to API server
+
+- The controller manager needs to connect to the API server
+
+- It *does not* have a convenient `localhost:8080` default
+
+- We can pass the connection information in two ways:
+
+  - `--master` and a host:port combination (easy)
+
+  - `--kubeconfig` and a `kubeconfig` file
+
+- For simplicity, we'll use the first option
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Starting the controller manager (for real)
+
+.exercise[
+
+- Start the controller manager:
+  ```bash
+  kube-controller-manager --master http://localhost:8080
+  ```
+
+]
+
+Success!
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Checking our Deployment status
+
+.exercise[
+
+- Check all our resources again:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+We now have a ReplicaSet.
+
+But we still don't have a Pod.
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## What's going on?
+
+In the controller manager logs, we should see something like this:
+```
+E0404 15:46:25.753376   22847 replica_set.go:450] Sync "default/web-5bc9bd5b8d"
+failed with `No API token found for service account "default"`, retry after the
+token is automatically created and added to the service account
+```
+
+- The service account `default` was automatically added to our Deployment
+
+  (and to its pods)
+
+- The service account `default` exists
+
+- But it doesn't have an associated token
+
+  (the token is a secret; creating it requires signature; therefore a CA)
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Solving the missing token issue
+
+There are many ways to solve that issue.
+
+We are going to list a few (to get an idea of what's happening behind the scenes).
+
+Of course, we don't need to perform *all* the solutions mentioned here.
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Option 1: disable service accounts
+
+- Restart the API server with
+  `--disable-admission-plugins=ServiceAccount`
+
+- The API server will no longer add a service account automatically
+
+- Our pods will be created without a service account
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Option 2: do not mount the (missing) token
+
+- Add `automountServiceAccountToken: false` to the Deployment spec
+
+  *or*
+
+- Add `automountServiceAccountToken: false` to the default ServiceAccount
+
+- The ReplicaSet controller will no longer create pods referencing the (missing) token
+
+.exercise[
+
+- Programmatically change the `default` ServiceAccount:
+  ```bash
+  kubectl patch sa default -p "automountServiceAccountToken: false"
+  ```
+
+]
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Option 3: set up service accounts properly
+
+- This is the most complex option!
+
+- Generate a key pair
+
+- Pass the private key to the controller manager
+
+  (to generate and sign tokens)
+
+- Pass the public key to the API server
+
+  (to verify these tokens)
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Continuing without service account token
+
+- Once we patch the default service account, the ReplicaSet can create a Pod
+
+.exercise[
+
+- Check that we now have a pod:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+Note: we might have to wait a bit for the ReplicaSet controller to retry.
+
+If we're impatient, we can restart the controller manager.
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## What's next?
+
+- Our pod exists, but it is in `Pending` state
+
+- Remember, we don't have a node so far
+
+  (`kubectl get nodes` shows an empty list)
+
+- We need to:
+
+  - start a container engine
+
+  - start kubelet
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Starting a container engine
+
+- We're going to use Docker (because it's the default option)
+
+.exercise[
+
+- Start the Docker Engine:
+  ```bash
+  dockerd
+  ```
+
+]
+
+Success!
+
+Feel free to check that it actually works with e.g.:
+```bash
+docker run alpine echo hello world
+```
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Starting kubelet
+
+- If we start kubelet without arguments, it *will* start
+
+- But it will not join the cluster!
+
+- It will start in *standalone* mode
+
+- Just like with the controller manager, we need to tell kubelet where the API server is
+
+- Alas, kubelet doesn't have a simple `--master` option
+
+- We have to use `--kubeconfig`
+
+- We need to write a `kubeconfig` file for kubelet
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Writing a kubeconfig file
+
+- We can copy/paste a bunch of YAML
+
+- Or we can generate the file with `kubectl`
+
+.exercise[
+
+- Create the file `~/.kube/config` with `kubectl`:
+  ```bash
+    kubectl config \
+            set-cluster localhost --server http://localhost:8080
+    kubectl config \
+            set-context localhost --cluster localhost
+    kubectl config \
+            use-context localhost
+  ```
+
+]
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Our `~/.kube/config` file
+
+The file that we generated looks like the one below.
+
+That one has been slightly simplified (removing extraneous fields), but it is still valid.
+
+```yaml
+apiVersion: v1
+kind: Config
+current-context: localhost
+contexts:
+- name: localhost
+  context:
+    cluster: localhost
+clusters:
+- name: localhost
+  cluster:
+    server: http://localhost:8080
+```
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Starting kubelet
+
+.exercise[
+
+- Start kubelet with that kubeconfig file:
+  ```bash
+  kubelet --kubeconfig ~/.kube/config
+  ```
+
+]
+
+Success!
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Looking at our 1-node cluster
+
+- Let's check that our node registered correctly
+
+.exercise[
+
+- List the nodes in our cluster:
+  ```bash
+  kubectl get nodes
+  ```
+
+]
+
+Our node should show up.
+
+Its name will be its hostname (it should be `dmuc1`).
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Are we there yet?
+
+- Let's check if our pod is running
+
+.exercise[
+
+- List all resources:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+--
+
+Our pod is still `Pending`. 🤔
+
+--
+
+Which is normal: it needs to be *scheduled*.
+
+(i.e., something needs to decide which node it should go on.)
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Scheduling our pod
+
+- Why do we need a scheduling decision, since we have only one node?
+
+- The node might be full, unavailable; the pod might have constraints ...
+
+- The easiest way to schedule our pod is to start the scheduler
+
+  (we could also schedule it manually)
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Starting the scheduler
+
+- The scheduler also needs to know how to connect to the API server
+
+- Just like for controller manager, we can use `--kubeconfig` or `--master`
+
+.exercise[
+
+- Start the scheduler:
+  ```bash
+  kube-scheduler --master http://localhost:8080
+  ```
+
+]
+
+- Our pod should now start correctly
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Checking the status of our pod
+
+- Our pod will go through a short `ContainerCreating` phase
+
+- Then it will be `Running`
+
+.exercise[
+
+- Check pod status:
+  ```bash
+  kubectl get pods
+  ```
+
+]
+
+Success!
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+class: extra-details
+
+## Scheduling a pod manually
+
+- We can schedule a pod in `Pending` state by creating a Binding, e.g.:
+  ```bash
+    kubectl create -f- <<EOF
+    apiVersion: v1
+    kind: Binding
+    metadata:
+      name: name-of-the-pod
+    target:
+      apiVersion: v1
+      kind: Node
+      name: name-of-the-node
+    EOF
+  ```
+
+- This is actually how the scheduler works!
+
+- It watches pods, makes scheduling decisions, and creates Binding objects
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Connecting to our pod
+
+- Let's check that our pod correctly runs NGINX
+
+.exercise[
+
+- Check our pod's IP address:
+  ```bash
+  kubectl get pods -o wide
+  ```
+
+- Send some HTTP request to the pod:
+  ```bash
+  curl `X.X.X.X`
+  ```
+
+]
+
+We should see the `Welcome to nginx!` page.
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Exposing our Deployment
+
+- We can now create a Service associated with this Deployment
+
+.exercise[
+
+- Expose the Deployment's port 80:
+  ```bash
+  kubectl expose deployment web --port=80
+  ```
+
+- Check the Service's ClusterIP, and try connecting:
+  ```bash
+  kubectl get service web
+  curl http://`X.X.X.X`
+  ```
+
+]
+
+--
+
+This won't work. We need kube-proxy to enable internal communication.
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Starting kube-proxy
+
+- kube-proxy also needs to connect to the API server
+
+- It can work with the `--master` flag
+
+  (although that will be deprecated in the future)
+
+.exercise[
+
+- Start kube-proxy:
+  ```bash
+  kube-proxy --master http://localhost:8080
+  ```
+
+]
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+## Connecting to our Service
+
+- Now that kube-proxy is running, we should be able to connect
+
+.exercise[
+
+- Check the Service's ClusterIP again, and retry connecting:
+  ```bash
+  kubectl get service web
+  curl http://`X.X.X.X`
+  ```
+
+]
+
+Success!
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+class: extra-details
+
+## How kube-proxy works
+
+- kube-proxy watches Service resources
+
+- When a Service is created or updated, kube-proxy creates iptables rules
+
+.exercise[
+
+- Check out the `OUTPUT` chain in the `nat` table:
+  ```bash
+  iptables -t nat -L OUTPUT
+  ```
+
+- Traffic is sent to `KUBE-SERVICES`; check that too:
+  ```bash
+  iptables -t nat -L KUBE-SERVICES
+  ```
+
+]
+
+For each Service, there is an entry in that chain.
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+class: extra-details
+
+## Diving into iptables
+
+- The last command showed a chain named `KUBE-SVC-...` corresponding to our service
+
+.exercise[
+
+- Check that `KUBE-SVC-...` chain:
+  ```bash
+  iptables -t nat -L `KUBE-SVC-...`
+  ```
+
+- It should show a jump to a `KUBE-SEP-...` chains; check it out too:
+  ```bash
+  iptables -t nat -L `KUBE-SEP-...`
+  ```
+
+]
+
+This is a `DNAT` rule to rewrite the destination address of the connection to our pod.
+
+This is how kube-proxy works!
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+class: extra-details
+
+## kube-router, IPVS
+
+- With recent versions of Kubernetes, it is possible to tell kube-proxy to use IPVS
+
+- IPVS is a more powerful load balancing framework
+
+  (remember: iptables was primarily designed for firewalling, not load balancing!)
+
+- It is also possible to replace kube-proxy with kube-router
+
+- kube-router uses IPVS by default
+
+- kube-router can also perform other functions
+
+  (e.g., we can use it as a CNI plugin to provide pod connectivity)
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+class: extra-details
+
+## What about the `kubernetes` service?
+
+- If we try to connect, it won't work
+
+  (by default, it should be `10.0.0.1`)
+
+- If we look at the Endpoints for this service, we will see one endpoint:
+
+  `host-address:6443`
+
+- By default, the API server expects to be running directly on the nodes
+
+  (it could be as a bare process, or in a container/pod using the host network)
+
+- ... And it expects to be listening on port 6443 with TLS
+
+???
+
+:EN:- Building our own cluster from scratch
+:FR:- Construire son cluster à la main
+
+.debug[[k8s/dmuc.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/dmuc.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/container-cranes.jpg)]
+
+---
+
+name: toc-adding-nodes-to-the-cluster
+class: title
+
+ Adding nodes to the cluster
+
+.nav[
+[Previous section](#toc-building-our-own-cluster)
+|
+[Back to table of contents](#toc-module-2)
+|
+[Next section](#toc-the-container-network-interface)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Adding nodes to the cluster
+
+- So far, our cluster has only 1 node
+
+- Let's see what it takes to add more nodes
+
+- We are going to use another set of machines: `kubenet`
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## The environment
+
+- We have 3 identical machines: `kubenet1`, `kubenet2`, `kubenet3`
+
+- The Docker Engine is installed (and running) on these machines
+
+- The Kubernetes packages are installed, but nothing is running
+
+- We will use `kubenet1` to run the control plane
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## The plan
+
+- Start the control plane on `kubenet1`
+
+- Join the 3 nodes to the cluster
+
+- Deploy and scale a simple web server
+
+.exercise[
+
+- Log into `kubenet1`
+
+]
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Running the control plane
+
+- We will use a Compose file to start the control plane components
+
+.exercise[
+
+- Clone the repository containing the workshop materials:
+  ```bash
+  git clone https://github.com/jpetazzo/container.training
+  ```
+
+- Go to the `compose/simple-k8s-control-plane` directory:
+  ```bash
+  cd container.training/compose/simple-k8s-control-plane
+  ```
+
+- Start the control plane:
+  ```bash
+  docker-compose up
+  ```
+
+]
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Checking the control plane status
+
+- Before moving on, verify that the control plane works
+
+.exercise[
+
+- Show control plane component statuses:
+  ```bash
+  kubectl get componentstatuses
+  kubectl get cs
+  ```
+
+- Show the (empty) list of nodes:
+  ```bash
+  kubectl get nodes
+  ```
+
+]
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+class: extra-details
+
+## Differences from `dmuc`
+
+- Our new control plane listens on `0.0.0.0` instead of the default `127.0.0.1`
+
+- The ServiceAccount admission plugin is disabled
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Joining the nodes
+
+- We need to generate a `kubeconfig` file for kubelet
+
+- This time, we need to put the public IP address of `kubenet1`
+
+  (instead of `localhost` or `127.0.0.1`)
+
+.exercise[
+
+- Generate the `kubeconfig` file:
+  ```bash
+    kubectl config set-cluster kubenet --server http://`X.X.X.X`:8080
+    kubectl config set-context kubenet --cluster kubenet
+    kubectl config use-context kubenet
+    cp ~/.kube/config ~/kubeconfig
+  ```
+
+]
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Distributing the `kubeconfig` file
+
+- We need that `kubeconfig` file on the other nodes, too
+
+.exercise[
+
+- Copy `kubeconfig` to the other nodes:
+  ```bash
+    for N in 2 3; do
+    	scp ~/kubeconfig kubenet$N:
+    done
+  ```
+
+]
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Starting kubelet
+
+- Reminder: kubelet needs to run as root; don't forget `sudo`!
+
+.exercise[
+
+- Join the first node:
+   ```bash
+   sudo kubelet --kubeconfig ~/kubeconfig
+   ```
+
+- Open more terminals and join the other nodes to the cluster:
+  ```bash
+  ssh kubenet2 sudo kubelet --kubeconfig ~/kubeconfig
+  ssh kubenet3 sudo kubelet --kubeconfig ~/kubeconfig
+  ```
+
+]
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Checking cluster status
+
+- We should now see all 3 nodes
+
+- At first, their `STATUS` will be `NotReady`
+
+- They will move to `Ready` state after approximately 10 seconds
+
+.exercise[
+
+- Check the list of nodes:
+  ```bash
+  kubectl get nodes
+  ```
+
+]
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Deploy a web server
+
+- Let's create a Deployment and scale it
+
+  (so that we have multiple pods on multiple nodes)
+
+.exercise[
+
+- Create a Deployment running NGINX:
+  ```bash
+  kubectl create deployment web --image=nginx
+  ```
+
+- Scale it:
+  ```bash
+  kubectl scale deployment web --replicas=5
+  ```
+
+]
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Check our pods
+
+- The pods will be scheduled on the nodes
+
+- The nodes will pull the `nginx` image, and start the pods
+
+- What are the IP addresses of our pods?
+
+.exercise[
+
+- Check the IP addresses of our pods
+  ```bash
+  kubectl get pods -o wide
+  ```
+
+]
+
+--
+
+🤔 Something's not right ... Some pods have the same IP address!
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## What's going on?
+
+- Without the `--network-plugin` flag, kubelet defaults to "no-op" networking
+
+- It lets the container engine use a default network
+
+  (in that case, we end up with the default Docker bridge)
+
+- Our pods are running on independent, disconnected, host-local networks
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## What do we need to do?
+
+- On a normal cluster, kubelet is configured to set up pod networking with CNI plugins
+
+- This requires:
+
+  - installing CNI plugins
+
+  - writing CNI configuration files
+
+  - running kubelet with `--network-plugin=cni`
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Using network plugins
+
+- We need to set up a better network
+
+- Before diving into CNI, we will use the `kubenet` plugin
+
+- This plugin creates a `cbr0` bridge and connects the containers to that bridge
+
+- This plugin allocates IP addresses from a range:
+
+  - either specified to kubelet (e.g. with `--pod-cidr`)
+
+  - or stored in the node's `spec.podCIDR` field
+
+.footnote[See [here] for more details about this `kubenet` plugin.]
+
+[here]: https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/#kubenet
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## What `kubenet` does and *does not* do
+
+- It allocates IP addresses to pods *locally*
+
+  (each node has its own local subnet)
+
+- It connects the pods to a *local* bridge
+
+  (pods on the same node can communicate together; not with other nodes)
+
+- It doesn't set up routing or tunneling
+
+  (we get pods on separated networks; we need to connect them somehow)
+
+- It doesn't allocate subnets to nodes
+
+  (this can be done manually, or by the controller manager) 
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Setting up routing or tunneling
+
+- *On each node*, we will add routes to the other nodes' pod network
+
+- Of course, this is not convenient or scalable!
+
+- We will see better techniques to do this; but for now, hang on!
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Allocating subnets to nodes
+
+- There are multiple options:
+
+  - passing the subnet to kubelet with the `--pod-cidr` flag
+
+  - manually setting `spec.podCIDR` on each node
+
+  - allocating node CIDRs automatically with the controller manager
+
+- The last option would be implemented by adding these flags to controller manager:
+  ```
+  --allocate-node-cidrs=true --cluster-cidr=<cidr> 
+  ```
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+class: extra-details
+
+## The pod CIDR field is not mandatory
+
+- `kubenet` needs the pod CIDR, but other plugins don't need it
+
+  (e.g. because they allocate addresses in multiple pools, or a single big one)
+
+- The pod CIDR field may eventually be deprecated and replaced by an annotation
+
+  (see [kubernetes/kubernetes#57130](https://github.com/kubernetes/kubernetes/issues/57130))
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Restarting kubelet wih pod CIDR
+
+- We need to stop and restart all our kubelets
+
+- We will add the `--network-plugin` and `--pod-cidr` flags
+
+- We all have a "cluster number" (let's call that `C`) printed on your VM info card
+
+- We will use pod CIDR `10.C.N.0/24` (where `N` is the node number: 1, 2, 3)
+
+.exercise[
+
+- Stop all the kubelets (Ctrl-C is fine)
+
+- Restart them all, adding `--network-plugin=kubenet --pod-cidr 10.C.N.0/24`
+
+]
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## What happens to our pods?
+
+- When we stop (or kill) kubelet, the containers keep running
+
+- When kubelet starts again, it detects the containers
+
+.exercise[
+
+- Check that our pods are still here:
+  ```bash
+  kubectl get pods -o wide
+  ```
+
+]
+
+🤔 But our pods still use local IP addresses!
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Recreating the pods
+
+- The IP address of a pod cannot change
+
+- kubelet doesn't automatically kill/restart containers with "invalid" addresses
+  <br/>
+  (in fact, from kubelet's point of view, there is no such thing as an "invalid" address)
+
+- We must delete our pods and recreate them
+
+.exercise[
+
+- Delete all the pods, and let the ReplicaSet recreate them:
+  ```bash
+  kubectl delete pods --all
+  ```
+
+- Wait for the pods to be up again:
+  ```bash
+  kubectl get pods -o wide -w
+  ```
+
+]
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Adding kube-proxy
+
+- Let's start kube-proxy to provide internal load balancing
+
+- Then see if we can create a Service and use it to contact our pods
+
+.exercise[
+
+- Start kube-proxy:
+  ```bash
+  sudo kube-proxy --kubeconfig ~/.kube/config
+  ```
+
+- Expose our Deployment:
+  ```bash
+  kubectl expose deployment web --port=80
+  ```
+
+]
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Test internal load balancing
+
+.exercise[
+
+- Retrieve the ClusterIP address:
+  ```bash
+  kubectl get svc web
+  ```
+
+- Send a few requests to the ClusterIP address (with `curl`)
+
+]
+
+--
+
+Sometimes it works, sometimes it doesn't. Why?
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Routing traffic
+
+- Our pods have new, distinct IP addresses
+
+- But they are on host-local, isolated networks
+
+- If we try to ping a pod on a different node, it won't work
+
+- kube-proxy merely rewrites the destination IP address
+
+- But we need that IP address to be reachable in the first place
+
+- How do we fix this?
+
+  (hint: check the title of this slide!)
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Important warning
+
+- The technique that we are about to use doesn't work everywhere
+
+- It only works if:
+
+  - all the nodes are directly connected to each other (at layer 2)
+
+  - the underlying network allows the IP addresses of our pods
+
+- If we are on physical machines connected by a switch: OK
+
+- If we are on virtual machines in a public cloud: NOT OK
+
+  - on AWS, we need to disable "source and destination checks" on our instances
+
+  - on OpenStack, we need to disable "port security" on our network ports
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Routing basics
+
+- We need to tell *each* node:
+
+  "The subnet 10.C.N.0/24 is located on node N" (for all values of N)
+
+- This is how we add a route on Linux:
+  ```bash
+  ip route add 10.C.N.0/24 via W.X.Y.Z
+  ```
+
+  (where `W.X.Y.Z` is the internal IP address of node N)
+
+- We can see the internal IP addresses of our nodes with:
+  ```bash
+  kubectl get nodes -o wide
+  ```
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Firewalling
+
+- By default, Docker prevents containers from using arbitrary IP addresses
+
+  (by setting up iptables rules)
+
+- We need to allow our containers to use our pod CIDR
+
+- For simplicity, we will insert a blanket iptables rule allowing all traffic:
+
+  `iptables -I FORWARD -j ACCEPT`
+
+- This has to be done on every node
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## Setting up routing
+
+.exercise[
+
+- Create all the routes on all the nodes
+
+- Insert the iptables rule allowing traffic
+
+- Check that you can ping all the pods from one of the nodes
+
+- Check that you can `curl` the ClusterIP of the Service successfully
+
+]
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+## What's next?
+
+- We did a lot of manual operations:
+
+  - allocating subnets to nodes
+
+  - adding command-line flags to kubelet
+
+  - updating the routing tables on our nodes
+
+- We want to automate all these steps
+
+- We want something that works on all networks
+
+???
+
+:EN:- Connecting nodes ands pods
+:FR:- Interconnecter les nœuds et les pods
+
+.debug[[k8s/multinode.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/multinode.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/container-housing.jpg)]
+
+---
+
+name: toc-the-container-network-interface
+class: title
+
+ The Container Network Interface
+
+.nav[
+[Previous section](#toc-adding-nodes-to-the-cluster)
+|
+[Back to table of contents](#toc-module-2)
+|
+[Next section](#toc-interconnecting-clusters)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# The Container Network Interface
+
+- Allows us to decouple network configuration from Kubernetes
+
+- Implemented by *plugins*
+
+- Plugins are executables that will be invoked by kubelet
+
+- Plugins are responsible for:
+
+  - allocating IP addresses for containers
+
+  - configuring the network for containers
+
+- Plugins can be combined and chained when it makes sense
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## Combining plugins
+
+- Interface could be created by e.g. `vlan` or `bridge` plugin
+
+- IP address could be allocated by e.g. `dhcp` or `host-local` plugin
+
+- Interface parameters (MTU, sysctls) could be tweaked by the `tuning` plugin
+
+The reference plugins are available [here].
+
+Look in each plugin's directory for its documentation.
+
+[here]: https://github.com/containernetworking/plugins/tree/master/plugins
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## How does kubelet know which plugins to use?
+
+- The plugin (or list of plugins) is set in the CNI configuration
+
+- The CNI configuration is a *single file* in `/etc/cni/net.d`
+
+- If there are multiple files in that directory, the first one is used
+
+  (in lexicographic order)
+
+- That path can be changed with the `--cni-conf-dir` flag of kubelet
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## CNI configuration in practice
+
+- When we set up the "pod network" (like Calico, Weave...) it ships a CNI configuration
+
+  (and sometimes, custom CNI plugins)
+
+- Very often, that configuration (and plugins) is installed automatically
+
+  (by a DaemonSet featuring an initContainer with hostPath volumes)
+
+- Examples:
+
+  - Calico [CNI config](https://github.com/projectcalico/calico/blob/1372b56e3bfebe2b9c9cbf8105d6a14764f44159/v2.6/getting-started/kubernetes/installation/hosted/calico.yaml#L25)
+    and [volume](https://github.com/projectcalico/calico/blob/1372b56e3bfebe2b9c9cbf8105d6a14764f44159/v2.6/getting-started/kubernetes/installation/hosted/calico.yaml#L219)
+
+  - kube-router [CNI config](https://github.com/cloudnativelabs/kube-router/blob/c2f893f64fd60cf6d2b6d3fee7191266c0fc0fe5/daemonset/generic-kuberouter.yaml#L10)
+    and [volume](https://github.com/cloudnativelabs/kube-router/blob/c2f893f64fd60cf6d2b6d3fee7191266c0fc0fe5/daemonset/generic-kuberouter.yaml#L73)
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+class: extra-details
+
+## Conf vs conflist
+
+- There are two slightly different configuration formats
+
+- Basic configuration format:
+
+  - holds configuration for a single plugin
+  - typically has a `.conf` name suffix
+  - has a `type` string field in the top-most structure
+  - [examples](https://github.com/containernetworking/cni/blob/master/SPEC.md#example-configurations)
+
+- Configuration list format:
+
+  - can hold configuration for multiple (chained) plugins
+  - typically has a `.conflist` name suffix
+  - has a `plugins` list field in the top-most structure
+  - [examples](https://github.com/containernetworking/cni/blob/master/SPEC.md#network-configuration-lists)
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+class: extra-details
+
+## How plugins are invoked
+
+- Parameters are given through environment variables, including:
+
+  - CNI_COMMAND: desired operation (ADD, DEL, CHECK, or VERSION)
+
+  - CNI_CONTAINERID: container ID
+
+  - CNI_NETNS: path to network namespace file
+
+  - CNI_IFNAME: what the network interface should be named
+
+- The network configuration must be provided to the plugin on stdin
+
+  (this avoids race conditions that could happen by passing a file path)
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## In practice: kube-router
+
+- We are going to set up a new cluster
+
+- For this new cluster, we will use kube-router
+
+- kube-router will provide the "pod network"
+
+  (connectivity with pods)
+
+- kube-router will also provide internal service connectivity
+
+  (replacing kube-proxy)
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## How kube-router works
+
+- Very simple architecture
+
+- Does not introduce new CNI plugins
+
+  (uses the `bridge` plugin, with `host-local` for IPAM)
+
+- Pod traffic is routed between nodes
+
+  (no tunnel, no new protocol)
+
+- Internal service connectivity is implemented with IPVS
+
+- Can provide pod network and/or internal service connectivity
+
+- kube-router daemon runs on every node
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## What kube-router does
+
+- Connect to the API server
+
+- Obtain the local node's `podCIDR`
+
+- Inject it into the CNI configuration file
+
+  (we'll use `/etc/cni/net.d/10-kuberouter.conflist`)
+
+- Obtain the addresses of all nodes
+
+- Establish a *full mesh* BGP peering with the other nodes
+
+- Exchange routes over BGP
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+class: extra-details
+
+## What's BGP?
+
+- BGP (Border Gateway Protocol) is the protocol used between internet routers
+
+- It [scales](https://www.cidr-report.org/as2.0/)
+  pretty [well](https://www.cidr-report.org/cgi-bin/plota?file=%2fvar%2fdata%2fbgp%2fas2.0%2fbgp-active%2etxt&descr=Active%20BGP%20entries%20%28FIB%29&ylabel=Active%20BGP%20entries%20%28FIB%29&with=step)
+  (it is used to announce the 700k CIDR prefixes of the internet)
+
+- It is spoken by many hardware routers from many vendors
+
+- It also has many software implementations (Quagga, Bird, FRR...)
+
+- Experienced network folks generally know it (and appreciate it)
+
+- It also used by Calico (another popular network system for Kubernetes)
+
+- Using BGP allows us to interconnect our "pod network" with other systems
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## The plan
+
+- We'll work in a new cluster (named `kuberouter`)
+
+- We will run a simple control plane (like before)
+
+- ... But this time, the controller manager will allocate `podCIDR` subnets
+
+  (so that we don't have to manually assign subnets to individual nodes)
+
+- We will create a DaemonSet for kube-router
+
+- We will join nodes to the cluster
+
+- The DaemonSet will automatically start a kube-router pod on each node
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## Logging into the new cluster
+
+.exercise[
+
+- Log into node `kuberouter1`
+
+- Clone the workshop repository:
+  ```bash
+  git clone https://github.com/jpetazzo/container.training
+  ```
+
+- Move to this directory:
+  ```bash
+  cd container.training/compose/kube-router-k8s-control-plane
+  ```
+
+]
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+class: extra-details
+
+## Checking the CNI configuration
+
+- By default, kubelet gets the CNI configuration from `/etc/cni/net.d`
+
+.exercise[
+
+- Check the content of `/etc/cni/net.d`
+
+]
+
+(On most machines, at this point, `/etc/cni/net.d` doesn't even exist).)
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## Our control plane
+
+- We will use a Compose file to start the control plane
+
+- It is similar to the one we used with the `kubenet` cluster
+
+- The API server is started with `--allow-privileged`
+
+  (because we will start kube-router in privileged pods)
+
+- The controller manager is started with extra flags too:
+
+  `--allocate-node-cidrs` and `--cluster-cidr`
+
+- We need to edit the Compose file to set the Cluster CIDR
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## Starting the control plane
+
+- Our cluster CIDR will be `10.C.0.0/16`
+
+  (where `C` is our cluster number)
+
+.exercise[
+
+- Edit the Compose file to set the Cluster CIDR:
+  ```bash
+  vim docker-compose.yaml
+  ```
+
+- Start the control plane:
+  ```bash
+  docker-compose up
+  ```
+
+]
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## The kube-router DaemonSet
+
+- In the same directory, there is a `kuberouter.yaml` file
+
+- It contains the definition for a DaemonSet and a ConfigMap
+
+- Before we load it, we also need to edit it
+
+- We need to indicate the address of the API server
+
+  (because kube-router needs to connect to it to retrieve node information)
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## Creating the DaemonSet
+
+- The address of the API server will be `http://A.B.C.D:8080`
+
+  (where `A.B.C.D` is the public address of `kuberouter1`, running the control plane)
+
+.exercise[
+
+- Edit the YAML file to set the API server address:
+  ```bash
+  vim kuberouter.yaml
+  ```
+
+- Create the DaemonSet:
+  ```bash
+  kubectl create -f kuberouter.yaml
+  ```
+
+]
+
+Note: the DaemonSet won't create any pods (yet) since there are no nodes (yet).
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## Generating the kubeconfig for kubelet
+
+- This is similar to what we did for the `kubenet` cluster
+
+.exercise[
+
+- Generate the kubeconfig file (replacing `X.X.X.X` with the address of `kuberouter1`):
+  ```bash
+    kubectl config set-cluster cni --server http://`X.X.X.X`:8080
+    kubectl config set-context cni --cluster cni
+    kubectl config use-context cni
+    cp ~/.kube/config ~/kubeconfig
+  ```
+
+]
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## Distributing kubeconfig
+
+- We need to copy that kubeconfig file to the other nodes
+
+.exercise[
+
+- Copy `kubeconfig` to the other nodes:
+  ```bash
+    for N in 2 3; do
+    	scp ~/kubeconfig kuberouter$N:
+    done
+  ```
+
+]
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## Starting kubelet
+
+- We don't need the `--pod-cidr` option anymore
+
+  (the controller manager will allocate these automatically)
+
+- We need to pass `--network-plugin=cni`
+
+.exercise[
+
+- Join the first node:
+   ```bash
+   sudo kubelet --kubeconfig ~/kubeconfig --network-plugin=cni
+   ```
+
+- Open more terminals and join the other nodes:
+  ```bash
+  ssh kuberouter2 sudo kubelet --kubeconfig ~/kubeconfig --network-plugin=cni
+  ssh kuberouter3 sudo kubelet --kubeconfig ~/kubeconfig --network-plugin=cni
+  ```
+
+]
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+class: extra-details
+
+## Checking the CNI configuration
+
+- At this point, kuberouter should have installed its CNI configuration
+
+  (in `/etc/cni/net.d`)
+
+.exercise[
+
+- Check the content of `/etc/cni/net.d`
+
+]
+
+- There should be a file created by kuberouter
+
+- The file should contain the node's podCIDR
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## Setting up a test
+
+- Let's create a Deployment and expose it with a Service
+
+.exercise[
+
+- Create a Deployment running a web server:
+  ```bash
+  kubectl create deployment web --image=jpetazzo/httpenv
+  ```
+
+- Scale it so that it spans multiple nodes:
+  ```bash
+  kubectl scale deployment web --replicas=5
+  ```
+
+- Expose it with a Service:
+  ```bash
+  kubectl expose deployment web --port=8888
+  ```
+
+]
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+## Checking that everything works
+
+.exercise[
+
+- Get the ClusterIP address for the service:
+  ```bash
+  kubectl get svc web
+  ```
+
+- Send a few requests there:
+  ```bash
+  curl `X.X.X.X`:8888
+  ```
+
+]
+
+Note that if you send multiple requests, they are load-balanced in a round robin manner.
+
+This shows that we are using IPVS (vs. iptables, which picked random endpoints).
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+class: extra-details
+
+## Troubleshooting
+
+- What if we need to check that everything is working properly?
+
+.exercise[
+
+- Check the IP addresses of our pods:
+  ```bash
+  kubectl get pods -o wide
+  ```
+
+- Check our routing table:
+  ```bash
+  route -n
+  ip route
+  ```
+
+]
+
+We should see the local pod CIDR connected to `kube-bridge`, and the other nodes' pod CIDRs having individual routes, with each node being the gateway.
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+class: extra-details
+
+## More troubleshooting
+
+- We can also look at the output of the kube-router pods
+
+  (with `kubectl logs`)
+
+- kube-router also comes with a special shell that gives lots of useful info
+
+  (we can access it with `kubectl exec`)
+
+- But with the current setup of the cluster, these options may not work!
+
+- Why?
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+class: extra-details
+
+## Trying `kubectl logs` / `kubectl exec`
+
+.exercise[
+
+- Try to show the logs of a kube-router pod:
+  ```bash
+  kubectl -n kube-system logs ds/kube-router
+  ```
+
+- Or try to exec into one of the kube-router pods:
+  ```bash
+  kubectl -n kube-system exec kube-router-xxxxx bash
+  ```
+
+]
+
+These commands will give an error message that includes:
+```
+dial tcp: lookup kuberouterX on 127.0.0.11:53: no such host
+```
+
+What does that mean?
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+class: extra-details
+
+## Internal name resolution
+
+- To execute these commands, the API server needs to connect to kubelet
+
+- By default, it creates a connection using the kubelet's name
+
+  (e.g. `http://kuberouter1:...`)
+
+- This requires our nodes names to be in DNS
+
+- We can change that by setting a flag on the API server:
+
+  `--kubelet-preferred-address-types=InternalIP`
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+class: extra-details
+
+## Another way to check the logs
+
+- We can also ask the logs directly to the container engine
+
+- First, get the container ID, with `docker ps` or like this:
+  ```bash
+  CID=$(docker ps -q \
+        --filter label=io.kubernetes.pod.namespace=kube-system \
+        --filter label=io.kubernetes.container.name=kube-router)
+  ```
+
+- Then view the logs:
+  ```bash
+  docker logs $CID
+  ```
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+class: extra-details
+
+## Other ways to distribute routing tables
+
+- We don't need kube-router and BGP to distribute routes
+
+- The list of nodes (and associated `podCIDR` subnets) is available through the API
+
+- This shell snippet generates the commands to add all required routes on a node:
+
+```bash
+NODES=$(kubectl get nodes -o name | cut -d/ -f2)
+for DESTNODE in $NODES; do
+  if [ "$DESTNODE" != "$HOSTNAME" ]; then
+    echo $(kubectl get node $DESTNODE -o go-template="
+      route add -net {{.spec.podCIDR}} gw {{(index .status.addresses 0).address}}")
+  fi
+done
+```
+
+- This could be useful for embedded platforms with very limited resources
+
+  (or lab environments for learning purposes)
+
+???
+
+:EN:- Configuring CNI plugins
+:FR:- Configurer des plugins CNI
+
+.debug[[k8s/cni.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cni.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/containers-by-the-water.jpg)]
+
+---
+
+name: toc-interconnecting-clusters
+class: title
+
+ Interconnecting clusters
+
+.nav[
+[Previous section](#toc-the-container-network-interface)
+|
+[Back to table of contents](#toc-module-2)
+|
+[Next section](#toc-api-server-availability)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Interconnecting clusters
+
+- We assigned different Cluster CIDRs to each cluster
+
+- This allows us to connect our clusters together
+
+- We will leverage kube-router BGP abilities for that
+
+- We will *peer* each kube-router instance with a *route reflector*
+
+- As a result, we will be able to ping each other's pods
+
+.debug[[k8s/interco.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/interco.md)]
+---
+
+## Disclaimers
+
+- There are many methods to interconnect clusters
+
+- Depending on your network implementation, you will use different methods
+
+- The method shown here only works for nodes with direct layer 2 connection
+
+- We will often need to use tunnels or other network techniques
+
+.debug[[k8s/interco.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/interco.md)]
+---
+
+## The plan
+
+- Someone will start the *route reflector*
+
+  (typically, that will be the person presenting these slides!)
+
+- We will update our kube-router configuration
+
+- We will add a *peering* with the route reflector
+
+  (instructing kube-router to connect to it and exchange route information)
+
+- We should see the routes to other clusters on our nodes
+
+  (in the output of e.g. `route -n` or `ip route show`)
+
+- We should be able to ping pods of other nodes
+
+.debug[[k8s/interco.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/interco.md)]
+---
+
+## Starting the route reflector
+
+- Only do this slide if you are doing this on your own
+
+- There is a Compose file in the `compose/frr-route-reflector` directory
+
+- Before continuing, make sure that you have the IP address of the route reflector
+
+.debug[[k8s/interco.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/interco.md)]
+---
+
+## Configuring kube-router
+
+- This can be done in two ways:
+
+  - with command-line flags to the `kube-router` process
+
+  - with annotations to Node objects
+
+- We will use the command-line flags
+
+  (because it will automatically propagate to all nodes)
+
+.footnote[Note: with Calico, this is achieved by creating a BGPPeer CRD.]
+
+.debug[[k8s/interco.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/interco.md)]
+---
+
+## Updating kube-router configuration
+
+- We need to pass two command-line flags to the kube-router process
+
+.exercise[
+
+- Edit the `kuberouter.yaml` file
+
+- Add the following flags to the kube-router arguments:
+  ```
+  - "--peer-router-ips=`X.X.X.X`"
+  - "--peer-router-asns=64512"
+  ```
+  (Replace `X.X.X.X` with the route reflector address)
+
+- Update the DaemonSet definition:
+  ```bash
+  kubectl apply -f kuberouter.yaml
+  ```
+
+]
+
+.debug[[k8s/interco.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/interco.md)]
+---
+
+## Restarting kube-router
+
+- The DaemonSet will not update the pods automatically
+
+  (it is using the default `updateStrategy`, which is `OnDelete`)
+
+- We will therefore delete the pods
+
+  (they will be recreated with the updated definition)
+
+.exercise[
+
+- Delete all the kube-router pods:
+  ```bash
+  kubectl delete pods -n kube-system -l k8s-app=kube-router
+  ```
+
+]
+
+Note: the other `updateStrategy` for a DaemonSet is RollingUpdate.
+<br/>
+For critical services, we might want to precisely control the update process.
+
+.debug[[k8s/interco.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/interco.md)]
+---
+
+## Checking peering status
+
+- We can see informative messages in the output of kube-router:
+  ```
+  time="2019-04-07T15:53:56Z" level=info msg="Peer Up"
+  Key=X.X.X.X State=BGP_FSM_OPENCONFIRM Topic=Peer
+  ```
+
+- We should see the routes of the other clusters show up
+
+- For debugging purposes, the reflector also exports a route to 1.0.0.2/32
+
+- That route will show up like this:
+  ```
+  1.0.0.2     172.31.X.Y    255.255.255.255 UGH   0      0        0 eth0
+  ```
+
+- We should be able to ping the pods of other clusters!
+
+.debug[[k8s/interco.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/interco.md)]
+---
+
+## If we wanted to do more ...
+
+- kube-router can also export ClusterIP addresses
+
+  (by adding the flag `--advertise-cluster-ip`)
+
+- They are exported individually (as /32)
+
+- This would allow us to easily access other clusters' services
+
+  (without having to resolve the individual addresses of pods)
+
+- Even better if it's combined with DNS integration
+
+  (to facilitate name → ClusterIP resolution)
+
+???
+
+:EN:- Interconnecting clusters
+:FR:- Interconnexion de clusters
+
+.debug[[k8s/interco.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/interco.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/distillery-containers.jpg)]
+
+---
+
+name: toc-api-server-availability
+class: title
+
+ API server availability
+
+.nav[
+[Previous section](#toc-interconnecting-clusters)
+|
+[Back to table of contents](#toc-module-3)
+|
+[Next section](#toc-upgrading-clusters)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# API server availability
+
+- When we set up a node, we need the address of the API server:
+
+  - for kubelet
+
+  - for kube-proxy
+
+  - sometimes for the pod network system (like kube-router)
+
+- How do we ensure the availability of that endpoint?
+
+  (what if the node running the API server goes down?)
+
+.debug[[k8s/apilb.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/apilb.md)]
+---
+
+## Option 1: external load balancer
+
+- Set up an external load balancer
+
+- Point kubelet (and other components) to that load balancer
+
+- Put the node(s) running the API server behind that load balancer
+
+- Update the load balancer if/when an API server node needs to be replaced
+
+- On cloud infrastructures, some mechanisms provide automation for this
+
+  (e.g. on AWS, an Elastic Load Balancer + Auto Scaling Group)
+
+- [Example in Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way/blob/master/docs/08-bootstrapping-kubernetes-controllers.md#the-kubernetes-frontend-load-balancer)
+
+.debug[[k8s/apilb.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/apilb.md)]
+---
+
+## Option 2: local load balancer
+
+- Set up a load balancer (like NGINX, HAProxy...) on *each* node
+
+- Configure that load balancer to send traffic to the API server node(s)
+
+- Point kubelet (and other components) to `localhost`
+
+- Update the load balancer configuration when API server nodes are updated
+
+.debug[[k8s/apilb.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/apilb.md)]
+---
+
+## Updating the local load balancer config
+
+- Distribute the updated configuration (push)
+
+- Or regularly check for updates (pull)
+
+- The latter requires an external, highly available store
+ 
+  (it could be an object store, an HTTP server, or even DNS...)
+
+- Updates can be facilitated by a DaemonSet
+
+  (but remember that it can't be used when installing a new node!)
+
+.debug[[k8s/apilb.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/apilb.md)]
+---
+
+## Option 3: DNS records
+
+- Put all the API server nodes behind a round-robin DNS
+
+- Point kubelet (and other components) to that name
+
+- Update the records when needed
+
+- Note: this option is not officially supported
+
+  (but since kubelet supports reconnection anyway, it *should* work)
+
+.debug[[k8s/apilb.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/apilb.md)]
+---
+
+## Option 4: ....................
+
+- Many managed clusters expose a high-availability API endpoint
+
+  (and you don't have to worry about it)
+
+- You can also use HA mechanisms that you're familiar with
+
+  (e.g. virtual IPs)
+
+- Tunnels are also fine
+
+  (e.g. [k3s](https://k3s.io/) uses a tunnel to allow each node to contact the API server)
+
+???
+
+:EN:- Ensuring API server availability
+:FR:- Assurer la disponibilité du serveur API
+
+.debug[[k8s/apilb.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/apilb.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/lots-of-containers.jpg)]
+
+---
+
+name: toc-upgrading-clusters
+class: title
+
+ Upgrading clusters
+
+.nav[
+[Previous section](#toc-api-server-availability)
+|
+[Back to table of contents](#toc-module-3)
+|
+[Next section](#toc-backing-up-clusters)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Upgrading clusters
+
+- It's *recommended* to run consistent versions across a cluster
+
+  (mostly to have feature parity and latest security updates)
+
+- It's not *mandatory*
+
+  (otherwise, cluster upgrades would be a nightmare!)
+
+- Components can be upgraded one at a time without problems
+
+<!-- ##VERSION## -->
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Checking what we're running
+
+- It's easy to check the version for the API server
+
+.exercise[
+
+- Log into node `test1`
+
+- Check the version of kubectl and of the API server:
+  ```bash
+  kubectl version
+  ```
+
+]
+
+- In a HA setup with multiple API servers, they can have different versions
+
+- Running the command above multiple times can return different values
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Node versions
+
+- It's also easy to check the version of kubelet
+
+.exercise[
+
+- Check node versions (includes kubelet, kernel, container engine):
+  ```bash
+  kubectl get nodes -o wide
+  ```
+
+]
+
+- Different nodes can run different kubelet versions
+
+- Different nodes can run different kernel versions
+
+- Different nodes can run different container engines
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Control plane versions
+
+- If the control plane is self-hosted (running in pods), we can check it
+
+.exercise[
+
+- Show image versions for all pods in `kube-system` namespace:
+  ```bash
+    kubectl --namespace=kube-system get pods -o json \
+            | jq -r '
+              .items[]
+              | [.spec.nodeName, .metadata.name]
+                + 
+                (.spec.containers[].image | split(":"))
+              | @tsv
+              ' \
+            | column -t
+  ```
+
+]
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## What version are we running anyway?
+
+- When I say, "I'm running Kubernetes 1.15", is that the version of:
+
+  - kubectl
+
+  - API server
+
+  - kubelet
+
+  - controller manager
+
+  - something else?
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Other versions that are important
+
+- etcd
+
+- kube-dns or CoreDNS
+
+- CNI plugin(s)
+
+- Network controller, network policy controller
+
+- Container engine
+
+- Linux kernel
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## General guidelines
+
+- To update a component, use whatever was used to install it
+
+- If it's a distro package, update that distro package
+
+- If it's a container or pod, update that container or pod
+
+- If you used configuration management, update with that
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Know where your binaries come from
+
+- Sometimes, we need to upgrade *quickly*
+
+  (when a vulnerability is announced and patched)
+
+- If we are using an installer, we should:
+
+  - make sure it's using upstream packages
+
+  - or make sure that whatever packages it uses are current
+
+  - make sure we can tell it to pin specific component versions
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Important questions
+
+- Should we upgrade the control plane before or after the kubelets?
+
+- Within the control plane, should we upgrade the API server first or last?
+
+- How often should we upgrade?
+
+- How long are versions maintained?
+
+- All the answers are in [the documentation about version skew policy](https://kubernetes.io/docs/setup/release/version-skew-policy/)!
+
+- Let's review the key elements together ...
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Kubernetes uses semantic versioning
+
+- Kubernetes versions look like MAJOR.MINOR.PATCH; e.g. in 1.17.2:
+
+  - MAJOR = 1
+  - MINOR = 17
+  - PATCH = 2
+
+- It's always possible to mix and match different PATCH releases
+
+  (e.g. 1.16.1 and 1.16.6 are compatible)
+
+- It is recommended to run the latest PATCH release
+
+  (but it's mandatory only when there is a security advisory)
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Version skew
+
+- API server must be more recent than its clients (kubelet and control plane)
+
+- ... Which means it must always be upgraded first
+
+- All components support a difference of one¹ MINOR version
+
+- This allows live upgrades (since we can mix e.g. 1.15 and 1.16)
+
+- It also means that going from 1.14 to 1.16 requires going through 1.15
+
+.footnote[¹Except kubelet, which can be up to two MINOR behind API server,
+and kubectl, which can be one MINOR ahead or behind API server.]
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Release cycle
+
+- There is a new PATCH relese whenever necessary
+
+  (every few weeks, or "ASAP" when there is a security vulnerability)
+
+- There is a new MINOR release every 3 months (approximately)
+
+- At any given time, three MINOR releases are maintained
+
+- ... Which means that MINOR releases are maintained approximately 9 months
+
+- We should expect to upgrade at least every 3 months (on average)
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## In practice
+
+- We are going to update a few cluster components
+
+- We will change the kubelet version on one node
+
+- We will change the version of the API server
+
+- We will work with cluster `test` (nodes `test1`, `test2`, `test3`)
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Updating the API server
+
+- This cluster has been deployed with kubeadm
+
+- The control plane runs in *static pods*
+
+- These pods are started automatically by kubelet
+
+  (even when kubelet can't contact the API server)
+
+- They are defined in YAML files in `/etc/kubernetes/manifests`
+
+  (this path is set by a kubelet command-line flag)
+
+- kubelet automatically updates the pods when the files are changed
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Changing the API server version
+
+- We will edit the YAML file to use a different image version
+
+.exercise[
+
+- Log into node `test1`
+
+- Check API server version:
+  ```bash
+  kubectl version
+  ```
+
+- Edit the API server pod manifest:
+  ```bash
+  sudo vim /etc/kubernetes/manifests/kube-apiserver.yaml
+  ```
+
+- Look for the `image:` line, and update it to e.g. `v1.16.0`
+
+]
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Checking what we've done
+
+- The API server will be briefly unavailable while kubelet restarts it
+
+.exercise[
+
+- Check the API server version:
+  ```bash
+  kubectl version
+  ```
+
+]
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Was that a good idea?
+
+--
+
+**No!**
+
+--
+
+- Remember the guideline we gave earlier:
+
+  *To update a component, use whatever was used to install it.*
+
+- This control plane was deployed with kubeadm
+
+- We should use kubeadm to upgrade it!
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Updating the whole control plane
+
+- Let's make it right, and use kubeadm to upgrade the entire control plane
+
+  (note: this is possible only because the cluster was installed with kubeadm)
+
+.exercise[
+
+- Check what will be upgraded:
+  ```bash
+  sudo kubeadm upgrade plan
+  ```
+
+]
+
+Note 1: kubeadm thinks that our cluster is running 1.16.0.
+<br/>It is confused by our manual upgrade of the API server!
+
+Note 2: kubeadm itself is still version 1.15.9.
+<br/>It doesn't know how to upgrade do 1.16.X.
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Upgrading kubeadm
+
+- First things first: we need to upgrade kubeadm
+
+.exercise[
+
+- Upgrade kubeadm:
+  ```
+  sudo apt install kubeadm
+  ```
+
+- Check what kubeadm tells us:
+  ```
+  sudo kubeadm upgrade plan
+  ```
+
+]
+
+Problem: kubeadm doesn't know know how to handle
+upgrades from version 1.15.
+
+This is because we installed version 1.17 (or even later).
+
+We need to install kubeadm version 1.16.X.
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Downgrading kubeadm
+
+- We need to go back to version 1.16.X (e.g. 1.16.6)
+
+.exercise[
+
+- View available versions for package `kubeadm`:
+  ```bash
+  apt show kubeadm -a | grep ^Version | grep 1.16
+  ```
+
+- Downgrade kubeadm:
+  ```
+  sudo apt install kubeadm=1.16.6-00
+  ```
+
+- Check what kubeadm tells us:
+  ```
+  sudo kubeadm upgrade plan
+  ```
+
+]
+
+kubeadm should now agree to upgrade to 1.16.6.
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Upgrading the cluster with kubeadm
+
+- Ideally, we should revert our `image:` change
+
+  (so that kubeadm executes the right migration steps)
+
+- Or we can try the upgrade anyway
+
+.exercise[
+
+- Perform the upgrade:
+  ```bash
+  sudo kubeadm upgrade apply v1.16.6
+  ```
+
+]
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Updating kubelet
+
+- These nodes have been installed using the official Kubernetes packages
+
+- We can therefore use `apt` or `apt-get`
+
+.exercise[
+
+- Log into node `test3`
+
+- View available versions for package `kubelet`:
+  ```bash
+  apt show kubelet -a | grep ^Version
+  ```
+
+- Upgrade kubelet:
+  ```bash
+  sudo apt install kubelet=1.16.6-00
+  ```
+
+]
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Checking what we've done
+
+.exercise[
+
+- Log into node `test1`
+
+- Check node versions:
+  ```bash
+  kubectl get nodes -o wide
+  ```
+
+- Create a deployment and scale it to make sure that the node still works
+
+]
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Was that a good idea?
+
+--
+
+**Almost!**
+
+--
+
+- Yes, kubelet was installed with distribution packages
+
+- However, kubeadm took care of configuring kubelet
+
+  (when doing `kubeadm join ...`)
+
+- We were supposed to run a special command *before* upgrading kubelet!
+
+- That command should be executed on each node
+
+- It will download the kubelet configuration generated by kubeadm
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Upgrading kubelet the right way
+
+- We need to upgrade kubeadm, upgrade kubelet config, then upgrade kubelet
+
+  (after upgrading the control plane)
+
+.exercise[
+
+- Download the configuration on each node, and upgrade kubelet:
+  ```bash
+    for N in 1 2 3; do
+      ssh test$N "
+        sudo apt install kubeadm=1.16.6-00 &&
+        sudo kubeadm upgrade node &&
+        sudo apt install kubelet=1.16.6-00"
+    done
+  ```
+]
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+## Checking what we've done
+
+- All our nodes should now be updated to version 1.16.6
+
+.exercise[
+
+- Check nodes versions:
+  ```bash
+  kubectl get nodes -o wide
+  ```
+
+]
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+class: extra-details
+
+## Skipping versions
+
+- This example worked because we went from 1.15 to 1.16
+
+- If you are upgrading from e.g. 1.14, you will have to go through 1.15 first
+
+- This means upgrading kubeadm to 1.15.X, then using it to upgrade the cluster
+
+- Then upgrading kubeadm to 1.16.X, etc.
+
+- **Make sure to read the release notes before upgrading!**
+
+???
+
+:EN:- Best practices for cluster upgrades
+:EN:- Example: upgrading a kubeadm cluster
+
+:FR:- Bonnes pratiques pour la mise à jour des clusters
+:FR:- Exemple : mettre à jour un cluster kubeadm
+
+.debug[[k8s/cluster-upgrade.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-upgrade.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/plastic-containers.JPG)]
+
+---
+
+name: toc-backing-up-clusters
+class: title
+
+ Backing up clusters
+
+.nav[
+[Previous section](#toc-upgrading-clusters)
+|
+[Back to table of contents](#toc-module-3)
+|
+[Next section](#toc-static-pods)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Backing up clusters
+
+- Backups can have multiple purposes:
+
+  - disaster recovery (servers or storage are destroyed or unreachable)
+
+  - error recovery (human or process has altered or corrupted data)
+
+  - cloning environments (for testing, validation...)
+
+- Let's see the strategies and tools available with Kubernetes!
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## Important
+
+- Kubernetes helps us with disaster recovery
+
+  (it gives us replication primitives)
+
+- Kubernetes helps us clone / replicate environments
+
+  (all resources can be described with manifests)
+
+- Kubernetes *does not* help us with error recovery
+
+- We still need to back up/snapshot our data:
+
+  - with database backups (mysqldump, pgdump, etc.)
+
+  - and/or snapshots at the storage layer
+
+  - and/or traditional full disk backups
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## In a perfect world ...
+
+- The deployment of our Kubernetes clusters is automated
+
+  (recreating a cluster takes less than a minute of human time)
+
+- All the resources (Deployments, Services...) on our clusters are under version control
+
+  (never use `kubectl run`; always apply YAML files coming from a repository)
+
+- Stateful components are either:
+
+  - stored on systems with regular snapshots
+
+  - backed up regularly to an external, durable storage
+
+  - outside of Kubernetes
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## Kubernetes cluster deployment
+
+- If our deployment system isn't fully automated, it should at least be documented
+
+- Litmus test: how long does it take to deploy a cluster...
+
+  - for a senior engineer?
+
+  - for a new hire?
+
+- Does it require external intervention?
+
+  (e.g. provisioning servers, signing TLS certs...)
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## Plan B
+
+- Full machine backups of the control plane can help
+
+- If the control plane is in pods (or containers), pay attention to storage drivers
+
+  (if the backup mechanism is not container-aware, the backups can take way more resources than they should, or even be unusable!)
+
+- If the previous sentence worries you:
+
+  **automate the deployment of your clusters!**
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## Managing our Kubernetes resources
+
+- Ideal scenario:
+
+  - never create a resource directly on a cluster
+
+  - push to a code repository
+
+  - a special branch (`production` or even `master`) gets automatically deployed
+
+- Some folks call this "GitOps"
+
+  (it's the logical evolution of configuration management and infrastructure as code)
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## GitOps in theory
+
+- What do we keep in version control?
+
+- For very simple scenarios: source code, Dockerfiles, scripts
+
+- For real applications: add resources (as YAML files)
+
+- For applications deployed multiple times: Helm, Kustomize...
+
+  (staging and production count as "multiple times")
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## GitOps tooling
+
+- Various tools exist (Weave Flux, GitKube...)
+
+- These tools are still very young
+
+- You still need to write YAML for all your resources
+
+- There is no tool to:
+
+  - list *all* resources in a namespace
+
+  - get resource YAML in a canonical form
+
+  - diff YAML descriptions with current state
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## GitOps in practice
+
+- Start describing your resources with YAML
+
+- Leverage a tool like Kustomize or Helm
+
+- Make sure that you can easily deploy to a new namespace
+
+  (or even better: to a new cluster)
+
+- When tooling matures, you will be ready
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## Plan B
+
+- What if we can't describe everything with YAML?
+
+- What if we manually create resources and forget to commit them to source control?
+
+- What about global resources, that don't live in a namespace?
+
+- How can we be sure that we saved *everything*?
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## Backing up etcd
+
+- All objects are saved in etcd
+
+- etcd data should be relatively small
+
+  (and therefore, quick and easy to back up)
+
+- Two options to back up etcd:
+
+  - snapshot the data directory
+
+  - use `etcdctl snapshot`
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## Making an etcd snapshot
+
+- The basic command is simple:
+  ```bash
+  etcdctl snapshot save <filename>
+  ```
+
+- But we also need to specify:
+
+  - an environment variable to specify that we want etcdctl v3
+
+  - the address of the server to back up
+
+  - the path to the key, certificate, and CA certificate
+    <br/>(if our etcd uses TLS certificates)
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## Snapshotting etcd on kubeadm
+
+- The following command will work on clusters deployed with kubeadm
+
+  (and maybe others)
+
+- It should be executed on a master node
+
+```bash
+docker run --rm --net host -v $PWD:/vol \
+    -v /etc/kubernetes/pki/etcd:/etc/kubernetes/pki/etcd:ro \
+    -e ETCDCTL_API=3 k8s.gcr.io/etcd:3.3.10 \
+    etcdctl --endpoints=https://[127.0.0.1]:2379 \
+            --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+            --cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt \
+            --key=/etc/kubernetes/pki/etcd/healthcheck-client.key \
+            snapshot save /vol/snapshot
+```
+
+- It will create a file named `snapshot` in the current directory
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## How can we remember all these flags?
+
+- Look at the static pod manifest for etcd
+
+  (in `/etc/kubernetes/manifests`)
+
+- The healthcheck probe is calling `etcdctl` with all the right flags 
+  😉👍✌️
+
+- Exercise: write the YAML for a batch job to perform the backup
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## Restoring an etcd snapshot
+
+- ~~Execute exactly the same command, but replacing `save` with `restore`~~
+
+  (Believe it or not, doing that will *not* do anything useful!)
+
+- The `restore` command does *not* load a snapshot into a running etcd server
+
+- The `restore` command creates a new data directory from the snapshot
+
+  (it's an offline operation; it doesn't interact with an etcd server)
+
+- It will create a new data directory in a temporary container
+
+  (leaving the running etcd node untouched)
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## When using kubeadm
+
+1. Create a new data directory from the snapshot:
+   ```bash
+   sudo rm -rf /var/lib/etcd
+   docker run --rm -v /var/lib:/var/lib -v $PWD:/vol \
+          -e ETCDCTL_API=3 k8s.gcr.io/etcd:3.3.10 \
+          etcdctl snapshot restore /vol/snapshot --data-dir=/var/lib/etcd
+   ```
+
+2. Provision the control plane, using that data directory:
+   ```bash
+   sudo kubeadm init \
+        --ignore-preflight-errors=DirAvailable--var-lib-etcd
+   ```
+
+3. Rejoin the other nodes
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## The fine print
+
+- This only saves etcd state
+
+- It **does not** save persistent volumes and local node data
+
+- Some critical components (like the pod network) might need to be reset
+
+- As a result, our pods might have to be recreated, too
+
+- If we have proper liveness checks, this should happen automatically
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## More information about etcd backups
+
+- [Kubernetes documentation](https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/#built-in-snapshot) about etcd backups
+
+- [etcd documentation](https://coreos.com/etcd/docs/latest/op-guide/recovery.html#snapshotting-the-keyspace) about snapshots and restore
+
+- [A good blog post by elastisys](https://elastisys.com/2018/12/10/backup-kubernetes-how-and-why/) explaining how to restore a snapshot
+
+- [Another good blog post by consol labs](https://labs.consol.de/kubernetes/2018/05/25/kubeadm-backup.html) on the same topic
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## Don't forget ...
+
+- Also back up the TLS information
+
+  (at the very least: CA key and cert; API server key and cert)
+
+- With clusters provisioned by kubeadm, this is in `/etc/kubernetes/pki`
+
+- If you don't:
+
+  - you will still be able to restore etcd state and bring everything back up
+
+  - you will need to redistribute user certificates
+
+.warning[**TLS information is highly sensitive! 
+<br/>Anyone who has it has full access to your cluster!**]
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## Stateful services
+
+- It's totally fine to keep your production databases outside of Kubernetes
+
+  *Especially if you have only one database server!*
+
+- Feel free to put development and staging databases on Kubernetes
+
+  (as long as they don't hold important data)
+
+- Using Kubernetes for stateful services makes sense if you have *many*
+
+  (because then you can leverage Kubernetes automation)
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## Snapshotting persistent volumes
+
+- Option 1: snapshot volumes out of band
+
+  (with the API/CLI/GUI of our SAN/cloud/...)
+
+- Option 2: storage system integration
+
+  (e.g. [Portworx](https://docs.portworx.com/portworx-install-with-kubernetes/storage-operations/create-snapshots/) can [create snapshots through annotations](https://docs.portworx.com/portworx-install-with-kubernetes/storage-operations/create-snapshots/snaps-annotations/#taking-periodic-snapshots-on-a-running-pod))
+
+- Option 3: [snapshots through Kubernetes API](https://kubernetes.io/blog/2018/10/09/introducing-volume-snapshot-alpha-for-kubernetes/)
+
+  (now in alpha for a few storage providers: GCE, OpenSDS, Ceph, Portworx)
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+## More backup tools
+
+- [Stash](https://appscode.com/products/stash/)
+
+  back up Kubernetes persistent volumes
+
+- [ReShifter](https://github.com/mhausenblas/reshifter)
+
+  cluster state management
+
+- ~~Heptio Ark~~ [Velero](https://github.com/heptio/velero)
+
+  full cluster backup
+
+- [kube-backup](https://github.com/pieterlange/kube-backup)
+
+  simple scripts to save resource YAML to a git repository
+  
+- [bivac](https://github.com/camptocamp/bivac) 
+
+  Backup Interface for Volumes Attached to Containers 
+
+???
+
+:EN:- Backing up clusters
+:FR:- Politiques de sauvegarde
+
+.debug[[k8s/cluster-backup.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/cluster-backup.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/train-of-containers-1.jpg)]
+
+---
+
+name: toc-static-pods
+class: title
+
+ Static pods
+
+.nav[
+[Previous section](#toc-backing-up-clusters)
+|
+[Back to table of contents](#toc-module-3)
+|
+[Next section](#toc-securing-the-control-plane)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Static pods
+
+- Hosting the Kubernetes control plane on Kubernetes has advantages:
+
+  - we can use Kubernetes' replication and scaling features for the control plane
+
+  - we can leverage rolling updates to upgrade the control plane
+
+- However, there is a catch:
+
+  - deploying on Kubernetes requires the API to be available
+
+  - the API won't be available until the control plane is deployed
+
+- How can we get out of that chicken-and-egg problem?
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+## A possible approach
+
+- Since each component of the control plane can be replicated...
+
+- We could set up the control plane outside of the cluster
+
+- Then, once the cluster is fully operational, create replicas running on the cluster
+
+- Finally, remove the replicas that are running outside of the cluster
+
+*What could possibly go wrong?*
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+## Sawing off the branch you're sitting on
+
+- What if anything goes wrong?
+
+  (During the setup or at a later point)
+
+- Worst case scenario, we might need to:
+
+  - set up a new control plane (outside of the cluster)
+
+  - restore a backup from the old control plane
+
+  - move the new control plane to the cluster (again)
+
+- This doesn't sound like a great experience
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+## Static pods to the rescue
+
+- Pods are started by kubelet (an agent running on every node)
+
+- To know which pods it should run, the kubelet queries the API server
+
+- The kubelet can also get a list of *static pods* from:
+
+  - a directory containing one (or multiple) *manifests*, and/or
+
+  - a URL (serving a *manifest*)
+
+- These "manifests" are basically YAML definitions
+
+  (As produced by `kubectl get pod my-little-pod -o yaml`)
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+## Static pods are dynamic
+
+- Kubelet will periodically reload the manifests
+
+- It will start/stop pods accordingly
+
+  (i.e. it is not necessary to restart the kubelet after updating the manifests)
+
+- When connected to the Kubernetes API, the kubelet will create *mirror pods*
+
+- Mirror pods are copies of the static pods
+
+  (so they can be seen with e.g. `kubectl get pods`)
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+## Bootstrapping a cluster with static pods
+
+- We can run control plane components with these static pods
+
+- They can start without requiring access to the API server
+
+- Once they are up and running, the API becomes available
+
+- These pods are then visible through the API
+
+  (We cannot upgrade them from the API, though)
+
+*This is how kubeadm has initialized our clusters.*
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+## Static pods vs normal pods
+
+- The API only gives us read-only access to static pods
+
+- We can `kubectl delete` a static pod...
+
+  ...But the kubelet will re-mirror it immediately
+
+- Static pods can be selected just like other pods
+
+  (So they can receive service traffic)
+
+- A service can select a mixture of static and other pods
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+## From static pods to normal pods
+
+- Once the control plane is up and running, it can be used to create normal pods
+
+- We can then set up a copy of the control plane in normal pods
+
+- Then the static pods can be removed
+
+- The scheduler and the controller manager use leader election
+
+  (Only one is active at a time; removing an instance is seamless)
+
+- Each instance of the API server adds itself to the `kubernetes` service
+
+- Etcd will typically require more work!
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+## From normal pods back to static pods
+
+- Alright, but what if the control plane is down and we need to fix it?
+
+- We restart it using static pods!
+
+- This can be done automatically with the [Pod Checkpointer]
+
+- The Pod Checkpointer automatically generates manifests of running pods
+
+- The manifests are used to restart these pods if API contact is lost
+
+  (More details in the [Pod Checkpointer] documentation page)
+
+- This technique is used by [bootkube]
+
+[Pod Checkpointer]: https://github.com/kubernetes-incubator/bootkube/blob/master/cmd/checkpoint/README.md
+[bootkube]: https://github.com/kubernetes-incubator/bootkube
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+## Where should the control plane run?
+
+*Is it better to run the control plane in static pods, or normal pods?*
+
+- If I'm a *user* of the cluster: I don't care, it makes no difference to me
+
+- What if I'm an *admin*, i.e. the person who installs, upgrades, repairs... the cluster?
+
+- If I'm using a managed Kubernetes cluster (AKS, EKS, GKE...) it's not my problem
+
+  (I'm not the one setting up and managing the control plane)
+
+- If I already picked a tool (kubeadm, kops...) to set up my cluster, the tool decides for me
+
+- What if I haven't picked a tool yet, or if I'm installing from scratch?
+
+  - static pods = easier to set up, easier to troubleshoot, less risk of outage
+
+  - normal pods = easier to upgrade, easier to move (if nodes need to be shut down)
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+## Static pods in action
+
+- On our clusters, the `staticPodPath` is `/etc/kubernetes/manifests`
+
+.exercise[
+
+- Have a look at this directory:
+  ```bash
+  ls -l /etc/kubernetes/manifests
+  ```
+
+]
+
+We should see YAML files corresponding to the pods of the control plane.
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+class: static-pods-exercise
+
+## Running a static pod
+
+- We are going to add a pod manifest to the directory, and kubelet will run it
+
+.exercise[
+
+- Copy a manifest to the directory:
+  ```bash
+  sudo cp ~/container.training/k8s/just-a-pod.yaml /etc/kubernetes/manifests
+  ```
+
+- Check that it's running:
+  ```bash
+  kubectl get pods
+  ```
+
+]
+
+The output should include a pod named `hello-node1`.
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+class: static-pods-exercise
+
+## Remarks
+
+In the manifest, the pod was named `hello`.
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello
+  namespace: default
+spec:
+  containers:
+  - name: hello
+    image: nginx
+```
+
+The `-node1` suffix was added automatically by kubelet.
+
+If we delete the pod (with `kubectl delete`), it will be recreated immediately.
+
+To delete the pod, we need to delete (or move) the manifest file.
+
+???
+
+:EN:- Static pods
+:FR:- Les *static pods*
+
+.debug[[k8s/staticpods.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/staticpods.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/train-of-containers-2.jpg)]
+
+---
+
+name: toc-securing-the-control-plane
+class: title
+
+ Securing the control plane
+
+.nav[
+[Previous section](#toc-static-pods)
+|
+[Back to table of contents](#toc-module-4)
+|
+[Next section](#toc-pod-security-policies)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Securing the control plane
+
+- Many components accept connections (and requests) from others:
+
+  - API server
+
+  - etcd
+
+  - kubelet
+
+- We must secure these connections:
+
+  - to deny unauthorized requests
+
+  - to prevent eavesdropping secrets, tokens, and other sensitive information
+
+- Disabling authentication and/or authorization is **strongly discouraged**
+
+  (but it's possible to do it, e.g. for learning / troubleshooting purposes)
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## Authentication and authorization
+
+- Authentication (checking "who you are") is done with mutual TLS
+
+ (both the client and the server need to hold a valid certificate)
+
+- Authorization (checking "what you can do") is done in different ways
+
+  - the API server implements a sophisticated permission logic (with RBAC)
+  
+  - some services will defer authorization to the API server (through webhooks)
+
+  - some services require a certificate signed by a particular CA / sub-CA
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## In practice
+
+- We will review the various communication channels in the control plane
+
+- We will describe how they are secured
+
+- When TLS certificates are used, we will indicate:
+
+  - which CA signs them
+
+  - what their subject (CN) should be, when applicable
+
+- We will indicate how to configure security (client- and server-side)
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## etcd peers
+
+- Replication and coordination of etcd happens on a dedicated port
+
+  (typically port 2380; the default port for normal client connections is 2379)
+
+- Authentication uses TLS certificates with a separate sub-CA
+
+  (otherwise, anyone with a Kubernetes client certificate could access etcd!)
+
+- The etcd command line flags involved are:
+
+   `--peer-client-cert-auth=true` to activate it
+
+   `--peer-cert-file`, `--peer-key-file`, `--peer-trusted-ca-file`
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## etcd clients
+
+- The only¹ thing that connects to etcd is the API server
+
+- Authentication uses TLS certificates with a separate sub-CA
+
+  (for the same reasons as for etcd inter-peer authentication)
+
+- The etcd command line flags involved are:
+
+  `--client-cert-auth=true` to activate it
+
+  `--trusted-ca-file`, `--cert-file`, `--key-file`
+
+- The API server command line flags involved are:
+
+  `--etcd-cafile`, `--etcd-certfile`, `--etcd-keyfile`
+
+.footnote[¹Technically, there is also the etcd healthcheck. Let's ignore it for now.]
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## API server clients
+
+- The API server has a sophisticated authentication and authorization system
+
+- For connections coming from other components of the control plane:
+
+  - authentication uses certificates (trusting the certificates' subject or CN)
+
+  - authorization uses whatever mechanism is enabled (most oftentimes, RBAC)
+
+- The relevant API server flags are:
+
+  `--client-ca-file`, `--tls-cert-file`, `--tls-private-key-file`
+
+- Each component connecting to the API server takes a `--kubeconfig` flag
+
+  (to specify a kubeconfig file containing the CA cert, client key, and client cert)
+
+- Yes, that kubeconfig file follows the same format as our `~/.kube/config` file!
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## Kubelet and API server
+
+- Communication between kubelet and API server can be established both ways
+
+- Kubelet → API server:
+
+  - kubelet registers itself ("hi, I'm node42, do you have work for me?")
+
+  - connection is kept open and re-established if it breaks
+
+  - that's how the kubelet knows which pods to start/stop
+
+- API server → kubelet:
+
+  - used to retrieve logs, exec, attach to containers
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## Kubelet → API server
+
+- Kubelet is started with `--kubeconfig` with API server information
+
+- The client certificate of the kubelet will typically have:
+
+  `CN=system:node:<nodename>` and groups `O=system:nodes`
+
+- Nothing special on the API server side
+
+  (it will authenticate like any other client)
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## API server → kubelet
+
+- Kubelet is started with the flag `--client-ca-file`
+
+  (typically using the same CA as the API server)
+
+- API server will use a dedicated key pair when contacting kubelet
+
+  (specified with `--kubelet-client-certificate` and `--kubelet-client-key`)
+
+- Authorization uses webhooks
+
+  (enabled with `--authorization-mode=Webhook` on kubelet)
+
+- The webhook server is the API server itself
+
+  (the kubelet sends back a request to the API server to ask, "can this person do that?")
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## Scheduler
+
+- The scheduler connects to the API server like an ordinary client
+
+- The certificate of the scheduler will have `CN=system:kube-scheduler`
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## Controller manager
+
+- The controller manager is also a normal client to the API server
+
+- Its certificate will have `CN=system:kube-controller-manager`
+
+- If we use the CSR API, the controller manager needs the CA cert and key
+
+  (passed with flags `--cluster-signing-cert-file` and `--cluster-signing-key-file`)
+
+- We usually want the controller manager to generate tokens for service accounts
+
+- These tokens deserve some details (on the next slide!)
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## Service account tokens
+
+- Each time we create a service account, the controller manager generates a token
+
+- These tokens are JWT tokens, signed with a particular key
+
+- These tokens are used for authentication with the API server
+
+  (and therefore, the API server needs to be able to verify their integrity)
+
+- This uses another keypair:
+
+  - the private key (used for signature) is passed to the controller manager
+    <br/>(using flags `--service-account-private-key-file` and `--root-ca-file`)
+
+  - the public key (used for verification) is passed to the API server
+    <br/>(using flag `--service-account-key-file`)
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## kube-proxy
+
+- kube-proxy is "yet another API server client"
+
+- In many clusters, it runs as a Daemon Set
+
+- In that case, it will have its own Service Account and associated permissions
+
+- It will authenticate using the token of that Service Account
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## Webhooks
+
+- We mentioned webhooks earlier; how does that really work?
+
+- The Kubernetes API has special resource types to check permissions
+
+- One of them is SubjectAccessReview
+
+- To check if a particular user can do a particular action on a particular resource:
+
+  - we prepare a SubjectAccessReview object
+
+  - we send that object to the API server
+
+  - the API server responds with allow/deny (and optional explanations)
+
+- Using webhooks for authorization = sending SAR to authorize each request
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+## Subject Access Review
+
+Here is an example showing how to check if `jean.doe` can `get` some `pods` in `kube-system`:
+
+```bash
+kubectl -v9 create -f- <<EOF
+apiVersion: authorization.k8s.io/v1beta1
+kind: SubjectAccessReview
+spec:
+  user: jean.doe
+  group:
+  - foo
+  - bar
+  resourceAttributes:
+    #group: blah.k8s.io
+    namespace: kube-system
+    resource: pods
+    verb: get
+    #name: web-xyz1234567-pqr89
+EOF
+```
+
+???
+
+:EN:- Control plane authentication
+:FR:- Sécurisation du plan de contrôle
+
+.debug[[k8s/control-plane-auth.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/control-plane-auth.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/two-containers-on-a-truck.jpg)]
+
+---
+
+name: toc-pod-security-policies
+class: title
+
+ Pod Security Policies
+
+.nav[
+[Previous section](#toc-securing-the-control-plane)
+|
+[Back to table of contents](#toc-module-4)
+|
+[Next section](#toc-the-csr-api)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Pod Security Policies
+
+- By default, our pods and containers can do *everything*
+
+  (including taking over the entire cluster)
+
+- We are going to show an example of a malicious pod
+
+- Then we will explain how to avoid this with PodSecurityPolicies
+
+- We will enable PodSecurityPolicies on our cluster
+
+- We will create a couple of policies (restricted and permissive)
+
+- Finally we will see how to use them to improve security on our cluster
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Setting up a namespace
+
+- For simplicity, let's work in a separate namespace
+
+- Let's create a new namespace called "green"
+
+.exercise[
+
+- Create the "green" namespace:
+  ```bash
+  kubectl create namespace green
+  ```
+
+- Change to that namespace:
+  ```bash
+  kns green
+  ```
+
+]
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Creating a basic Deployment
+
+- Just to check that everything works correctly, deploy NGINX
+
+.exercise[
+
+- Create a Deployment using the official NGINX image:
+  ```bash
+  kubectl create deployment web --image=nginx
+  ```
+
+- Confirm that the Deployment, ReplicaSet, and Pod exist, and that the Pod is running:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## One example of malicious pods
+
+- We will now show an escalation technique in action
+
+- We will deploy a DaemonSet that adds our SSH key to the root account
+
+  (on *each* node of the cluster)
+
+- The Pods of the DaemonSet will do so by mounting `/root` from the host
+
+.exercise[
+
+- Check the file `k8s/hacktheplanet.yaml` with a text editor:
+  ```bash
+  vim ~/container.training/k8s/hacktheplanet.yaml
+  ```
+
+- If you would like, change the SSH key (by changing the GitHub user name)
+
+]
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Deploying the malicious pods
+
+- Let's deploy our "exploit"!
+
+.exercise[
+
+- Create the DaemonSet:
+  ```bash
+  kubectl create -f ~/container.training/k8s/hacktheplanet.yaml
+  ```
+
+- Check that the pods are running:
+  ```bash
+  kubectl get pods
+  ```
+
+- Confirm that the SSH key was added to the node's root account:
+  ```bash
+  sudo cat /root/.ssh/authorized_keys
+  ```
+
+]
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Cleaning up
+
+- Before setting up our PodSecurityPolicies, clean up that namespace
+
+.exercise[
+
+- Remove the DaemonSet:
+  ```bash
+  kubectl delete daemonset hacktheplanet
+  ```
+
+- Remove the Deployment:
+  ```bash
+  kubectl delete deployment web
+  ```
+
+]
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Pod Security Policies in theory
+
+- To use PSPs, we need to activate their specific *admission controller*
+
+- That admission controller will intercept each pod creation attempt
+
+- It will look at:
+
+  - *who/what* is creating the pod
+
+  - which PodSecurityPolicies they can use
+
+  - which PodSecurityPolicies can be used by the Pod's ServiceAccount
+
+- Then it will compare the Pod with each PodSecurityPolicy one by one
+
+- If a PodSecurityPolicy accepts all the parameters of the Pod, it is created
+
+- Otherwise, the Pod creation is denied and it won't even show up in `kubectl get pods`
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Pod Security Policies fine print
+
+- With RBAC, using a PSP corresponds to the verb `use` on the PSP
+
+  (that makes sense, right?)
+
+- If no PSP is defined, no Pod can be created
+
+  (even by cluster admins)
+
+- Pods that are already running are *not* affected
+
+- If we create a Pod directly, it can use a PSP to which *we* have access
+
+- If the Pod is created by e.g. a ReplicaSet or DaemonSet, it's different:
+
+  - the ReplicaSet / DaemonSet controllers don't have access to *our* policies
+
+  - therefore, we need to give access to the PSP to the Pod's ServiceAccount
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Pod Security Policies in practice
+
+- We are going to enable the PodSecurityPolicy admission controller
+
+- At that point, we won't be able to create any more pods (!)
+
+- Then we will create a couple of PodSecurityPolicies
+
+- ...And associated ClusterRoles (giving `use` access to the policies)
+
+- Then we will create RoleBindings to grant these roles to ServiceAccounts
+
+- We will verify that we can't run our "exploit" anymore
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Enabling Pod Security Policies
+
+- To enable Pod Security Policies, we need to enable their *admission plugin*
+
+- This is done by adding a flag to the API server
+
+- On clusters deployed with `kubeadm`, the control plane runs in static pods
+
+- These pods are defined in YAML files located in `/etc/kubernetes/manifests`
+
+- Kubelet watches this directory
+
+- Each time a file is added/removed there, kubelet creates/deletes the corresponding pod
+
+- Updating a file causes the pod to be deleted and recreated
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Updating the API server flags
+
+- Let's edit the manifest for the API server pod
+
+.exercise[
+
+- Have a look at the static pods:
+  ```bash
+  ls -l /etc/kubernetes/manifests
+  ```
+
+- Edit the one corresponding to the API server:
+  ```bash
+  sudo vim /etc/kubernetes/manifests/kube-apiserver.yaml
+  ```
+
+<!-- ```wait apiVersion``` -->
+
+]
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Adding the PSP admission plugin
+
+- There should already be a line with `--enable-admission-plugins=...`
+
+- Let's add `PodSecurityPolicy` on that line
+
+.exercise[
+
+- Locate the line with `--enable-admission-plugins=`
+
+- Add `PodSecurityPolicy`
+
+  It should read: `--enable-admission-plugins=NodeRestriction,PodSecurityPolicy`
+
+- Save, quit
+
+<!--
+```keys /--enable-admission-plugins=```
+```key ^J```
+```key $```
+```keys a,PodSecurityPolicy```
+```key Escape```
+```keys :wq```
+```key ^J```
+-->
+
+]
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Waiting for the API server to restart
+
+- The kubelet detects that the file was modified
+
+- It kills the API server pod, and starts a new one
+
+- During that time, the API server is unavailable
+
+.exercise[
+
+- Wait until the API server is available again
+
+]
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Check that the admission plugin is active
+
+- Normally, we can't create any Pod at this point
+
+.exercise[
+
+- Try to create a Pod directly:
+  ```bash
+  kubectl run testpsp1 --image=nginx --restart=Never
+  ```
+
+<!-- ```wait forbidden: no providers available``` -->
+
+- Try to create a Deployment:
+  ```bash
+  kubectl run testpsp2 --image=nginx
+  ```
+
+- Look at existing resources:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+We can get hints at what's happening by looking at the ReplicaSet and Events.
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Introducing our Pod Security Policies
+
+- We will create two policies:
+
+  - privileged (allows everything)
+
+  - restricted (blocks some unsafe mechanisms)
+
+- For each policy, we also need an associated ClusterRole granting *use*
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Creating our Pod Security Policies
+
+- We have a couple of files, each defining a PSP and associated ClusterRole:
+
+  - k8s/psp-privileged.yaml: policy `privileged`, role `psp:privileged`
+  - k8s/psp-restricted.yaml: policy `restricted`, role `psp:restricted`
+
+.exercise[
+
+- Create both policies and their associated ClusterRoles:
+  ```bash
+  kubectl create -f ~/container.training/k8s/psp-restricted.yaml
+  kubectl create -f ~/container.training/k8s/psp-privileged.yaml
+  ```
+]
+
+- The privileged policy comes from [the Kubernetes documentation](https://kubernetes.io/docs/concepts/policy/pod-security-policy/#example-policies)
+
+- The restricted policy is inspired by that same documentation page
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Check that we can create Pods again
+
+- We haven't bound the policy to any user yet
+
+- But `cluster-admin` can implicitly `use` all policies
+
+.exercise[
+
+- Check that we can now create a Pod directly:
+  ```bash
+  kubectl run testpsp3 --image=nginx --restart=Never
+  ```
+
+- Create a Deployment as well:
+  ```bash
+  kubectl run testpsp4 --image=nginx
+  ```
+
+- Confirm that the Deployment is *not* creating any Pods:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## What's going on?
+
+- We can create Pods directly (thanks to our root-like permissions)
+
+- The Pods corresponding to a Deployment are created by the ReplicaSet controller
+
+- The ReplicaSet controller does *not* have root-like permissions
+
+- We need to either:
+
+  - grant permissions to the ReplicaSet controller
+
+  *or*
+
+  - grant permissions to our Pods' ServiceAccount
+
+- The first option would allow *anyone* to create pods
+
+- The second option will allow us to scope the permissions better
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Binding the restricted policy
+
+- Let's bind the role `psp:restricted` to ServiceAccount `green:default`
+
+  (aka the default ServiceAccount in the green Namespace)
+
+- This will allow Pod creation in the green Namespace
+
+  (because these Pods will be using that ServiceAccount automatically)
+
+.exercise[
+
+- Create the following RoleBinding:
+  ```bash
+    kubectl create rolebinding psp:restricted \
+            --clusterrole=psp:restricted \
+            --serviceaccount=green:default
+  ```
+
+]
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Trying it out
+
+- The Deployments that we created earlier will *eventually* recover
+
+  (the ReplicaSet controller will retry to create Pods once in a while)
+
+- If we create a new Deployment now, it should work immediately
+
+.exercise[
+
+- Create a simple Deployment:
+  ```bash
+  kubectl create deployment testpsp5 --image=nginx
+  ```
+
+- Look at the Pods that have been created:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Trying to hack the cluster
+
+- Let's create the same DaemonSet we used earlier
+
+.exercise[
+
+- Create a hostile DaemonSet:
+  ```bash
+  kubectl create -f ~/container.training/k8s/hacktheplanet.yaml
+  ```
+
+- Look at the state of the namespace:
+  ```bash
+  kubectl get all
+  ```
+
+]
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+class: extra-details
+
+## What's in our restricted policy?
+
+- The restricted PSP is similar to the one provided in the docs, but:
+
+  - it allows containers to run as root
+
+  - it doesn't drop capabilities
+
+- Many containers run as root by default, and would require additional tweaks
+
+- Many containers use e.g. `chown`, which requires a specific capability
+
+  (that's the case for the NGINX official image, for instance)
+
+- We still block: hostPath, privileged containers, and much more!
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+class: extra-details
+
+## The case of static pods
+
+- If we list the pods in the `kube-system` namespace, `kube-apiserver` is missing
+
+- However, the API server is obviously running
+
+  (otherwise, `kubectl get pods --namespace=kube-system` wouldn't work)
+
+- The API server Pod is created directly by kubelet
+
+  (without going through the PSP admission plugin)
+
+- Then, kubelet creates a "mirror pod" representing that Pod in etcd
+
+- That "mirror pod" creation goes through the PSP admission plugin
+
+- And it gets blocked!
+
+- This can be fixed by binding `psp:privileged` to group `system:nodes`
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## .warning[Before moving on...]
+
+- Our cluster is currently broken
+
+  (we can't create pods in namespaces kube-system, default, ...)
+
+- We need to either:
+
+  - disable the PSP admission plugin
+
+  - allow use of PSP to relevant users and groups
+
+- For instance, we could:
+
+  - bind `psp:restricted` to the group `system:authenticated`
+
+  - bind `psp:privileged` to the ServiceAccount `kube-system:default`
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+## Fixing the cluster
+
+- Let's disable the PSP admission plugin
+
+.exercise[
+
+- Edit the Kubernetes API server static pod manifest
+
+- Remove the PSP admission plugin
+
+- This can be done with this one-liner:
+  ```bash
+  sudo sed -i s/,PodSecurityPolicy// /etc/kubernetes/manifests/kube-apiserver.yaml
+  ```
+
+]
+
+???
+
+:EN:- Preventing privilege escalation with Pod Security Policies
+:FR:- Limiter les droits des conteneurs avec les *Pod Security Policies*
+
+.debug[[k8s/podsecuritypolicy.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/podsecuritypolicy.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/wall-of-containers.jpeg)]
+
+---
+
+name: toc-the-csr-api
+class: title
+
+ The CSR API
+
+.nav[
+[Previous section](#toc-pod-security-policies)
+|
+[Back to table of contents](#toc-module-4)
+|
+[Next section](#toc-openid-connect)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# The CSR API
+
+- The Kubernetes API exposes CSR resources
+
+- We can use these resources to issue TLS certificates
+
+- First, we will go through a quick reminder about TLS certificates
+
+- Then, we will see how to obtain a certificate for a user
+
+- We will use that certificate to authenticate with the cluster
+
+- Finally, we will grant some privileges to that user
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Reminder about TLS
+
+- TLS (Transport Layer Security) is a protocol providing:
+
+  - encryption (to prevent eavesdropping)
+
+  - authentication (using public key cryptography)
+
+- When we access an https:// URL, the server authenticates itself
+
+  (it proves its identity to us; as if it were "showing its ID")
+
+- But we can also have mutual TLS authentication (mTLS)
+
+  (client proves its identity to server; server proves its identity to client)
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Authentication with certificates
+
+- To authenticate, someone (client or server) needs:
+
+  - a *private key* (that remains known only to them)
+
+  - a *public key* (that they can distribute)
+
+  - a *certificate* (associating the public key with an identity)
+
+- A message encrypted with the private key can only be decrypted with the public key
+
+  (and vice versa)
+
+- If I use someone's public key to encrypt/decrypt their messages,
+  <br/>
+  I can be certain that I am talking to them / they are talking to me
+
+- The certificate proves that I have the correct public key for them
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Certificate generation workflow
+
+This is what I do if I want to obtain a certificate.
+
+1. Create public and private keys.
+
+2. Create a Certificate Signing Request (CSR).
+
+   (The CSR contains the identity that I claim and a public key.)
+
+3. Send that CSR to the Certificate Authority (CA).
+
+4. The CA verifies that I can claim the identity in the CSR.
+
+5. The CA generates my certificate and gives it to me.
+
+The CA (or anyone else) never needs to know my private key.
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## The CSR API
+
+- The Kubernetes API has a CertificateSigningRequest resource type
+
+  (we can list them with e.g. `kubectl get csr`)
+
+- We can create a CSR object
+
+  (= upload a CSR to the Kubernetes API)
+
+- Then, using the Kubernetes API, we can approve/deny the request
+
+- If we approve the request, the Kubernetes API generates a certificate
+
+- The certificate gets attached to the CSR object and can be retrieved
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Using the CSR API
+
+- We will show how to use the CSR API to obtain user certificates
+
+- This will be a rather complex demo
+
+- ... And yet, we will take a few shortcuts to simplify it
+
+  (but it will illustrate the general idea)
+
+- The demo also won't be automated
+
+  (we would have to write extra code to make it fully functional)
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## General idea
+
+- We will create a Namespace named "users"
+
+- Each user will get a ServiceAccount in that Namespace
+
+- That ServiceAccount will give read/write access to *one* CSR object
+
+- Users will use that ServiceAccount's token to submit a CSR
+
+- We will approve the CSR (or not)
+
+- Users can then retrieve their certificate from their CSR object
+
+- ...And use that certificate for subsequent interactions
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Resource naming
+
+For a user named `jean.doe`, we will have:
+
+- ServiceAccount `jean.doe` in Namespace `users`
+
+- CertificateSigningRequest `users:jean.doe`
+
+- ClusterRole `users:jean.doe` giving read/write access to that CSR
+
+- ClusterRoleBinding `users:jean.doe` binding ClusterRole and ServiceAccount
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Creating the user's resources
+
+.warning[If you want to use another name than `jean.doe`, update the YAML file!]
+
+.exercise[
+
+- Create the global namespace for all users:
+  ```bash
+  kubectl create namespace users
+  ```
+
+- Create the ServiceAccount, ClusterRole, ClusterRoleBinding for `jean.doe`:
+  ```bash
+  kubectl apply -f ~/container.training/k8s/users:jean.doe.yaml
+  ```
+
+]
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Extracting the user's token
+
+- Let's obtain the user's token and give it to them
+
+  (the token will be their password)
+
+.exercise[
+
+- List the user's secrets:
+  ```bash
+  kubectl --namespace=users describe serviceaccount jean.doe
+  ```
+
+- Show the user's token:
+  ```bash
+  kubectl --namespace=users describe secret `jean.doe-token-xxxxx`
+  ```
+
+]
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Configure `kubectl` to use the token
+
+- Let's create a new context that will use that token to access the API
+
+.exercise[
+
+- Add a new identity to our kubeconfig file:
+  ```bash
+  kubectl config set-credentials token:jean.doe --token=...
+  ```
+
+- Add a new context using that identity:
+  ```bash
+  kubectl config set-context jean.doe --user=token:jean.doe --cluster=kubernetes
+  ```
+
+]
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Access the API with the token
+
+- Let's check that our access rights are set properly
+
+.exercise[
+
+- Try to access any resource:
+  ```bash
+  kubectl get pods
+  ```
+  (This should tell us "Forbidden")
+
+- Try to access "our" CertificateSigningRequest:
+  ```bash
+  kubectl get csr users:jean.doe
+  ```
+  (This should tell us "NotFound")
+
+]
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Create a key and a CSR
+
+- There are many tools to generate TLS keys and CSRs
+
+- Let's use OpenSSL; it's not the best one, but it's installed everywhere
+
+  (many people prefer cfssl, easyrsa, or other tools; that's fine too!)
+
+.exercise[
+
+- Generate the key and certificate signing request:
+  ```bash
+    openssl req -newkey rsa:2048 -nodes -keyout key.pem \
+                -new -subj /CN=jean.doe/O=devs/ -out csr.pem
+  ```
+
+]
+
+The command above generates:
+
+- a 2048-bit RSA key, without encryption, stored in key.pem
+- a CSR for the name `jean.doe` in group `devs`
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Inside the Kubernetes CSR object
+
+- The Kubernetes CSR object is a thin wrapper around the CSR PEM file
+
+- The PEM file needs to be encoded to base64 on a single line
+
+  (we will use `base64 -w0` for that purpose)
+
+- The Kubernetes CSR object also needs to list the right "usages"
+
+  (these are flags indicating how the certificate can be used)
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Sending the CSR to Kubernetes
+
+.exercise[
+
+- Generate and create the CSR resource:
+  ```bash
+    kubectl apply -f - <<EOF
+    apiVersion: certificates.k8s.io/v1beta1
+    kind: CertificateSigningRequest
+    metadata:
+      name: users:jean.doe
+    spec:
+      request: $(base64 -w0 < csr.pem)
+      usages:
+      - digital signature
+      - key encipherment
+      - client auth
+    EOF
+  ```
+
+]
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Adjusting certificate expiration
+
+- By default, the CSR API generates certificates valid 1 year
+
+- We want to generate short-lived certificates, so we will lower that to 1 hour
+
+- Fow now, this is configured [through an experimental controller manager flag](https://github.com/kubernetes/kubernetes/issues/67324)
+
+.exercise[
+
+- Edit the static pod definition for the controller manager:
+  ```bash
+  sudo vim /etc/kubernetes/manifests/kube-controller-manager.yaml
+  ```
+
+- In the list of flags, add the following line:
+  ```bash
+  - --experimental-cluster-signing-duration=1h
+  ```
+
+]
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Verifying and approving the CSR
+
+- Let's inspect the CSR, and if it is valid, approve it
+
+.exercise[
+
+- Switch back to `cluster-admin`:
+  ```bash
+  kctx -
+  ```
+
+- Inspect the CSR:
+  ```bash
+  kubectl describe csr users:jean.doe
+  ```
+
+- Approve it:
+  ```bash
+  kubectl certificate approve users:jean.doe
+  ```
+
+]
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Obtaining the certificate
+
+.exercise[
+
+- Switch back to the user's identity:
+  ```bash
+  kctx -
+  ```
+
+- Retrieve the updated CSR object and extract the certificate:
+  ```bash
+  kubectl get csr users:jean.doe \
+          -o jsonpath={.status.certificate} \
+          | base64 -d > cert.pem
+  ```
+
+- Inspect the certificate:
+  ```bash
+  openssl x509 -in cert.pem -text -noout
+  ```
+
+]
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Using the certificate
+
+.exercise[
+
+- Add the key and certificate to kubeconfig:
+  ```bash
+  kubectl config set-credentials cert:jean.doe --embed-certs \
+          --client-certificate=cert.pem --client-key=key.pem
+  ```
+
+- Update the user's context to use the key and cert to authenticate:
+  ```bash
+  kubectl config set-context jean.doe --user cert:jean.doe
+  ```
+
+- Confirm that we are seen as `jean.doe` (but don't have permissions):
+  ```bash
+  kubectl get pods
+  ```
+
+]
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## What's missing?
+
+We have just shown, step by step, a method to issue short-lived certificates for users.
+
+To be usable in real environments, we would need to add:
+
+- a kubectl helper to automatically generate the CSR and obtain the cert
+
+  (and transparently renew the cert when needed)
+
+- a Kubernetes controller to automatically validate and approve CSRs
+
+  (checking that the subject and groups are valid)
+
+- a way for the users to know the groups to add to their CSR
+
+  (e.g.: annotations on their ServiceAccount + read access to the ServiceAccount)
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+## Is this realistic?
+
+- Larger organizations typically integrate with their own directory
+
+- The general principle, however, is the same:
+
+  - users have long-term credentials (password, token, ...)
+
+  - they use these credentials to obtain other, short-lived credentials
+
+- This provides enhanced security:
+
+  - the long-term credentials can use long passphrases, 2FA, HSM...
+
+  - the short-term credentials are more convenient to use
+
+  - we get strong security *and* convenience
+
+- Systems like Vault also have certificate issuance mechanisms
+
+???
+
+:EN:- Generating user certificates with the CSR API
+:FR:- Génération de certificats utilisateur avec la CSR API
+
+.debug[[k8s/csr-api.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/csr-api.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/Container-Ship-Freighter-Navigation-Elbe-Romance-1782991.jpg)]
+
+---
+
+name: toc-openid-connect
+class: title
+
+ OpenID Connect
+
+.nav[
+[Previous section](#toc-the-csr-api)
+|
+[Back to table of contents](#toc-module-4)
+|
+[Next section](#toc-links-and-resources)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# OpenID Connect
+
+- The Kubernetes API server can perform authentication with OpenID connect
+
+- This requires an *OpenID provider*
+
+  (external authorization server using the OAuth 2.0 protocol)
+
+- We can use a third-party provider (e.g. Google) or run our own (e.g. Dex)
+
+- We are going to give an overview of the protocol
+
+- We will show it in action (in a simplified scenario)
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## Workflow overview
+
+- We want to access our resources (a Kubernetes cluster)
+
+- We authenticate with the OpenID provider
+
+  - we can do this directly (e.g. by going to https://accounts.google.com)
+
+  - or maybe a kubectl plugin can open a browser page on our behalf
+
+- After authenticating us, the OpenID provider gives us:
+
+  - an *id token* (a short-lived signed JSON Web Token, see next slide)
+
+  - a *refresh token* (to renew the *id token* when needed)
+
+- We can now issue requests to the Kubernetes API with the *id token*
+
+- The API server will verify that token's content to authenticate us
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## JSON Web Tokens
+
+- A JSON Web Token (JWT) has three parts:
+
+  - a header specifying algorithms and token type
+
+  - a payload (indicating who issued the token, for whom, which purposes...)
+
+  - a signature generated by the issuer (the issuer = the OpenID provider)
+
+- Anyone can verify a JWT without contacting the issuer
+
+  (except to obtain the issuer's public key)
+
+- Pro tip: we can inspect a JWT with https://jwt.io/
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## How the Kubernetes API uses JWT
+
+- Server side
+
+  - enable OIDC authentication
+
+  - indicate which issuer (provider) should be allowed
+
+  - indicate which audience (or "client id") should be allowed
+
+  - optionally, map or prefix user and group names
+
+- Client side
+
+  - obtain JWT as described earlier
+
+  - pass JWT as authentication token
+
+  - renew JWT when needed (using the refresh token)
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## Demo time!
+
+- We will use [Google Accounts](https://accounts.google.com) as our OpenID provider
+
+- We will use the [Google OAuth Playground](https://developers.google.com/oauthplayground) as the "audience" or "client id"
+
+- We will obtain a JWT through Google Accounts and the OAuth Playground
+
+- We will enable OIDC in the Kubernetes API server
+
+- We will use the JWT to authenticate
+
+.footnote[If you can't or won't use a Google account, you can try to adapt this to another provider.]
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## Checking the API server logs
+
+- The API server logs will be particularly useful in this section
+
+  (they will indicate e.g. why a specific token is rejected)
+
+- Let's keep an eye on the API server output!
+
+.exercise[
+
+- Tail the logs of the API server:
+  ```bash
+  kubectl logs kube-apiserver-node1 --follow --namespace=kube-system
+  ```
+
+]
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## Authenticate with the OpenID provider
+
+- We will use the Google OAuth Playground for convenience
+
+- In a real scenario, we would need our own OAuth client instead of the playground
+
+  (even if we were still using Google as the OpenID provider)
+
+.exercise[
+
+- Open the Google OAuth Playground:
+  ```
+  https://developers.google.com/oauthplayground/
+  ```
+
+- Enter our own custom scope in the text field:
+  ```
+  https://www.googleapis.com/auth/userinfo.email
+  ```
+
+- Click on "Authorize APIs" and allow the playground to access our email address
+
+]
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## Obtain our JSON Web Token
+
+- The previous step gave us an "authorization code"
+
+- We will use it to obtain tokens
+
+.exercise[
+
+- Click on "Exchange authorization code for tokens"
+
+]
+
+- The JWT is the very long `id_token` that shows up on the right hand side
+
+  (it is a base64-encoded JSON object, and should therefore start with `eyJ`)
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## Using our JSON Web Token
+
+- We need to create a context (in kubeconfig) for our token
+
+  (if we just add the token or use `kubectl --token`, our certificate will still be used)
+
+.exercise[
+
+- Create a new authentication section in kubeconfig:
+  ```bash
+  kubectl config set-credentials myjwt --token=eyJ...
+  ```
+
+- Try to use it:
+  ```bash
+  kubectl --user=myjwt get nodes
+  ```
+
+]
+
+We should get an `Unauthorized` response, since we haven't enabled OpenID Connect in the API server yet. We should also see `invalid bearer token` in the API server log output.
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## Enabling OpenID Connect
+
+- We need to add a few flags to the API server configuration
+
+- These two are mandatory:
+
+  `--oidc-issuer-url` → URL of the OpenID provider
+
+  `--oidc-client-id` → app requesting the authentication
+  <br/>(in our case, that's the ID for the Google OAuth Playground)
+
+- This one is optional:
+
+  `--oidc-username-claim` → which field should be used as user name
+  <br/>(we will use the user's email address instead of an opaque ID)
+
+- See the [API server documentation](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#configuring-the-api-server
+) for more details about all available flags
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## Updating the API server configuration
+
+- The instructions below will work for clusters deployed with kubeadm
+
+  (or where the control plane is deployed in static pods)
+
+- If your cluster is deployed differently, you will need to adapt them
+
+.exercise[
+
+- Edit `/etc/kubernetes/manifests/kube-apiserver.yaml`
+
+- Add the following lines to the list of command-line flags:
+  ```yaml
+  - --oidc-issuer-url=https://accounts.google.com
+  - --oidc-client-id=407408718192.apps.googleusercontent.com
+  - --oidc-username-claim=email
+  ```
+]
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## Restarting the API server
+
+- The kubelet monitors the files in `/etc/kubernetes/manifests`
+
+- When we save the pod manifest, kubelet will restart the corresponding pod
+
+  (using the updated command line flags)
+
+.exercise[
+
+- After making the changes described on the previous slide, save the file
+
+- Issue a simple command (like `kubectl version`) until the API server is back up
+
+  (it might take between a few seconds and one minute for the API server to restart)
+
+- Restart the `kubectl logs` command to view the logs of the API server
+
+]
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## Using our JSON Web Token
+
+- Now that the API server is set up to recognize our token, try again!
+
+.exercise[
+
+- Try an API command with our token:
+  ```bash
+  kubectl --user=myjwt get nodes
+  kubectl --user=myjwt get pods
+  ```
+
+]
+
+We should see a message like:
+```
+Error from server (Forbidden): nodes is forbidden: User "jean.doe@gmail.com"
+cannot list resource "nodes" in API group "" at the cluster scope
+```
+
+→ We were successfully *authenticated*, but not *authorized*.
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## Authorizing our user
+
+- As an extra step, let's grant read access to our user
+
+- We will use the pre-defined ClusterRole `view`
+
+.exercise[
+
+- Create a ClusterRoleBinding allowing us to view resources:
+  ```bash
+    kubectl create clusterrolebinding i-can-view \
+            --user=`jean.doe@gmail.com` --clusterrole=view
+  ```
+
+  (make sure to put *your* Google email address there)
+
+- Confirm that we can now list pods with our token:
+   ```bash
+  kubectl --user=myjwt get pods
+  ```
+
+]
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+## From demo to production
+
+.warning[This was a very simplified demo! In a real deployment...]
+
+- We wouldn't use the Google OAuth Playground
+
+- We *probably* wouldn't even use Google at all
+
+  (it doesn't seem to provide a way to include groups!)
+
+- Some popular alternatives:
+
+  - [Dex](https://github.com/dexidp/dex),
+    [Keycloak](https://www.keycloak.org/)
+    (self-hosted)
+
+  - [Okta](https://developer.okta.com/docs/how-to/creating-token-with-groups-claim/#step-five-decode-the-jwt-to-verify)
+    (SaaS)
+
+- We would use a helper (like the [kubelogin](https://github.com/int128/kubelogin) plugin) to automatically obtain tokens
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+class: extra-details
+
+## Service Account tokens
+
+- The tokens used by Service Accounts are JWT tokens as well
+
+- They are signed and verified using a special service account key pair
+
+.exercise[
+
+- Extract the token of a service account in the current namespace:
+  ```bash
+  kubectl get secrets -o jsonpath={..token} | base64 -d
+  ```
+
+- Copy-paste the token to a verification service like https://jwt.io 
+
+- Notice that it says "Invalid Signature"
+
+]
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+class: extra-details
+
+## Verifying Service Account tokens
+
+- JSON Web Tokens embed the URL of the "issuer" (=OpenID provider)
+
+- The issuer provides its public key through a well-known discovery endpoint
+
+  (similar to https://accounts.google.com/.well-known/openid-configuration)
+
+- There is no such endpoint for the Service Account key pair
+
+- But we can provide the public key ourselves for verification
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+class: extra-details
+
+## Verifying a Service Account token
+
+- On clusters provisioned with kubeadm, the Service Account key pair is:
+
+  `/etc/kubernetes/pki/sa.key` (used by the controller manager to generate tokens)
+
+  `/etc/kubernetes/pki/sa.pub` (used by the API server to validate the same tokens)
+
+.exercise[
+
+- Display the public key used to sign Service Account tokens:
+  ```bash
+  sudo cat /etc/kubernetes/pki/sa.pub
+  ```
+
+- Copy-paste the key in the "verify signature" area on https://jwt.io
+
+- It should now say "Signature Verified"
+
+]
+
+???
+
+:EN:- Authenticating with OIDC
+:FR:- S'identifier avec OIDC
+
+.debug[[k8s/openid-connect.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/openid-connect.md)]
+---
+
+class: pic
+
+.interstitial[![Image separating from the next module](https://gallant-turing-d0d520.netlify.com/containers/ShippingContainerSFBay.jpg)]
+
+---
+
+name: toc-links-and-resources
+class: title
+
+ Links and resources
+
+.nav[
+[Previous section](#toc-openid-connect)
+|
+[Back to table of contents](#toc-module-5)
+|
+[Next section](#toc-)
+]
+
+.debug[(automatically generated title slide)]
+
+---
+# Links and resources
+
+All things Kubernetes:
+
+- [Kubernetes Community](https://kubernetes.io/community/) - Slack, Google Groups, meetups
+- [Kubernetes on StackOverflow](https://stackoverflow.com/questions/tagged/kubernetes)
+- [Play With Kubernetes Hands-On Labs](https://medium.com/@marcosnils/introducing-pwk-play-with-k8s-159fcfeb787b)
+
+All things Docker:
+
+- [Docker documentation](http://docs.docker.com/)
+- [Docker Hub](https://hub.docker.com)
+- [Docker on StackOverflow](https://stackoverflow.com/questions/tagged/docker)
+- [Play With Docker Hands-On Labs](http://training.play-with-docker.com/)
+
+Everything else:
+
+- [Local meetups](https://www.meetup.com/)
+
+.footnote[These slides (and future updates) are on → http://container.training/]
+
+.debug[[k8s/links.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/k8s/links.md)]
+---
+class: title, self-paced
+
+Thank you!
+
+.debug[[shared/thankyou.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/shared/thankyou.md)]
+---
+
+class: title, in-person
+
+That's all, folks! <br/> Questions?
+
+![end](images/end.jpg)
+
+.debug[[shared/thankyou.md](https://github.com/paulczar/container.training/tree/austin-devops/slides/shared/thankyou.md)]</textarea>
+    <script src="remark.min.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+      var slideshow = remark.create({
+        ratio: '16:9',
+        highlightSpans: true,
+        slideNumberFormat: '%current%/%total%',
+        excludedClasses: ["self-paced","static-pods-exercise"]
+      });
+    </script>
+    
+    <!-- 
+    These two scripts will be available only when loading the
+    content using the pub/sub server. Otherwise, they'll just
+    404 and that's OK.
+    -->
+    <script src="/socket.io/socket.io.js">
+    </script>
+    <script src="/remote.js">
+    </script>
+
+  </body>
+</html>
